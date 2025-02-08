@@ -27,6 +27,6 @@
 	}
 
 	a {
-		@apply underline;
+		@apply underline-offset-2
 	}
 }
