@@ -1,5 +1,5 @@
-<script>
-	import Header from "$lib/components/Header.svelte";
-</script>
+<svelte:head>
+	<title>Contact Us - Greenfellas' Trading Post</title>
+</svelte:head>
 
-<Header></Header>
+<h2>Contact Us</h2>

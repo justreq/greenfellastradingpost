@@ -27,9 +27,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@fortawesome/free-brands-svg-icons": "^6.7.2",
-		"@fortawesome/free-solid-svg-icons": "^6.7.2",
-		"firebase": "^11.2.0",
-		"svelte-fa": "^4.0.3"
+		"@supabase/supabase-js": "^2.48.1",
+		"firebase": "^11.2.0"
 	}
 }

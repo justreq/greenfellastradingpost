@@ -1,15 +1,18 @@
 <script lang="ts">
+	import FancyAnchor from "./FancyAnchor.svelte";
+
 	import { page } from "$app/state";
 </script>
 
-<header class=" w-screen h-28 py-4">
-	<nav class="bg-primary rounded-xl mx-auto w-[75rem] h-full">
-		<ul class="w-full h-full flex flex-row justify-evenly [&_*]:my-auto [&_a]:block [&_a]:w-full [&_a]:h-full [&_a]:uppercase">
-			<li><a href="/" class:underline={page.route.id == "/"}>Home</a></li>
-			<li><a href="/collections" class:underline={page.route.id?.includes("collections")}>Collections</a></li>
-			<img src="/favicon.png" alt="logo" draggable="false" class="h-[80%]" />
-			<li><a href="/cart" class:underline={page.route.id?.includes("cart")}>Cart (0)</a></li>
-			<li><a href="/contactus" class:underline={page.route.id?.includes("contactus")}>Contact Us</a></li>
-		</ul>
-	</nav>
+<header class="w-screen h-24 px-16 py-3 bg-secondary/80 backdrop-blur-sm flex justify-between">
+	<div class="flex gap-16">
+		<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]"><img src="/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
+		<FancyAnchor text="Home" route="/" on={page.route.id == "/"} />
+		<FancyAnchor text="Collections" route="/collections" on={page.route.id?.includes("collections")} />
+		<FancyAnchor text="Contact Us" route="/contactus" on={page.route.id?.includes("contactus")} />
+	</div>
+	<div class="flex gap-4">
+		<FancyAnchor text="Sign Up" route="/signup" on={page.route.id?.includes("signup")} border />
+		<FancyAnchor text="Log In" route="/login" on={page.route.id?.includes("login")} border />
+	</div>
 </header>

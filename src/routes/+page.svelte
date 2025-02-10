@@ -1,5 +1,10 @@
 <script>
-	import Header from "$lib/components/Header.svelte";
+	let { data } = $props();
+	console.log(data.products);
 </script>
 
-<Header></Header>
+<svelte:head>
+	<title>Greenfellas' Trading Post</title>
+</svelte:head>
+
+<h2>Homepage</h2>
