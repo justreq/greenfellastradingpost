@@ -19,6 +19,11 @@
 		@apply min-h-screen bg-bg;
 	}
 
+	header,
+	footer {
+		@apply fixed w-screen px-16 bg-primary/80 backdrop-blur-sm flex justify-between border-secondary/80;
+	}
+
 	img,
 	picture,
 	svg,

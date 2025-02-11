@@ -1,10 +1,9 @@
-<script lang="ts">
+<script>
 	import FancyAnchor from "./FancyAnchor.svelte";
-
 	import { page } from "$app/state";
 </script>
 
-<header class="w-screen h-24 px-16 py-3 bg-secondary/80 backdrop-blur-sm flex justify-between">
+<header class="h-24 py-3 border-b-2">
 	<div class="flex gap-16">
 		<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]"><img src="/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
 		<FancyAnchor text="Home" route="/" on={page.route.id == "/"} />
