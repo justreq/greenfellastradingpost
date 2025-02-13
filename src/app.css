@@ -21,7 +21,7 @@
 
 	header,
 	footer {
-		@apply fixed w-screen px-16 bg-primary/80 backdrop-blur-sm flex justify-between border-secondary/80;
+		@apply w-screen px-16 bg-primary/80 backdrop-blur-sm flex justify-between border-secondary/80;
 	}
 
 	img,
@@ -30,5 +30,37 @@
 	video,
 	i {
 		@apply block max-w-full;
+	}
+
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		@apply bg-primary transition-colors duration-200;
+	}
+
+	a:not(:has(*)) {
+		@apply fancy-anchor;
+	}
+}
+
+@layer components {
+	.hover-effect {
+		@apply duration-200 transition-colors hover:border-accent2;
+	}
+
+	.fancy-anchor {
+		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase hover-effect ;
+	}
+
+	.fancy-anchor[data-border="true"] {
+		@apply border-text hover:border-accent2;
+	}
+
+	.fancy-anchor[data-on="false"] {
+		@apply font-normal hover:text-accent2;
+	}
+
+	.fancy-anchor[data-on="true"] {
+		@apply bg-text text-bg font-extrabold hover:bg-accent2;
 	}
 }
