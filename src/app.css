@@ -35,21 +35,26 @@
 	input[type="text"],
 	input[type="email"],
 	input[type="password"] {
-		@apply bg-primary transition-colors duration-200;
+		@apply bg-primary border-[3px] rounded-lg hover-effect;
 	}
 
-	a:not(:has(*)) {
+	a:not(:has(*)),
+	button {
 		@apply fancy-anchor;
+	}
+
+	button {
+		@apply py-2 border-text hover:border-accent2 bg-text text-bg font-extrabold hover:bg-accent2;
 	}
 }
 
 @layer components {
 	.hover-effect {
-		@apply duration-200 transition-colors hover:border-accent2;
+		@apply duration-200 transition-colors [&:hover:not(:focus)]:border-accent2;
 	}
 
 	.fancy-anchor {
-		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase hover-effect ;
+		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase hover-effect;
 	}
 
 	.fancy-anchor[data-border="true"] {
