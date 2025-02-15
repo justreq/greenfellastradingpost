@@ -12,11 +12,16 @@
 	}
 
 	* {
-		@apply m-0 p-0 text-text font-body select-none tracking-widest;
+		@apply m-0 p-0 font-body text-text select-none tracking-widest;
+	}
+
+	h1,
+	h2 {
+		@apply font-heading;
 	}
 
 	body {
-		@apply min-h-screen bg-bg;
+		@apply min-h-screen bg-bg overflow-x-hidden;
 	}
 
 	header,
@@ -35,37 +40,37 @@
 	input[type="text"],
 	input[type="email"],
 	input[type="password"] {
-		@apply bg-primary border-[3px] rounded-lg hover-effect;
+		@apply !bg-primary border-[3px] rounded-lg [&>:not(:focus)]:hover-effect;
 	}
 
-	a:not(:has(*)),
-	button {
+	input:-webkit-autofill,
+	input:-webkit-autofill:focus {
+		transition: background-color 0s 600000s, color 0s 600000s !important;
+	}
+
+	a:not(:has(*)) {
 		@apply fancy-anchor;
 	}
 
 	button {
-		@apply py-2 border-text hover:border-accent2 bg-text text-bg font-extrabold hover:bg-accent2;
+		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase h-min bg-text text-bg font-extrabold transition-transform duration-200 hover:scale-110;
 	}
 }
 
 @layer components {
 	.hover-effect {
-		@apply duration-200 transition-colors [&:hover:not(:focus)]:border-accent2;
+		@apply duration-200 transition-colors [&:hover]:border-accent2;
 	}
 
 	.fancy-anchor {
-		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase hover-effect;
+		@apply px-2 py-1 h-min border-[3px] border-transparent rounded-lg uppercase hover-effect;
 	}
 
-	.fancy-anchor[data-border="true"] {
-		@apply border-text hover:border-accent2;
-	}
-
-	.fancy-anchor[data-on="false"] {
+	.fancy-anchor:not(.fancy-anchor-on) {
 		@apply font-normal hover:text-accent2;
 	}
 
-	.fancy-anchor[data-on="true"] {
+	.fancy-anchor.fancy-anchor-on {
 		@apply bg-text text-bg font-extrabold hover:bg-accent2;
 	}
 }
