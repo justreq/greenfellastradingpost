@@ -51,15 +51,15 @@
 	a:not(:has(*)) {
 		@apply fancy-anchor;
 	}
-
-	button {
-		@apply px-2 py-1 border-[3px] border-transparent rounded-lg uppercase h-min bg-text text-bg font-extrabold transition-transform duration-200 hover:scale-110;
-	}
 }
 
 @layer components {
 	.hover-effect {
 		@apply duration-200 transition-colors [&:hover]:border-accent2;
+	}
+
+	.fancy-button {
+		@apply fancy-anchor border-text !transition-all hover:scale-105;
 	}
 
 	.fancy-anchor {
