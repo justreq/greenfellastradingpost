@@ -6,7 +6,7 @@
 </script>
 
 <Header></Header>
-<div class="flex min-h-[calc(100vh-10rem)] h-[calc(100vh-10rem)]">
+<main class="min-w-[60vw] w-[60vw] pt-24 mx-auto min-h-[calc(100vh-10rem)]">
 	{@render children()}
-</div>
+</main>
 <Footer></Footer>

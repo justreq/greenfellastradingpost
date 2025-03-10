@@ -15,6 +15,10 @@
 		@apply m-0 p-0 font-body text-text select-none tracking-widest;
 	}
 
+	*::-webkit-scrollbar {
+		@apply hidden;
+	}
+
 	h1,
 	h2 {
 		@apply font-heading;
@@ -26,7 +30,7 @@
 
 	header,
 	footer {
-		@apply w-screen px-16 bg-primary/80 backdrop-blur-sm flex justify-between border-secondary/80;
+		@apply w-screen px-16 bg-glass flex justify-between border-secondary/80;
 	}
 
 	img,
@@ -43,6 +47,7 @@
 		@apply !bg-primary border-[3px] rounded-lg [&>:not(:focus)]:hover-effect;
 	}
 
+	input,
 	input:-webkit-autofill,
 	input:-webkit-autofill:focus {
 		transition: background-color 0s 600000s, color 0s 600000s !important;
@@ -54,6 +59,10 @@
 }
 
 @layer components {
+	.bg-glass {
+		@apply bg-primary/80 backdrop-blur-sm;
+	}
+
 	.hover-effect {
 		@apply duration-200 transition-colors [&:hover]:border-accent2;
 	}
