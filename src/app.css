@@ -20,17 +20,13 @@
 	}
 
 	h1,
-	h2 {
+	h2,
+	h3 {
 		@apply font-heading;
 	}
 
 	body {
 		@apply min-h-screen bg-bg overflow-x-hidden;
-	}
-
-	header,
-	footer {
-		@apply w-screen px-16 bg-glass flex justify-between border-secondary/80;
 	}
 
 	img,
@@ -43,7 +39,8 @@
 
 	input[type="text"],
 	input[type="email"],
-	input[type="password"] {
+	input[type="password"],
+	select {
 		@apply !bg-primary border-[3px] rounded-lg [&>:not(:focus)]:hover-effect;
 	}
 
@@ -59,8 +56,12 @@
 }
 
 @layer components {
+	.bg-glass-sm {
+		@apply bg-primary/60 backdrop-blur-sm;
+	}
+
 	.bg-glass {
-		@apply bg-primary/80 backdrop-blur-sm;
+		@apply bg-primary/80 backdrop-blur-md;
 	}
 
 	.hover-effect {
@@ -81,5 +82,17 @@
 
 	.fancy-anchor.fancy-anchor-on {
 		@apply bg-text text-bg font-extrabold hover:bg-accent2;
+	}
+
+	.fade-out-x {
+		mask-image: linear-gradient(to right, transparent 0, white 4rem, white calc(100% - 4rem), transparent);
+	}
+
+	.fade-out-left {
+		mask-image: linear-gradient(to right, transparent 0, white 4rem);
+	}
+
+	.fade-out-right {
+		mask-image: linear-gradient(to left, transparent 0, white 4rem);
 	}
 }

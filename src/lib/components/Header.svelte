@@ -22,11 +22,14 @@
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<header class="sticky top-0 h-24 pr-0 border-b-2">
+<header class="sticky top-0 h-24 pr-0 border-b-2 w-screen px-16 bg-glass flex justify-between border-secondary/80 z-10">
 	<nav class="flex gap-16 [&>*]:my-auto">
 		<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 duration-200 hover:scale-110"><img src="/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
 		<a href="/" class:fancy-anchor-on={page.route.id == "/"}>Home</a>
-		<a href="/collections" class:fancy-anchor-on={page.route.id?.includes("collections")}>Collections</a>
+		<a href="/collection" class:fancy-anchor-on={page.route.id?.includes("collection")}>Collection</a>
+		<a href="/schedule" class:fancy-anchor-on={page.route.id?.includes("schedule")}>Schedule</a>
+		<a href="/gtpchase" class:fancy-anchor-on={page.route.id?.includes("gtpchase")}>GTP Chase</a>
+		<a href="/gtpstore" class:fancy-anchor-on={page.route.id?.includes("gtpstore")}>GTP Store</a>
 		<a href="/contactus" class:fancy-anchor-on={page.route.id?.includes("contactus")}>Contact Us</a>
 	</nav>
 	<div class="flex flex-col h-min" onmouseleave={() => (showHeaderPopup = false)}>

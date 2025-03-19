@@ -1,30 +1,25 @@
-<script>
-	import FancyButton from "./FancyButton.svelte";
-	import FancyLabel from "./FancyLabel.svelte";
+<script lang="ts">
+	import { page } from "$app/state";
+	import FancyTextInput from "./FancyTextInput.svelte";
+	export let id;
 
-	export let brand = "";
-	export let year = "";
-	export let set = "";
-	export let player = "";
-	export let type = "";
-	export let variant = "";
-	export let number = "";
+	let data = page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((p: { id: any }) => p.id == id).item_id);
+	const formatter = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "USD",
+		trailingZeroDisplay: "stripIfInteger",
+	});
 </script>
 
-<div class="min-w-64 max-w-64">
-	<div class="w-full relative aspect-square bg-text rounded-xl">
-		<img src="" alt="" />
-
-		<div class="absolute right-2 bottom-2 flex gap-2">
-				<FancyButton iconPath="/icons/cart.svg" className="bg-glass transition-all hover:scale-105" />
-				<FancyButton iconPath="/icons/buy-now.svg" className="bg-glass transition-all hover:scale-105" />
-			</div>
-		</div>
-		<p class="mt-4 h-14 text-lg line-clamp-2 text-ellipsis">
-			{[number, player, year, brand, set]
+<a href="/collection/{id}" class="[&:hover>p:not(:last-child)]:text-accent [&:hover>div]:bg-tertiary/60">
+	<div class="relative w-full aspect-square rounded-xl bg-tertiary/30 backdrop-blur-sm border-2 border-tertiary/30 duration-200 transition-colors">
+		<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{id}/0.jpg" alt="Product" class="absolute rounded-lg h-4/5 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_1rem_4px_black]" draggable="false" />
+	</div>
+	<p class="mt-4 h-14 text-lg line-clamp-2 text-ellipsis transition-colors duration-200">
+		{[data.number, data.player, data.year, data.brand, data.set]
 			.map((e) => e.trim())
 			.filter((e) => e != "")
 			.join(" ")}
 	</p>
-	<p class="w-full text-2xl text-accent font-bold">$700.00</p>
-</div>
+	<p class="w-full text-2xl text-accent font-bold">{formatter.format(data.sell_price)}</p>
+</a>

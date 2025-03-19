@@ -5,8 +5,8 @@
 	export let text = "";
 	export let onclick = () => {};
 	export let className = "";
-
 	export let canFocus = true;
+	export let reverse = false;
 
 	const setFocus = (value: boolean) => {
 		if (!value) {
@@ -16,7 +16,7 @@
 	};
 </script>
 
-<button {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class="h-min p-2 flex gap-4 rounded-lg transition-colors duration-200 hover:bg-tertiary {className}">
+<button {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class="h-min p-2 flex gap-4 rounded-lg transition-colors duration-200 hover:bg-tertiary {className}">
 	{#if iconPath != ""}
 		<div class="h-6 aspect-square flex"><img src={iconPath} alt="" class="w-full m-auto" /></div>
 	{/if}
