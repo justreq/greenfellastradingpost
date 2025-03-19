@@ -19,6 +19,14 @@
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 	</CardProductCarousel>
 	<CardProductCarousel title="New Arrivals">
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
@@ -28,8 +36,23 @@
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 	</CardProductCarousel>
 	<CardProductCarousel title="Recently Viewed">
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
+		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />
 		<CardProductThumbnail id="b9757624-b2a1-4192-967f-250a1787f5af" />

@@ -39,14 +39,15 @@
 		else filters[filterType].splice(filters[filterType].indexOf(filter), 1);
 	};
 
-	const applyFilters = (event: Event) => {
-		let target = event.target as HTMLInputElement;
+	const applyFilters = () => {
+		if (currentPage == 1) {
+			page.url.searchParams.delete("page");
+		} else page.url.searchParams.set("page", currentPage.toString());
 
-		if (target.id == "page-input") {
-			if (currentPage == 1) {
-				page.url.searchParams.delete("page");
-			} else page.url.searchParams.set("page", currentPage.toString());
-		}
+		Object.keys(filters).forEach((key) => {
+			if (filters[key].length == 0) page.url.searchParams.delete(key);
+			else page.url.searchParams.set(key, filters[key].join(","));
+		});
 
 		let query = page.url.searchParams.toString();
 		goto("/collection" + (query.length > 0 ? "?" : "") + query);
@@ -60,101 +61,99 @@
 <!-- <input type="number" min="1" name="page" id="page-input" bind:value={currentPage} oninput={applyFilters} /> -->
 
 <section class="flex justify-center gap-16 px-16 [&>*>div]:bg-glass-sm [&>*>div]:border-secondary/60 [&>*>div]:rounded-xl">
-	<aside class="flex flex-col gap-4 [&_*]:whitespace-nowrap [&>div>button]:w-full [&>div>button]:justify-between [&>div>div]:max-h-0 [&>div>div]:overflow-hidden [&>div>div]:duration-200 [&>div>div]:transition-[max-height] [&>div>div>button]:p-4 [&>div>div>button]:pl-2">
+	<aside class="flex flex-col gap-4 [&_*]:whitespace-nowrap [&>div_button]:w-full [&>div>button]:justify-between [&>div>div]:max-h-0 [&>div>div]:overflow-hidden [&>div>div]:duration-200 [&>div>div]:transition-[max-height] [&>div>div>button]:p-4 [&>div>div>button]:pl-2">
 		<div class="p-4">
-			<h2 class="text-3xl">Filters</h2>
+			<h2 class="text-5xl">Filters</h2>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showPriceFilters ? 'minus' : 'plus'}.svg" text="Prices" reverse onclick={() => (showPriceFilters = !showPriceFilters)} />
 			<div class:!max-h-screen={showPriceFilters}>
-				<FancyCheckbox text="$1 - $10" id="filter-1-10" onclick={() => toggleFilter(filters, "prices", "1-10")} />
-				<FancyCheckbox text="$11 - $25" id="filter-11-25" onclick={() => toggleFilter(filters, "prices", "11-25")} />
-				<FancyCheckbox text="$26 - $50" id="filter-26-50" onclick={() => toggleFilter(filters, "prices", "26-50")} />
-				<FancyCheckbox text="$51 - $100" id="filter-51-100" onclick={() => toggleFilter(filters, "prices", "51-100")} />
-				<FancyCheckbox text="$101+" id="filter-101+" onclick={() => toggleFilter(filters, "prices", "101+")} />
+				<FancyCheckbox text="$1 - $10" id="filter-1-10" onclick={() => toggleFilter(filters, "prices", "1-10")} canFocus={showPriceFilters} />
+				<FancyCheckbox text="$11 - $25" id="filter-11-25" onclick={() => toggleFilter(filters, "prices", "11-25")} canFocus={showPriceFilters} />
+				<FancyCheckbox text="$26 - $50" id="filter-26-50" onclick={() => toggleFilter(filters, "prices", "26-50")} canFocus={showPriceFilters} />
+				<FancyCheckbox text="$51 - $100" id="filter-51-100" onclick={() => toggleFilter(filters, "prices", "51-100")} canFocus={showPriceFilters} />
+				<FancyCheckbox text="$101+" id="filter-101+" onclick={() => toggleFilter(filters, "prices", "101+")} canFocus={showPriceFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showBrandFilters ? 'minus' : 'plus'}.svg" text="Brands" reverse onclick={() => (showBrandFilters = !showBrandFilters)} />
 			<div class:!max-h-screen={showBrandFilters}>
-				<FancyCheckbox text="Panini" id="filter-panini" onclick={() => toggleFilter(filters, "brands", "panini")} />
-				<FancyCheckbox text="Topps" id="filter-topps" onclick={() => toggleFilter(filters, "brands", "topps")} />
-				<FancyCheckbox text="Donruss" id="filter-donruss" onclick={() => toggleFilter(filters, "brands", "donruss")} />
+				<FancyCheckbox text="Panini" id="filter-panini" onclick={() => toggleFilter(filters, "brands", "panini")} canFocus={showBrandFilters} />
+				<FancyCheckbox text="Topps" id="filter-topps" onclick={() => toggleFilter(filters, "brands", "topps")} canFocus={showBrandFilters} />
+				<FancyCheckbox text="Donruss" id="filter-donruss" onclick={() => toggleFilter(filters, "brands", "donruss")} canFocus={showBrandFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showYearFilters ? 'minus' : 'plus'}.svg" text="Years" reverse onclick={() => (showYearFilters = !showYearFilters)} />
 			<div class:!max-h-screen={showYearFilters}>
 				{#each { length: new Date().getFullYear() - 2020 }, i}
-					<FancyCheckbox text={(2020 + i).toString()} id="filter-{2020 + i}" onclick={() => toggleFilter(filters, "years", (2020 + i).toString())} />
+					<FancyCheckbox text={(2020 + i).toString()} id="filter-{2020 + i}" onclick={() => toggleFilter(filters, "years", (2020 + i).toString())} canFocus={showYearFilters} />
 				{/each}
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showPaniniSetFilters ? 'minus' : 'plus'}.svg" text="Sets (Panini)" reverse onclick={() => (showPaniniSetFilters = !showPaniniSetFilters)} />
 			<div class:!max-h-screen={showPaniniSetFilters}>
-				<FancyCheckbox text="Prizm" id="filter-prizm" onclick={() => toggleFilter(filters, "sets", "prizm")} />
-				<FancyCheckbox text="Immaculate" id="filter-immaculate" onclick={() => toggleFilter(filters, "sets", "immaculate")} />
-				<FancyCheckbox text="Impeccable" id="filter-impeccable" onclick={() => toggleFilter(filters, "sets", "impeccable")} />
-				<FancyCheckbox text="Select" id="filter-select" onclick={() => toggleFilter(filters, "sets", "select")} />
-				<FancyCheckbox text="Obsidian" id="filter-obsidian" onclick={() => toggleFilter(filters, "sets", "obsidian")} />
+				<FancyCheckbox text="Prizm" id="filter-prizm" onclick={() => toggleFilter(filters, "sets", "prizm")} canFocus={showPaniniSetFilters} />
+				<FancyCheckbox text="Immaculate" id="filter-immaculate" onclick={() => toggleFilter(filters, "sets", "immaculate")} canFocus={showPaniniSetFilters} />
+				<FancyCheckbox text="Impeccable" id="filter-impeccable" onclick={() => toggleFilter(filters, "sets", "impeccable")} canFocus={showPaniniSetFilters} />
+				<FancyCheckbox text="Select" id="filter-select" onclick={() => toggleFilter(filters, "sets", "select")} canFocus={showPaniniSetFilters} />
+				<FancyCheckbox text="Obsidian" id="filter-obsidian" onclick={() => toggleFilter(filters, "sets", "obsidian")} canFocus={showPaniniSetFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showToppsSetFilters ? 'minus' : 'plus'}.svg" text="Sets (Topps)" reverse onclick={() => (showToppsSetFilters = !showToppsSetFilters)} />
 			<div class:!max-h-screen={showToppsSetFilters}>
-				<FancyCheckbox text="Chrome" id="filter-chrome" onclick={() => toggleFilter(filters, "sets", "chrome")} />
-				<FancyCheckbox text="Finest" id="filter-finest" onclick={() => toggleFilter(filters, "sets", "finest")} />
-				<FancyCheckbox text="Stadium Club" id="filter-stadiumclub" onclick={() => toggleFilter(filters, "sets", "stadiumclub")} />
-				<FancyCheckbox text="Match Attax" id="filter-matchattax" onclick={() => toggleFilter(filters, "sets", "matchattax")} />
-				<FancyCheckbox text="Living Set" id="filter-livingset" onclick={() => toggleFilter(filters, "sets", "livingset")} />
+				<FancyCheckbox text="Chrome" id="filter-chrome" onclick={() => toggleFilter(filters, "sets", "chrome")} canFocus={showToppsSetFilters} />
+				<FancyCheckbox text="Finest" id="filter-finest" onclick={() => toggleFilter(filters, "sets", "finest")} canFocus={showToppsSetFilters} />
+				<FancyCheckbox text="Stadium Club" id="filter-stadiumclub" onclick={() => toggleFilter(filters, "sets", "stadiumclub")} canFocus={showToppsSetFilters} />
+				<FancyCheckbox text="Match Attax" id="filter-matchattax" onclick={() => toggleFilter(filters, "sets", "matchattax")} canFocus={showToppsSetFilters} />
+				<FancyCheckbox text="Living Set" id="filter-livingset" onclick={() => toggleFilter(filters, "sets", "livingset")} canFocus={showToppsSetFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showDonrussSetFilters ? 'minus' : 'plus'}.svg" text="Sets (Donruss)" reverse onclick={() => (showDonrussSetFilters = !showDonrussSetFilters)} />
 			<div class:!max-h-screen={showDonrussSetFilters}>
-				<FancyCheckbox text="Donruss Soccer" id="filter-donrusssoccer" onclick={() => toggleFilter(filters, "sets", "donrusssoccer")} />
-				<FancyCheckbox text="The Beautiful Game" id="filter-thebeautifulgame" onclick={() => toggleFilter(filters, "sets", "thebeautifulgame")} />
-				<FancyCheckbox text="Kit Kings" id="filter-kitkings" onclick={() => toggleFilter(filters, "sets", "kitkings")} />
-				<FancyCheckbox text="Net Marvels" id="filter-netmarvels" onclick={() => toggleFilter(filters, "sets", "netmarvels")} />
-				<FancyCheckbox text="Pitch Kings" id="filter-pitchkings" onclick={() => toggleFilter(filters, "sets", "pitchkings")} />
+				<FancyCheckbox text="Donruss Soccer" id="filter-donrusssoccer" onclick={() => toggleFilter(filters, "sets", "donrusssoccer")} canFocus={showDonrussSetFilters} />
+				<FancyCheckbox text="The Beautiful Game" id="filter-thebeautifulgame" onclick={() => toggleFilter(filters, "sets", "thebeautifulgame")} canFocus={showDonrussSetFilters} />
+				<FancyCheckbox text="Kit Kings" id="filter-kitkings" onclick={() => toggleFilter(filters, "sets", "kitkings")} canFocus={showDonrussSetFilters} />
+				<FancyCheckbox text="Net Marvels" id="filter-netmarvels" onclick={() => toggleFilter(filters, "sets", "netmarvels")} canFocus={showDonrussSetFilters} />
+				<FancyCheckbox text="Pitch Kings" id="filter-pitchkings" onclick={() => toggleFilter(filters, "sets", "pitchkings")} canFocus={showDonrussSetFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showPlayerFilters ? 'minus' : 'plus'}.svg" text="Players" reverse onclick={() => (showPlayerFilters = !showPlayerFilters)} />
 			<div class:!max-h-screen={showPlayerFilters}>
-				<FancyCheckbox text="Lionel Messi" id="filter-lionelmessi" onclick={() => toggleFilter(filters, "players", "lionelmessi")} />
-				<FancyCheckbox text="Cristiano Ronaldo" id="filter-cristianoronaldo" onclick={() => toggleFilter(filters, "players", "cristianoronaldo")} />
-				<FancyCheckbox text="Kylian Mbappe" id="filter-kylianmbappe" onclick={() => toggleFilter(filters, "players", "kylianmbappe")} />
-				<FancyCheckbox text="Lamine Yamal" id="filter-lamineyamal" onclick={() => toggleFilter(filters, "players", "lamineyamal")} />
-				<FancyCheckbox text="Maxence Lacroix" id="filter-maxencelacroix" onclick={() => toggleFilter(filters, "players", "maxencelacroix")} />
+				<FancyCheckbox text="Lionel Messi" id="filter-lionelmessi" onclick={() => toggleFilter(filters, "players", "lionelmessi")} canFocus={showPlayerFilters} />
+				<FancyCheckbox text="Cristiano Ronaldo" id="filter-cristianoronaldo" onclick={() => toggleFilter(filters, "players", "cristianoronaldo")} canFocus={showPlayerFilters} />
+				<FancyCheckbox text="Kylian Mbappe" id="filter-kylianmbappe" onclick={() => toggleFilter(filters, "players", "kylianmbappe")} canFocus={showPlayerFilters} />
+				<FancyCheckbox text="Lamine Yamal" id="filter-lamineyamal" onclick={() => toggleFilter(filters, "players", "lamineyamal")} canFocus={showPlayerFilters} />
+				<FancyCheckbox text="Maxence Lacroix" id="filter-maxencelacroix" onclick={() => toggleFilter(filters, "players", "maxencelacroix")} canFocus={showPlayerFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showTypeFilters ? 'minus' : 'plus'}.svg" text="Types" reverse onclick={() => (showTypeFilters = !showTypeFilters)} />
 			<div class:!max-h-screen={showTypeFilters}>
-				<FancyCheckbox text="Rookie" id="filter-rookie" onclick={() => toggleFilter(filters, "types", "rookie")} />
-				<FancyCheckbox text="Legend" id="filter-legend" onclick={() => toggleFilter(filters, "types", "legend")} />
-				<FancyCheckbox text="Team" id="filter-team" onclick={() => toggleFilter(filters, "types", "team")} />
-				<FancyCheckbox text="Action Shot" id="filter-actionshot" onclick={() => toggleFilter(filters, "types", "actionshot")} />
-				<FancyCheckbox text="Special Event" id="filter-specialevent" onclick={() => toggleFilter(filters, "types", "specialevent")} />
+				<FancyCheckbox text="Rookie" id="filter-rookie" onclick={() => toggleFilter(filters, "types", "rookie")} canFocus={showTypeFilters} />
+				<FancyCheckbox text="Legend" id="filter-legend" onclick={() => toggleFilter(filters, "types", "legend")} canFocus={showTypeFilters} />
+				<FancyCheckbox text="Team" id="filter-team" onclick={() => toggleFilter(filters, "types", "team")} canFocus={showTypeFilters} />
+				<FancyCheckbox text="Action Shot" id="filter-actionshot" onclick={() => toggleFilter(filters, "types", "actionshot")} canFocus={showTypeFilters} />
+				<FancyCheckbox text="Special Event" id="filter-specialevent" onclick={() => toggleFilter(filters, "types", "specialevent")} canFocus={showTypeFilters} />
 			</div>
 		</div>
 		<div>
 			<FancyButton iconPath="/icons/{showVariantFilters ? 'minus' : 'plus'}.svg" text="Variants" reverse onclick={() => (showVariantFilters = !showVariantFilters)} />
 			<div class:!max-h-screen={showVariantFilters}>
-				<FancyCheckbox text="Numbered" id="filter-numbered" onclick={() => toggleFilter(filters, "variants", "numbered")} />
-				<FancyCheckbox text="Auto" id="filter-auto" onclick={() => toggleFilter(filters, "variants", "auto")} />
-				<FancyCheckbox text="Refractor" id="filter-refractor" onclick={() => toggleFilter(filters, "variants", "refractor")} />
-				<FancyCheckbox text="Holographic" id="filter-holographic" onclick={() => toggleFilter(filters, "variants", "holographic")} />
-				<FancyCheckbox text="Memorabilia" id="filter-memorabilia" onclick={() => toggleFilter(filters, "variants", "memorabilia")} />
+				<FancyCheckbox text="Numbered" id="filter-numbered" onclick={() => toggleFilter(filters, "variants", "numbered")} canFocus={showVariantFilters} />
+				<FancyCheckbox text="Auto" id="filter-auto" onclick={() => toggleFilter(filters, "variants", "auto")} canFocus={showVariantFilters} />
+				<FancyCheckbox text="Patch" id="filter-patch" onclick={() => toggleFilter(filters, "variants", "patch")} canFocus={showVariantFilters} />
 			</div>
 		</div>
 	</aside>
 	<article class="flex-grow max-w-[93rem]">
 		<header class="flex justify-between [&>div]:bg-glass-sm [&>div]:border-secondary/60 [&>div]:rounded-xl">
 			<div class="p-4 w-fit">
-				<h2 class="text-3xl">GTP Card Collection</h2>
+				<h2 class="text-5xl">GTP Card Collection</h2>
 			</div>
 			<div class="flex px-4 gap-4 w-fit [&>*]:my-auto [&>button]:w-8 [&>button]:aspect-square [&>button]:p-2 [&>button]:rounded-lg [&>button]:bg-tertiary [&>button]:transition-all [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:h-full [&>button>img]:mx-auto">
 				<!-- svelte-ignore a11y_missing_attribute -->
@@ -165,7 +164,30 @@
 				</div>
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<button type="button" onclick={() => (sortMethod = sortMethod == sortMethods.length - 1 ? 0 : sortMethod + 1)}><img src="/icons/right.svg" draggable="false" /></button>
+				<button type="button" onclick={() => (sortMethod = sortMethod == sortMethods.length - 1 ? 0 : sortMethod + 1)} class="mr-8"><img src="/icons/right.svg" draggable="false" /></button>
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<!-- svelte-ignore a11y_consider_explicit_label -->
+				<button
+					type="button"
+					onclick={() => {
+						currentPage = Math.max(1, currentPage - 1);
+						applyFilters();
+					}}
+				>
+					<img src="/icons/left.svg" draggable="false" />
+				</button>
+				<p class="p-2 rounded-lg bg-tertiary duration-200 transition-transform hover:scale-105">Page {currentPage}</p>
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<!-- svelte-ignore a11y_consider_explicit_label -->
+				<button
+					type="button"
+					onclick={() => {
+						currentPage = Math.max(1, currentPage + 1);
+						applyFilters();
+					}}
+				>
+					<img src="/icons/right.svg" draggable="false" />
+				</button>
 			</div>
 		</header>
 		<article class="mt-4">
