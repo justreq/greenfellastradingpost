@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	export let type: "button" | "submit" | "reset" | null | undefined = "button";
 	export let id: string = "";
 	export let iconPath = "";
@@ -8,12 +10,16 @@
 	export let canFocus = true;
 	export let reverse = false;
 
-	const setFocus = (value: boolean) => {
-		if (!value) {
-			document.getElementById(`button-${id}`)?.blur();
-		}
-		return value ? 0 : -1;
-	};
+	let setFocus = (value: boolean) => 0 | -1;
+
+	onMount(() => {
+		setFocus = (value: boolean) => {
+			if (!value) {
+				document.getElementById(`button-${id}`)?.blur();
+			}
+			return value ? 0 : -1;
+		};
+	});
 </script>
 
 <button {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class="h-min p-2 flex gap-4 rounded-lg transition-colors duration-200 hover:bg-tertiary {className}">
