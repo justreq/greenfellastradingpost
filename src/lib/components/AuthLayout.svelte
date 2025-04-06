@@ -1,0 +1,116 @@
+<script lang="ts">
+	import { supabase } from "$lib/supabaseClient";
+	import type { Provider } from "@supabase/supabase-js";
+	import FancyButton from "./FancyButton.svelte";
+	import FancyTextInput from "./FancyTextInput.svelte";
+	import { goto } from "$app/navigation";
+	import FancyCheckbox from "./FancyCheckbox.svelte";
+
+	export var authType: "signup" | "login";
+
+	var email = "";
+	var displayName = "";
+	var password = "";
+	var confirmPassword = "";
+	var includeInEmailBlast = true;
+
+	var errorText = "0";
+
+	const tryCreateAccount = async () => {
+		if (password != confirmPassword) {
+			errorText = "Passwords do not match";
+			return;
+		} else if (displayName.length < 6 || displayName.length > 20) {
+			errorText = "Display name must be 5 - 20 characters long";
+			return;
+		} else errorText = "0";
+
+		let { error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: includeInEmailBlast } } });
+		if (error) {
+			switch (error.code) {
+				case "validation_failed":
+					errorText = "Incorrect email format";
+					break;
+				case "weak_password":
+					errorText = "Weak password";
+					break;
+				default:
+					errorText = "0";
+					break;
+			}
+
+			throw error;
+		} else goto("/");
+	};
+
+	const trySignIn = async (provider: Provider | "email") => {
+		if (provider == "email") {
+			let { error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+			if (error) {
+				switch (error.code) {
+					case "invalid_credentials":
+						errorText = "Invalid credentials";
+						break;
+					default:
+						errorText = "0";
+						break;
+				}
+
+				throw error;
+			} else {
+				goto("/");
+				return;
+			}
+		}
+
+		let { error } = await supabase.auth.signInWithOAuth({ provider: provider as Provider });
+		if (error) throw error;
+	};
+
+	supabase.auth.signOut();
+</script>
+
+<article class="w-[32rem] mx-auto flex flex-col gap-8">
+	<h2 class="text-5xl text-center">{authType == "signup" ? "Create a new account" : "Log into your account"}</h2>
+	<div class="p-8 pb-4 flex flex-col gap-4 bg-glass-sm border-secondary/60 border-2 rounded-lg">
+		<form
+			onsubmit={() => {
+				authType == "signup" ? tryCreateAccount() : trySignIn("email");
+			}}
+			class="flex flex-col gap-4"
+		>
+			{#if authType == "signup"}
+				<FancyTextInput bind:value={displayName} name="auth-display-name" placeholder="Display Name" required={authType == "signup"} iconPath="/icons/user.svg" />
+			{/if}
+			<FancyTextInput bind:value={email} name="auth-email" placeholder="Email" required={authType == "signup"} iconPath="/icons/email.svg" />
+			<FancyTextInput bind:value={password} type="password" name="auth-password" placeholder="Password" required={authType == "signup"} iconPath="/icons/lock.svg" />
+			{#if authType == "signup"}
+				<FancyTextInput bind:value={confirmPassword} type="password" name="auth-confirm-password" placeholder="Confirm Password" required iconPath="/icons/lock.svg" />
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="flex cursor-pointer"
+					onclick={() => {
+						includeInEmailBlast = !includeInEmailBlast;
+					}}
+				>
+					<FancyCheckbox bind:value={includeInEmailBlast} />
+					<p>Recieve occasional emails about GTP news, updates, offers, coupons, etc.</p>
+				</div>
+			{/if}
+			<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
+			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all hover:scale-105 flex justify-center cursor-pointer" />
+		</form>
+		<hr class="h-1 border-none bg-tertiary rounded-full" />
+		<p class="text-center">or sign in via</p>
+		<div class="flex gap-4 justify-center [&>button]:h-12 [&>button]:aspect-square [&>button]:bg-secondary [&>button]:rounded-full [&>button]:transition-transform [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:w-2/3 [&>button>img]:h-2/3 [&>button>img]:m-auto">
+			<button type="button" onclick={() => trySignIn("google")}><img src="/icons/google.svg" alt="Sign In With Google" /></button>
+			<button type="button" onclick={() => trySignIn("discord")}><img src="/icons/discord.svg" alt="Sign In With Discord" /></button>
+		</div>
+	</div>
+	<p class="text-center">
+		{authType == "signup" ? "Already have an account? " : "Don't have an account? "}
+		<span><a href="/{authType == 'signup' ? 'login' : 'signup'}" class="text-accent border-0">{authType == "signup" ? "Log In" : "Sign Up"}</a></span>
+	</p>
+	<slot></slot>
+</article>

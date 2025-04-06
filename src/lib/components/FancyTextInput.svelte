@@ -1,15 +1,10 @@
 <script lang="ts">
-	export let type: string = "text";
-	export let name: string;
-	export let placeholder: string = "";
-	export let required: boolean = false;
-	export let iconPath: string = "";
+	let { type = "text", name = "", placeholder = "", required = false, iconPath = "", value = $bindable("") } = $props();
 
-	let showRequired: boolean = required;
-	let value: string = "";
+	let showRequired: boolean = $state(required);
 </script>
 
-<div class="w-fit">
+<div class="w-full">
 	<div class="relative">
 		{#if iconPath != ""}
 			<img src={iconPath} alt="" draggable="false" class="absolute h-1/2 left-3 top-1/2 -translate-y-1/2" />
