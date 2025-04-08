@@ -50,6 +50,10 @@
 		transition: background-color 0s 600000s, color 0s 600000s !important;
 	}
 
+	a {
+		@apply whitespace-nowrap;
+	}
+
 	a:not(:has(*)) {
 		@apply fancy-anchor;
 	}
@@ -65,7 +69,7 @@
 	}
 
 	.hover-effect {
-		@apply duration-200 transition-colors [&:hover]:border-accent2;
+		@apply duration-200 transition-colors lg:[&:hover]:border-accent2;
 	}
 
 	.fancy-button {
@@ -77,11 +81,11 @@
 	}
 
 	.fancy-anchor:not(.fancy-anchor-on) {
-		@apply font-normal hover:text-accent2;
+		@apply font-normal lg:hover:text-accent2;
 	}
 
 	.fancy-anchor.fancy-anchor-on {
-		@apply bg-text text-bg font-extrabold hover:bg-accent2;
+		@apply bg-text text-bg font-extrabold lg:hover:bg-accent2;
 	}
 
 	.fade-out-x {

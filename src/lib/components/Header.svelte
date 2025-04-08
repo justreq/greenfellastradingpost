@@ -2,6 +2,9 @@
 	import { page } from "$app/state";
 	import { supabase } from "$lib/supabaseClient";
 
+	let isNavMenuVisible = false;
+	let isProfileMenuVisible = false;
+
 	let getUser = supabase.auth.getUser();
 
 	supabase.auth.onAuthStateChange((event) => {
@@ -23,22 +26,95 @@
 	});
 </script>
 
-<header class="sticky top-0 h-24 border-b-2 w-screen px-16 bg-glass flex justify-between border-secondary/80 z-10 [&>*]:flex [&>*]:gap-16 [&_a]:my-auto">
-	<nav>
-		<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 duration-200 hover:scale-110"><img src="/images/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
-		<a href="/" class:fancy-anchor-on={page.route.id == "/"}>Home</a>
-		<a href="/collection" class:fancy-anchor-on={page.route.id?.includes("collection")}>Collection</a>
-		<a href="/store" class:fancy-anchor-on={page.route.id?.includes("store")}>GTP Store</a>
-		<a href="/contact" class:fancy-anchor-on={page.route.id?.includes("contact")}>Contact Us</a>
-	</nav>
+<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button>img]:h-1/2 [&>button>img]:my-auto [&>button>img]:lg:hidden">
+	<div class:hidden={!isNavMenuVisible}>
+		<nav>
+			<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-full aspect-square lg:duration-200 lg:hover:scale-110 lg:block hidden"><img src="/images/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
+			<a
+				href="/"
+				class:fancy-anchor-on={page.route.id == "/"}
+				onclick={() => {
+					isNavMenuVisible = false;
+				}}
+			>
+				Home
+			</a>
+			<a
+				href="/collection"
+				class:fancy-anchor-on={page.route.id?.includes("collection")}
+				onclick={() => {
+					isNavMenuVisible = false;
+				}}
+			>
+				Collection
+			</a>
+			<a
+				href="/store"
+				class:fancy-anchor-on={page.route.id?.includes("store")}
+				onclick={() => {
+					isNavMenuVisible = false;
+				}}
+			>
+				GTP Store
+			</a>
+			<a
+				href="/contact"
+				class:fancy-anchor-on={page.route.id?.includes("contact")}
+				onclick={() => {
+					isNavMenuVisible = false;
+				}}
+			>
+				Contact Us
+			</a>
+		</nav>
+	</div>
+	<button
+		type="button"
+		onclick={() => {
+			isProfileMenuVisible = false;
+			isNavMenuVisible = !isNavMenuVisible;
+		}}
+	>
+		<img src="/icons/menu.svg" alt="Navigation Menu Button" />
+	</button>
+	<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 aspect-square lg:duration-200 lg:hover:scale-110 lg:hidden"><img src="/images/favicon.png" alt="Logo Mobile" draggable="false" class="h-full" /></a>
+	<button
+		type="button"
+		onclick={() => {
+			isNavMenuVisible = false;
+			isProfileMenuVisible = !isProfileMenuVisible;
+		}}
+	>
+		<img src="/icons/user-circle.svg" alt="Profile Menu Button" />
+	</button>
 	{#await getUser then { data }}
-		<div class="!gap-8">
-			{#if data.user}
-				<a href="/" class="fancy-button">{data.user.user_metadata.displayName}</a>
-			{:else}
-				<a href="/signup" class="fancy-button" class:fancy-anchor-on={page.route.id?.includes("signup")}>Sign Up</a>
-				<a href="/login" class="fancy-button" class:fancy-anchor-on={page.route.id?.includes("login")}>Log In</a>
-			{/if}
+		<div class:hidden={!isProfileMenuVisible}>
+			<nav>
+				{#if data.user}
+					<a href="/" class="fancy-button">{data.user.user_metadata.displayName}</a>
+				{:else}
+					<a
+						href="/signup"
+						class="fancy-button"
+						class:fancy-anchor-on={page.route.id?.includes("signup")}
+						onclick={() => {
+							isProfileMenuVisible = false;
+						}}
+					>
+						Sign Up
+					</a>
+					<a
+						href="/login"
+						class="fancy-button"
+						class:fancy-anchor-on={page.route.id?.includes("login")}
+						onclick={() => {
+							isProfileMenuVisible = false;
+						}}
+					>
+						Log In
+					</a>
+				{/if}
+			</nav>
 		</div>
 	{/await}
 </header>
