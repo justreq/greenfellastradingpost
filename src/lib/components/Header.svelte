@@ -26,14 +26,14 @@
 	});
 </script>
 
-<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/2 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
+<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
 	<button
 		type="button"
 		onclick={() => {
 			isProfileMenuVisible = false;
 			isNavMenuVisible = !isNavMenuVisible;
 		}}
-		class=""
+		class="lg:hidden"
 	>
 		<img src="/icons/menu.svg" alt="Navigation Menu Button" draggable="false" />
 	</button>
@@ -44,7 +44,7 @@
 			isNavMenuVisible = false;
 			isProfileMenuVisible = !isProfileMenuVisible;
 		}}
-		class=""
+		class="lg:hidden"
 	>
 		<img src="/icons/user-circle.svg" alt="Profile Menu Button" draggable="false" />
 	</button>
