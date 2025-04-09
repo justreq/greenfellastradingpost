@@ -26,7 +26,7 @@
 	});
 </script>
 
-<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button>img]:h-1/2 [&>button>img]:my-auto [&>button]:block [&>button]:lg:hidden">
+<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button>img]:h-1/2 [&>button>img]:my-auto">
 	<div class:hidden={!isNavMenuVisible}>
 		<nav>
 			<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-full aspect-square lg:duration-200 lg:hover:scale-110 lg:block hidden"><img src="/images/favicon.png" alt="Logo" draggable="false" class="h-full" /></a>
@@ -74,6 +74,7 @@
 			isProfileMenuVisible = false;
 			isNavMenuVisible = !isNavMenuVisible;
 		}}
+		class="block lg:hidden"
 	>
 		<img src="/icons/menu.svg" alt="Navigation Menu Button" />
 	</button>
@@ -84,6 +85,7 @@
 			isNavMenuVisible = false;
 			isProfileMenuVisible = !isProfileMenuVisible;
 		}}
+		class="block lg:hidden"
 	>
 		<img src="/icons/user-circle.svg" alt="Profile Menu Button" />
 	</button>
