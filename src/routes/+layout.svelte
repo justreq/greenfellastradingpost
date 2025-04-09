@@ -19,8 +19,11 @@
 		{#if (data.user && greenfellas.includes(data.user.id)) || page.route.id?.includes("login") || page.route.id?.includes("signup")}
 			{@render children()}
 		{:else}
-			<h2 class="text-4xl lg:text-5xl text-center">Coming Soon...</h2>
-			<p class="mt-4 px-8 md:px-16 lg:px-0 text-lg lg:text-xl text-center">Create an account with us to stay up to date with GTP's latest machinations...</p>
+			<div class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
+				<h2>Coming Soon...</h2>
+				<p class="text-lg lg:text-xl">Create an account with us to stay up to date with GTP's latest machinations...</p>
+				<a href="/signup" class="fancy-button w-fit mx-auto mt-4">Sign Up</a>
+			</div>
 		{/if}
 	{/await}
 </main>

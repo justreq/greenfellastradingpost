@@ -26,7 +26,7 @@
 	});
 </script>
 
-<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-10 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-[calc(6rem+1px)] [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
+<header class="sticky top-0 h-24 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between border-secondary/80 z-20 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-24 [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
 	<button
 		type="button"
 		onclick={() => {
@@ -37,7 +37,16 @@
 	>
 		<img src="/icons/menu.svg" alt="Navigation Menu Button" draggable="false" />
 	</button>
-	<a href="/" class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 aspect-square lg:duration-200 lg:hover:scale-110"><img src="/images/favicon.png" alt="Logo Mobile" draggable="false" class="h-full" /></a>
+	<a
+		href="/"
+		onclick={() => {
+			isNavMenuVisible = false;
+			isProfileMenuVisible = false;
+		}}
+		class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 aspect-square lg:duration-200 lg:hover:scale-110"
+	>
+		<img src="/images/favicon.png" alt="Logo Mobile" draggable="false" class="h-full" />
+	</a>
 	<button
 		type="button"
 		onclick={() => {
@@ -94,16 +103,7 @@
 				{#if data.user}
 					<a href="/" class="fancy-button">{data.user.user_metadata.displayName}</a>
 				{:else}
-					<a
-						href="/signup"
-						class="fancy-button"
-						class:fancy-anchor-on={page.route.id?.includes("signup")}
-						onclick={() => {
-							isProfileMenuVisible = false;
-						}}
-					>
-						Sign Up
-					</a>
+					<!-- ! REMEMBER TO ADD THE SIGN UP BUTTON HERE PRIOR TO LAUNCH -->
 					<a
 						href="/login"
 						class="fancy-button"
@@ -119,3 +119,13 @@
 		</div>
 	{/await}
 </header>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<div
+	class:hidden={!isNavMenuVisible && !isProfileMenuVisible}
+	class="absolute w-screen min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] bg-black/40 lg:hidden z-10"
+	onclick={() => {
+		isNavMenuVisible = false;
+		isProfileMenuVisible = false;
+	}}
+></div>

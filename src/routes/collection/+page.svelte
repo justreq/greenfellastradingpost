@@ -87,7 +87,7 @@
 <section class="flex justify-center gap-16 px-16 [&>*>div]:bg-glass-sm [&>*>div]:border-secondary/60 [&>*>div]:rounded-xl">
 	<aside class="flex flex-col gap-4 [&_*]:whitespace-nowrap [&>div_button]:w-full [&>div>button]:justify-between [&>div>div]:max-h-0 [&>div>div]:overflow-hidden [&>div>div]:duration-200 [&>div>div]:transition-[max-height] [&>div>div>button]:p-4 [&>div>div>button]:pl-2">
 		<div class="p-4">
-			<h2 class="text-5xl text-center">Filters</h2>
+			<h2 class="text-center">Filters</h2>
 		</div>
 		<FancyButton text="Apply Filters" className="bg-glass-sm !transition-all hover:scale-105" onclick={applyFilters} />
 		<FancyButton text="Clear Filters" className="bg-glass-sm !transition-all hover:scale-105" onclick={clearFilters} />
@@ -169,7 +169,7 @@
 	<article class="flex-grow max-w-[93rem]">
 		<header class="flex justify-between [&>div]:bg-glass-sm [&>div]:border-secondary/60 [&>div]:rounded-xl">
 			<div class="p-4 w-fit">
-				<h2 class="text-5xl">GTP Card Collection</h2>
+				<h2 class="">GTP Card Collection</h2>
 			</div>
 			<div class="flex px-4 gap-4 w-fit [&>*]:my-auto [&>button]:w-8 [&>button]:aspect-square [&>button]:p-2 [&>button]:rounded-lg [&>button]:bg-tertiary [&>button]:transition-all [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:h-full [&>button>img]:mx-auto">
 				<!-- svelte-ignore a11y_missing_attribute -->

@@ -23,8 +23,8 @@
 				(v) => (value = v)
 			}
 			class:pl-11={iconPath != ""}
-			class="w-full"
+			class="w-full text-sm lg:text-base"
 		/>
 	</div>
-	<p class:!text-red-500={required && showRequired} class="text-transparent text-sm mt-1">*This field is required</p>
+	<p class:!text-red-500={required && showRequired} class="text-transparent text-xs lg:text-sm mt-1">*This field is required</p>
 </div>

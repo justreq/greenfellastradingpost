@@ -70,11 +70,17 @@
 	supabase.auth.signOut();
 </script>
 
-<article class="w-[32rem] mx-auto flex flex-col gap-8">
-	<h2 class="text-5xl text-center">{authType == "signup" ? "Create a new account" : "Log into your account"}</h2>
-	<div class="p-8 pb-4 flex flex-col gap-4 bg-glass-sm border-secondary/60 border-2 rounded-lg">
+<article class="w-[90vw] sm:w-[32rem] mx-auto flex flex-col gap-2">
+	<h2 class="text-center">{authType == "signup" ? "Create a new account" : "Log into your account"}</h2>
+	<p class="text-center">
+		{authType == "signup" ? "Already have an account? " : "Don't have an account? "}
+		<span><a href="/{authType == 'signup' ? 'login' : 'signup'}" class="text-accent border-0">{authType == "signup" ? "Log In" : "Sign Up"}</a></span>
+	</p>
+	<div class="w-full mx-auto sm:p-4 lg:p-8 !pb-4 flex flex-col gap-4 sm:bg-glass-sm border-secondary/60 sm:border-2 rounded-lg">
 		<form
-			onsubmit={() => {
+			method="POST"
+			onsubmit={(event) => {
+				event.preventDefault();
 				authType == "signup" ? tryCreateAccount() : trySignIn("email");
 			}}
 			class="flex flex-col gap-4"
@@ -108,9 +114,4 @@
 			<button type="button" onclick={() => trySignIn("discord")}><img src="/icons/discord.svg" alt="Sign In With Discord" /></button>
 		</div>
 	</div>
-	<p class="text-center">
-		{authType == "signup" ? "Already have an account? " : "Don't have an account? "}
-		<span><a href="/{authType == 'signup' ? 'login' : 'signup'}" class="text-accent border-0">{authType == "signup" ? "Log In" : "Sign Up"}</a></span>
-	</p>
-	<slot></slot>
 </article>
