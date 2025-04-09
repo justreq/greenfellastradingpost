@@ -33,7 +33,7 @@
 			isProfileMenuVisible = false;
 			isNavMenuVisible = !isNavMenuVisible;
 		}}
-		class="hidden lg:block"
+		class="lg:hide"
 	>
 		<img src="/icons/menu.svg" alt="Navigation Menu Button" draggable="false" />
 	</button>
@@ -44,7 +44,7 @@
 			isNavMenuVisible = false;
 			isProfileMenuVisible = !isProfileMenuVisible;
 		}}
-		class="hidden lg:block"
+		class="lg:hidden"
 	>
 		<img src="/icons/user-circle.svg" alt="Profile Menu Button" draggable="false" />
 	</button>
