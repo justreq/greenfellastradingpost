@@ -73,11 +73,11 @@
 	}
 
 	.hover-effect {
-		@apply duration-200 transition-colors lg:[&:hover]:border-accent2;
+		@apply duration-200 transition-colors lg:hover:border-accent2;
 	}
 
 	.fancy-button {
-		@apply fancy-anchor border-text !transition-all hover:scale-105;
+		@apply fancy-anchor border-text !transition-all lg:hover:scale-105;
 	}
 
 	.fancy-anchor {

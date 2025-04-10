@@ -3,10 +3,6 @@
 	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 </script>
 
-<svelte:head>
-	<title>Greenfellas' Trading Post</title>
-</svelte:head>
-
 <section class="flex flex-col gap-32 [&_a]:min-w-64 [&_a]:max-w-64">
 	<img src="/images/title.png" alt="Title" class="w-[96rem] mx-auto" draggable="false" />
 	<article class="flex gap-8 justify-center [&>a]:p-8 [&>a]:bg-glass-sm [&>a]:border-2 [&>a]:flex [&>a]:gap-4 [&>a]:flex-col [&>a]:justify-end [&>a]:uppercase [&>a]:border-secondary/60 [&>a]:!max-w-none [&>a]:w-80 [&>a]:aspect-square [&>a]:rounded-lg [&>a]:text-center [&>a:hover]:text-accent [&>a:hover]:bg-primary/80 [&>a]:transition-colors [&>a]:duration-200 [&>a>img]:mx-auto">

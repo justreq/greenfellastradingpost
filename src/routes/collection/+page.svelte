@@ -80,10 +80,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Collection - Greenfellas' Trading Post</title>
-</svelte:head>
-
 <section class="flex justify-center gap-16 px-16 [&>*>div]:bg-glass-sm [&>*>div]:border-secondary/60 [&>*>div]:rounded-xl">
 	<aside class="flex flex-col gap-4 [&_*]:whitespace-nowrap [&>div_button]:w-full [&>div>button]:justify-between [&>div>div]:max-h-0 [&>div>div]:overflow-hidden [&>div>div]:duration-200 [&>div>div]:transition-[max-height] [&>div>div>button]:p-4 [&>div>div>button]:pl-2">
 		<div class="p-4">
