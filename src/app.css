@@ -29,6 +29,10 @@
 		@apply text-4xl lg:text-5xl;
 	}
 
+	h3 {
+		@apply text-3xl lg:text-4xl;
+	}
+
 	body {
 		@apply min-h-screen bg-bg overflow-x-hidden;
 	}
@@ -73,11 +77,11 @@
 	}
 
 	.hover-effect {
-		@apply duration-200 transition-colors lg:hover:border-accent2;
+		@apply duration-200 transition-colors md:hover:border-accent2;
 	}
 
 	.fancy-button {
-		@apply fancy-anchor border-text !transition-all lg:hover:scale-105;
+		@apply fancy-anchor border-text !transition-all md:hover:scale-105;
 	}
 
 	.fancy-anchor {
@@ -85,11 +89,11 @@
 	}
 
 	.fancy-anchor:not(.fancy-anchor-on) {
-		@apply font-normal lg:hover:text-accent2;
+		@apply font-normal md:hover:text-accent2;
 	}
 
 	.fancy-anchor.fancy-anchor-on {
-		@apply bg-text text-bg font-extrabold lg:hover:bg-accent2;
+		@apply bg-text text-bg font-extrabold md:hover:bg-accent2;
 	}
 
 	.fade-out-x {

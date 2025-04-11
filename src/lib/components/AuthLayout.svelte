@@ -5,6 +5,7 @@
 	import FancyTextInput from "./FancyTextInput.svelte";
 	import { goto } from "$app/navigation";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
+	import Page from "../../routes/+page.svelte";
 
 	export var authType: "signup" | "login";
 
@@ -105,7 +106,7 @@
 				</div>
 			{/if}
 			<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
-			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all hover:scale-105 flex justify-center cursor-pointer" />
+			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer" />
 		</form>
 		<hr class="h-1 border-none bg-tertiary rounded-full" />
 		<p class="text-center">or sign in via</p>

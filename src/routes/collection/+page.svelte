@@ -85,8 +85,8 @@
 		<div class="p-4">
 			<h2 class="text-center">Filters</h2>
 		</div>
-		<FancyButton text="Apply Filters" className="bg-glass-sm !transition-all hover:scale-105" onclick={applyFilters} />
-		<FancyButton text="Clear Filters" className="bg-glass-sm !transition-all hover:scale-105" onclick={clearFilters} />
+		<FancyButton text="Apply Filters" className="bg-glass-sm !transition-all md:hover:scale-105" onclick={applyFilters} />
+		<FancyButton text="Clear Filters" className="bg-glass-sm !transition-all md:hover:scale-105" onclick={clearFilters} />
 		<div>
 			<FancyButton iconPath="/icons/{showPriceFilters ? 'minus' : 'plus'}.svg" text="Prices" reverse onclick={() => (showPriceFilters = !showPriceFilters)} />
 			<div class:!max-h-screen={showPriceFilters}>
@@ -172,7 +172,7 @@
 				<!-- svelte-ignore a11y_consider_explicit_label -->
 				<button type="button" onclick={() => (sortMethod = sortMethod == 0 ? sortMethods.length - 1 : sortMethod - 1)}><img src="/icons/left.svg" draggable="false" /></button>
 				<div>
-					<FancyButton iconPath="/icons/{sortAscending ? 'ascending' : 'descending'}.svg" text={sortMethods[sortMethod]} reverse onclick={() => (sortAscending = !sortAscending)} className="bg-tertiary justify-between min-w-40 duration-200 transition-transform hover:scale-105" />
+					<FancyButton iconPath="/icons/{sortAscending ? 'ascending' : 'descending'}.svg" text={sortMethods[sortMethod]} reverse onclick={() => (sortAscending = !sortAscending)} className="bg-tertiary justify-between min-w-40 duration-200 transition-transform md:hover:scale-105" />
 				</div>
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_consider_explicit_label -->

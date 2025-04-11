@@ -43,7 +43,7 @@
 			isNavMenuVisible = false;
 			isProfileMenuVisible = false;
 		}}
-		class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 aspect-square lg:duration-200 lg:hover:scale-110"
+		class="drop-shadow-[0_0_8px_rgba(0,0,0,0.5)] h-4/5 aspect-square lg:duration-200 md:hover:scale-110"
 	>
 		<img src="/images/favicon.png" alt="Logo Mobile" draggable="false" class="h-full" />
 	</a>
@@ -101,7 +101,7 @@
 		<div class:hidden={!isProfileMenuVisible}>
 			<nav>
 				{#if data.user}
-					<a href="/" class="fancy-button">{data.user.user_metadata.displayName}</a>
+					<a href="/" class="fancy-button">{data.user.user_metadata.displayName || data.user.user_metadata.full_name}</a>
 				{:else}
 					<!-- ! REMEMBER TO ADD THE SIGN UP BUTTON HERE PRIOR TO LAUNCH -->
 					<a
