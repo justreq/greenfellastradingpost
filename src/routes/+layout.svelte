@@ -21,7 +21,7 @@
 <Header></Header>
 <main class="w-screen pt-12 lg:pt-24 pb-32 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)]">
 	{#await supabase.auth.getUser() then { data }}
-		{#if (data.user && greenfellas.includes(data.user.id)) || page.route.id?.includes("login") || page.route.id?.includes("signup")}
+		{#if (data.user && greenfellas.includes(data.user.id)) || page.route.id?.includes("login") || page.route.id?.includes("signup") || page.route.id?.includes("legal")}
 			{@render children()}
 		{:else}
 			<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
