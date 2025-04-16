@@ -68,12 +68,16 @@
 }
 
 @layer components {
+	.infinite-cooling-off {
+		@apply [visibility:hidden] after:visible after:block after:text-center after:content-["Loading_More..."];
+	}
+
 	.bg-glass-sm {
-		@apply bg-primary/60 backdrop-blur-sm;
+		@apply bg-primary/60 backdrop-blur-sm border-2 border-secondary/60;
 	}
 
 	.bg-glass {
-		@apply bg-primary/80 backdrop-blur-md;
+		@apply bg-primary/80 backdrop-blur-md border-2 border-secondary/80;
 	}
 
 	.hover-effect {

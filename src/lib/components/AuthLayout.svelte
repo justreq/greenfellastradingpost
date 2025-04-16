@@ -13,7 +13,8 @@
 	var displayName = "";
 	var password = "";
 	var confirmPassword = "";
-	var includeInEmailBlast = true;
+	var dontIncludeInEmailBlast = false;
+	var acceptedTerms = false;
 
 	var errorText = "0";
 
@@ -26,7 +27,7 @@
 			return;
 		} else errorText = "0";
 
-		let { error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: includeInEmailBlast } } });
+		let { error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: !dontIncludeInEmailBlast } } });
 		if (error) {
 			switch (error.code) {
 				case "validation_failed":
@@ -77,7 +78,7 @@
 		{authType == "signup" ? "Already have an account? " : "Don't have an account? "}
 		<span><a href="/{authType == 'signup' ? 'login' : 'signup'}" class="text-accent border-0">{authType == "signup" ? "Log In" : "Sign Up"}</a></span>
 	</p>
-	<div class="w-full mx-auto sm:p-4 lg:p-8 !pb-4 flex flex-col gap-4 sm:bg-glass-sm border-secondary/60 sm:border-2 rounded-lg">
+	<div class="w-full mx-auto sm:p-4 lg:p-8 !pb-4 flex flex-col gap-4 sm:bg-glass-sm rounded-lg">
 		<form
 			method="POST"
 			onsubmit={(event) => {
@@ -98,15 +99,28 @@
 				<div
 					class="flex cursor-pointer"
 					onclick={() => {
-						includeInEmailBlast = !includeInEmailBlast;
+						dontIncludeInEmailBlast = !dontIncludeInEmailBlast;
 					}}
 				>
-					<FancyCheckbox bind:value={includeInEmailBlast} />
-					<p>Recieve occasional emails about GTP news, updates, offers, coupons, etc.</p>
+					<FancyCheckbox bind:value={dontIncludeInEmailBlast} />
+					<p>Check this to exclude yourself from occasional emails about GTP news, updates, offers, coupons, etc.</p>
+				</div>
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="flex cursor-pointer"
+					onclick={() => {
+						acceptedTerms = !acceptedTerms;
+					}}
+				>
+					<FancyCheckbox bind:value={acceptedTerms} />
+					<p>
+						By checking this, you agree to the terms and conditions set forth by our <span><a href="/legal" class="underline border-none">Legal Notice</a></span>
+					</p>
 				</div>
 			{/if}
 			<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
-			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer" />
+			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 || !acceptedTerms : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer" />
 		</form>
 		<hr class="h-1 border-none bg-tertiary rounded-full" />
 		<p class="text-center">or sign in via</p>
