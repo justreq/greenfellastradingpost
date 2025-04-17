@@ -10,6 +10,8 @@
 	export let className = "";
 	export let canFocus = true;
 	export let reverse = false;
+	export let isTogglable = false;
+	export let toggleValue = false;
 
 	let setFocus = (value: boolean) => 0 | -1;
 
@@ -23,7 +25,7 @@
 	});
 </script>
 
-<button {disabled} {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class="h-min p-2 flex gap-4 rounded-lg transition-colors duration-200 md:hover:bg-tertiary {className}">
+<button {disabled} {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class:border-2={isTogglable} class:!border-text={isTogglable && toggleValue} class="h-min p-2 flex gap-4 rounded-lg border-transparent transition-colors duration-200 md:hover:bg-tertiary {className}">
 	{#if iconPath != ""}
 		<div class="h-6 aspect-square flex"><img src={iconPath} alt="" class="w-full m-auto" /></div>
 	{/if}

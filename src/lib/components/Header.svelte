@@ -123,7 +123,7 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
 	class:hidden={!isNavMenuVisible && !isProfileMenuVisible}
-	class="absolute w-screen min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] bg-black/40 lg:hidden z-10"
+	class="fixed w-screen h-screen bg-black/40 lg:hidden z-10"
 	onclick={() => {
 		isNavMenuVisible = false;
 		isProfileMenuVisible = false;

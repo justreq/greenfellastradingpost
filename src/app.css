@@ -68,8 +68,8 @@
 }
 
 @layer components {
-	.infinite-cooling-off {
-		@apply [visibility:hidden] after:visible after:block after:text-center after:content-["Loading_More..."];
+	.invisible {
+		@apply [visibility:hidden];
 	}
 
 	.bg-glass-sm {
