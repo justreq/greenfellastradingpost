@@ -1,6 +1,7 @@
 <script>
 	import CardProductCarousel from "$lib/components/CardProductCarousel.svelte";
 	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
+	export let data;
 </script>
 
 <img src="/images/title.png" alt="Title" class="w-[90%] 2xl:w-[90rem] mx-auto" draggable="false" />
@@ -22,49 +23,10 @@
 		Breaks With Rel
 	</a>
 </section>
-<CardProductCarousel title="Hottest">
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-</CardProductCarousel>
-<CardProductCarousel title="New Arrivals">
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-</CardProductCarousel>
-<CardProductCarousel title="Recently Viewed">
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-	<CardProductThumbnail id="47c8d853-115e-4f89-94c8-b7b4875432e8" />
-</CardProductCarousel>
+{#each ["Hottest", "New Arrivals", "Recently Viewed"] as carousel}
+	<CardProductCarousel title={carousel}>
+		{#each data.products as product}
+			<CardProductThumbnail id={product.id} />
+		{/each}
+	</CardProductCarousel>
+{/each}
