@@ -1,7 +1,10 @@
 <script lang="ts">
+	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import { onMount } from "svelte";
 	let { data } = $props();
+
+	const itemsPerPage = 15;
 
 	let filtersList: { [key: string]: { name: string; value: string }[] } = {
 		prices: [
@@ -31,23 +34,33 @@
 
 		if (sortingOptions || filters) {
 			document.body.querySelector("footer")?.firstElementChild?.classList.add("!invisible");
+			scrollTo({ top: 0 });
+			document.body.classList.add("!overflow-y-hidden");
 		} else {
 			document.body.querySelector("footer")?.firstElementChild?.classList.remove("!invisible");
+			document.body.classList.remove("!overflow-y-hidden");
 			submitCollectionForm();
 		}
 	};
 
 	let sortingMethods = ["popularity", "name", "price", "newest"];
-	let sortReversed = $state(searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false);
-	let sortingMethod = $state(searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0);
+	// svelte-ignore non_reactive_update
+	let sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false;
+	// svelte-ignore non_reactive_update
+	let sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
 
-	const setSortIcon = () => ((document.getElementById("sorting-options-button-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
+	const setSortIcon = () => ((document.getElementById("button-sorting-options-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
+
 	const setSort = (reversed: boolean, method: number) => {
 		sortReversed = reversed;
 		sortingMethod = method;
 
 		(document.getElementById("sortby") as HTMLInputElement).value = sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "");
 		setSortIcon();
+	};
+
+	const sortProductList = (e: any) => {
+		return 0;
 	};
 
 	let priceFilters = $state(searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => filtersList.prices.map((f) => f.value).includes(e)) : []);
@@ -81,7 +94,44 @@
 		(document.getElementById(type) as HTMLInputElement).disabled = getFilters(type).length == 0;
 	};
 
-	let currentPage = $state(searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1);
+	const clearFilters = () => {
+		Object.keys(filtersList).forEach((type) => {
+			(document.getElementById(type) as HTMLInputElement).value = "";
+			(document.getElementById(type) as HTMLInputElement).disabled = true;
+		});
+
+		priceFilters = [];
+		yearFilters = [];
+		setFilters = [];
+		playerFilters = [];
+		otherFilters = [];
+	};
+
+	const filterProductList = (e: any) => {
+		const itemData = data.cards.find((card) => card.id == e.item_id);
+		let isValid = false;
+
+		if (priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && otherFilters.length == 0) return true;
+
+		if (priceFilters.includes("lowest") && e.price <= 10.0) isValid = true;
+		if (priceFilters.includes("affordable") && e.price > 10.0 && e.price <= 25.0) isValid = true;
+		if (priceFilters.includes("midrange") && e.price > 25.0 && e.price <= 75.0) isValid = true;
+		if (priceFilters.includes("premium") && e.price > 75.0 && e.price <= 150.0) isValid = true;
+		if (priceFilters.includes("luxury") && e.price > 150.0) isValid = true;
+
+		if (yearFilters.length > 0 && yearFilters.includes(itemData.year.toLowerCase())) isValid = true;
+		if (setFilters.length > 0 && setFilters.includes(`${itemData.brand.toLowerCase().split(" ").join("-")}-${itemData.set.toLowerCase().split(" ").join("-")}`)) isValid = true;
+		if (playerFilters.length > 0 && playerFilters.includes(itemData.player.toLowerCase().split(" ").join("-"))) isValid = true;
+
+		if (otherFilters.includes("numbered") && itemData.number != "") isValid = true;
+		if (otherFilters.includes("auto") && itemData.auto) isValid = true;
+		if (otherFilters.includes("patch") && itemData.patch) isValid = true;
+
+		return isValid;
+	};
+
+	// svelte-ignore non_reactive_update
+	let currentPage = searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1;
 
 	const setPage = (page: number) => {
 		currentPage = page;
@@ -107,17 +157,13 @@
 </script>
 
 <header>
-	<form id="collection-form" class="flex gap-4 px-4 [&>*:not(article)]:bg-glass-sm [&>*:not(article)]:rounded-lg [&>button]:h-12 [&>button]:aspect-square [&>button]:flex [&>button>img]:m-auto [&>button>img]:h-3/5">
-		<button type="button" onclick={() => setCollectionModals(true, false)}>
-			<img id="sorting-options-button-icon" alt="Sorting Options Button" />
-		</button>
-		<button type="button" onclick={() => setCollectionModals(false, true)}>
-			<img src="/icons/filter.svg" alt="Filters Button" />
-		</button>
-		<article class="absolute left-0 top-0 w-screen max-h-screen overflow-y-scroll z-20 [&>article]:bg-primary [&>article]:p-2 [&>article]:w-full [&>article]:min-h-[20vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
+	<form id="collection-form" class="grid grid-cols-6 gap-4 px-4 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+		<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3" />
+		<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3" />
+		<article class="absolute left-0 top-0 w-screen max-h-screen overflow-y-scroll z-20 [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-12 [&>article]:w-full [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<div class="w-full h-[80vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
+			<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
 			<article class:!hidden={!areSortingOptionsVisible} class="grid grid-cols-2 auto-rows-min">
 				<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
 				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Sorting</button>
@@ -132,6 +178,7 @@
 			</article>
 			<article class:!hidden={!areFiltersVisible} class="flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
 				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Filters</button>
+				<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
 				{#each Object.keys(filtersList) as filterType}
 					<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
 					<p>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</p>
@@ -142,26 +189,33 @@
 				{/each}
 			</article>
 		</article>
-		<button
-			type="button"
+		<FancyButton
+			iconPath="/icons/left.svg"
 			onclick={() => {
 				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage - 1));
 			}}
-			disabled={currentPage == 1}
-		>
-			<img src="/icons/left.svg" alt="Previous Page Button" />
-		</button>
-		<div class="flex-grow flex">
+			disabled={currentPage <= 1}
+			className="w-min"
+		/>
+		<div class="col-span-4 flex">
 			<input type="number" name="page" id="page" value={currentPage.toString()} class="hidden" />
-			<p class="h-min m-auto">Page {currentPage}</p>
+			<p class="h-min m-auto">Page {currentPage} / {Math.ceil(data.products.length / itemsPerPage)} ({(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, data.products.length)})</p>
 		</div>
-		<button
-			type="button"
+		<FancyButton
+			iconPath="/icons/right.svg"
 			onclick={() => {
 				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage + 1));
 			}}
-		>
-			<img src="/icons/right.svg" alt="Next Page Button" />
-		</button>
+			disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
+			className="w-min"
+		/>
 	</form>
+	<article class="flex flex-col">
+		{#each data.products
+			.filter(filterProductList)
+			.sort(sortProductList)
+			.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
+			<CardProductThumbnail id={product.id} />
+		{/each}
+	</article>
 </header>
