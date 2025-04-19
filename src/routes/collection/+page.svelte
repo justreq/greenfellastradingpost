@@ -154,13 +154,15 @@
 	onMount(() => {
 		setSortIcon();
 	});
+
+	const productList = data.products.filter(filterProductList).sort(sortProductList);
 </script>
 
 <header>
-	<form id="collection-form" class="grid grid-cols-6 gap-4 px-4 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+	<form id="collection-form" class="grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] gap-4 px-4 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
 		<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3" />
 		<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3" />
-		<article class="absolute left-0 top-0 w-screen max-h-screen overflow-y-scroll z-20 [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-12 [&>article]:w-full [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
+		<article class="absolute left-0 top-0 w-screen max-h-screen overflow-y-scroll z-20 [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-24 [&>article]:w-full [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
@@ -195,11 +197,11 @@
 				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage - 1));
 			}}
 			disabled={currentPage <= 1}
-			className="w-min"
+			className="w-min justify-self-center"
 		/>
 		<div class="col-span-4 flex">
 			<input type="number" name="page" id="page" value={currentPage.toString()} class="hidden" />
-			<p class="h-min m-auto">Page {currentPage} / {Math.ceil(data.products.length / itemsPerPage)} ({(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, data.products.length)})</p>
+			<p class="h-min m-auto">Items {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, productList.length)} ({productList.length})</p>
 		</div>
 		<FancyButton
 			iconPath="/icons/right.svg"
@@ -207,14 +209,11 @@
 				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage + 1));
 			}}
 			disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
-			className="w-min"
+			className="w-min justify-self-center"
 		/>
 	</form>
-	<article class="flex flex-col">
-		{#each data.products
-			.filter(filterProductList)
-			.sort(sortProductList)
-			.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
+	<article class="flex flex-wrap px-2 justify-evenly mx-auto mt-4 gap-2">
+		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
 			<CardProductThumbnail id={product.id} />
 		{/each}
 	</article>
