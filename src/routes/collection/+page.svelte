@@ -45,9 +45,9 @@
 
 	let sortingMethods = ["popularity", "name", "price", "newest"];
 	// svelte-ignore non_reactive_update
-	let sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false;
+	let sortReversed = $state(searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false);
 	// svelte-ignore non_reactive_update
-	let sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
+	let sortingMethod = $state(searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0);
 
 	const setSortIcon = () => ((document.getElementById("button-sorting-options-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
 
@@ -59,8 +59,19 @@
 		setSortIcon();
 	};
 
-	const sortProductList = (e: any) => {
-		return 0;
+	const sortProductList = (a: any, b: any) => {
+		switch (sortingMethod) {
+			case 0:
+				return a.reputation - b.reputation;
+			case 1:
+				return data.cards.find((e) => e.id == a.item_id).player.localeCompare(data.cards.find((e) => e.id == b.item_id).player);
+			case 2:
+				return a.price - b.price;
+			case 3:
+				return a.created - b.created;
+			default:
+				return 0;
+		}
 	};
 
 	let priceFilters = $state(searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => filtersList.prices.map((f) => f.value).includes(e)) : []);
@@ -156,17 +167,19 @@
 	});
 
 	const productList = data.products.filter(filterProductList).sort(sortProductList);
+	// svelte-ignore state_referenced_locally
+	if (sortReversed) productList.reverse();
 </script>
 
 <header>
-	<form id="collection-form" class="grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] gap-4 px-4 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
-		<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3" />
-		<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3" />
-		<article class="absolute left-0 top-0 w-screen max-h-screen overflow-y-scroll z-20 [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-24 [&>article]:w-full [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
+	<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex gap-4 px-4 lg:px-0 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+		<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3 lg:hidden" />
+		<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3 lg:hidden" />
+		<article class="absolute lg:static lg:block left-0 top-0 w-screen lg:w-fit max-h-screen lg:max-h-max overflow-y-scroll lg:overflow-y-auto z-20 [&>article]:absolute [&>article]:lg:top-14 [&>article]:lg:block [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-24 [&>article]:w-full [&>article]:lg:w-max [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
-			<article class:!hidden={!areSortingOptionsVisible} class="grid grid-cols-2 auto-rows-min">
+			<article class:hidden={!areSortingOptionsVisible} class="grid grid-cols-2 auto-rows-min">
 				<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
 				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Sorting</button>
 				<hr />
@@ -178,7 +191,7 @@
 				<FancyButton text="Price" onclick={() => (sortingMethod = 2)} isTogglable toggleValue={sortingMethod == 2} />
 				<FancyButton text="Newest" onclick={() => (sortingMethod = 3)} isTogglable toggleValue={sortingMethod == 3} />
 			</article>
-			<article class:!hidden={!areFiltersVisible} class="flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
+			<article class:hidden={!areFiltersVisible} class="flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
 				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Filters</button>
 				<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
 				{#each Object.keys(filtersList) as filterType}
@@ -212,9 +225,9 @@
 			className="w-min justify-self-center"
 		/>
 	</form>
-	<article class="flex flex-wrap px-2 justify-evenly mx-auto mt-4 gap-2">
-		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
-			<CardProductThumbnail id={product.id} />
-		{/each}
-	</article>
 </header>
+<article class="flex flex-wrap px-2 justify-evenly mx-auto mt-4 gap-2">
+	{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
+		<CardProductThumbnail id={product.id} />
+	{/each}
+</article>
