@@ -100,8 +100,20 @@
 		@apply bg-text text-bg font-extrabold md:hover:bg-accent2;
 	}
 
+	.fade-out-x-none {
+		mask-image: linear-gradient(to right, white);
+	}
+
 	.fade-out-x {
 		mask-image: linear-gradient(to right, transparent 0, white 4rem, white calc(100% - 4rem), transparent);
+	}
+
+	.fade-out-y-none {
+		mask-image: linear-gradient(to bottom, white);
+	}
+
+	.fade-out-y {
+		mask-image: linear-gradient(to bottom, transparent 0, white 4rem, white calc(100% - 4rem), transparent);
 	}
 
 	.fade-out-left {

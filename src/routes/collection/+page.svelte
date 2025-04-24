@@ -171,63 +171,66 @@
 	if (sortReversed) productList.reverse();
 </script>
 
-<header>
-	<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex gap-4 px-4 lg:px-0 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
-		<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3 lg:hidden" />
-		<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3 lg:hidden" />
-		<article class="absolute lg:static lg:block left-0 top-0 w-screen lg:w-fit max-h-screen lg:max-h-max overflow-y-scroll lg:overflow-y-auto z-20 [&>article]:absolute [&>article]:lg:top-14 [&>article]:lg:block [&>article]:bg-primary [&>article]:p-2 [&>article]:pb-24 [&>article]:w-full [&>article]:lg:w-max [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:rounded-lg [&>article>hr]:col-span-2 [&>article>hr]:border-none [&>article>hr]:h-0.5 [&>article>hr]:bg-secondary [&>article>hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
-			<article class:hidden={!areSortingOptionsVisible} class="grid grid-cols-2 auto-rows-min">
-				<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
-				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Sorting</button>
-				<hr />
-				<FancyButton iconPath="/icons/sort.svg" text="Default" onclick={() => (sortReversed = false)} isTogglable toggleValue={!sortReversed} />
-				<FancyButton iconPath="/icons/sort-reversed.svg" text="Reversed" onclick={() => (sortReversed = true)} isTogglable toggleValue={sortReversed} />
-				<hr />
-				<FancyButton text="Popularity" onclick={() => (sortingMethod = 0)} isTogglable toggleValue={sortingMethod == 0} />
-				<FancyButton text="Name" onclick={() => (sortingMethod = 1)} isTogglable toggleValue={sortingMethod == 1} />
-				<FancyButton text="Price" onclick={() => (sortingMethod = 2)} isTogglable toggleValue={sortingMethod == 2} />
-				<FancyButton text="Newest" onclick={() => (sortingMethod = 3)} isTogglable toggleValue={sortingMethod == 3} />
-			</article>
-			<article class:hidden={!areFiltersVisible} class="flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
-				<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Filters</button>
-				<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
-				{#each Object.keys(filtersList) as filterType}
-					<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
-					<p>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</p>
-					{#each filtersList[filterType] as filter}
-						<FancyButton text={filter.name} id={`filter-${filterType}-${filter.value}`} onclick={() => toggleFilter(filterType, filter.value)} isTogglable toggleValue={getFilters(filterType).includes(filter.value)} />
-					{/each}
+<section class="w-full mx-auto">
+	<header class="w-screen 2xl:w-[90rem] 2xl:mx-auto px-4 2xl:px-0">
+		<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3 lg:hidden" />
+			<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3 lg:hidden" />
+			<article class="absolute lg:flex lg:flex-col left-0 top-0 w-screen lg:w-fit h-screen lg:h-auto overflow-y-scroll lg:overflow-y-visible z-20 lg:z-0 [&>article]:absolute [&>article]:lg:flex [&>article]:lg:flex-col [&>article]:bg-glass [&>article]:lg:bg-transparent [&>article]:lg:backdrop-blur-none [&>article]:lg:border-none [&>article]:rounded-lg [&>article]:p-2 [&>article]:pb-24 [&>article]:lg:pb-0 [&>article]:w-full [&>article]:lg:w-auto [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:lg:bg-primary [&>article>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
+				<article class:hidden={!areSortingOptionsVisible} class="!static grid grid-cols-2 auto-rows-min">
+					<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
+					<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Sorting</button>
 					<hr />
-				{/each}
+					<FancyButton iconPath="/icons/sort.svg" text="Default" onclick={() => (sortReversed = false)} isTogglable toggleValue={!sortReversed} />
+					<FancyButton iconPath="/icons/sort-reversed.svg" text="Reversed" onclick={() => (sortReversed = true)} isTogglable toggleValue={sortReversed} />
+					<hr />
+					<FancyButton text="Popularity" onclick={() => (sortingMethod = 0)} isTogglable toggleValue={sortingMethod == 0} />
+					<FancyButton text="Name" onclick={() => (sortingMethod = 1)} isTogglable toggleValue={sortingMethod == 1} />
+					<FancyButton text="Price" onclick={() => (sortingMethod = 2)} isTogglable toggleValue={sortingMethod == 2} />
+					<FancyButton text="Newest" onclick={() => (sortingMethod = 3)} isTogglable toggleValue={sortingMethod == 3} />
+				</article>
+				<hr class="hidden lg:block border-tertiary lg:mt-4 lg:mb-2" />
+				<article class:hidden={!areFiltersVisible} class="!static flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
+					<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Filters</button>
+					<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
+					{#each Object.keys(filtersList) as filterType}
+						<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
+						<p>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</p>
+						{#each filtersList[filterType] as filter}
+							<FancyButton text={filter.name} id={`filter-${filterType}-${filter.value}`} onclick={() => toggleFilter(filterType, filter.value)} isTogglable toggleValue={getFilters(filterType).includes(filter.value)} />
+						{/each}
+						<hr />
+					{/each}
+				</article>
 			</article>
-		</article>
-		<FancyButton
-			iconPath="/icons/left.svg"
-			onclick={() => {
-				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage - 1));
-			}}
-			disabled={currentPage <= 1}
-			className="w-min justify-self-center"
-		/>
-		<div class="col-span-4 flex">
-			<input type="number" name="page" id="page" value={currentPage.toString()} class="hidden" />
-			<p class="h-min m-auto">Items {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, productList.length)} ({productList.length})</p>
-		</div>
-		<FancyButton
-			iconPath="/icons/right.svg"
-			onclick={() => {
-				submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage + 1));
-			}}
-			disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
-			className="w-min justify-self-center"
-		/>
-	</form>
-</header>
-<article class="flex flex-wrap px-2 justify-evenly mx-auto mt-4 gap-2">
-	{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
-		<CardProductThumbnail id={product.id} />
-	{/each}
-</article>
+			<FancyButton
+				iconPath="/icons/left.svg"
+				onclick={() => {
+					submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage - 1));
+				}}
+				disabled={currentPage <= 1}
+				className="w-min justify-self-center"
+			/>
+			<div class="col-span-4 flex">
+				<input type="number" name="page" id="page" value={currentPage.toString()} class="hidden" />
+				<p class="h-min m-auto px-4 whitespace-nowrap">{(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, productList.length)} ({productList.length})</p>
+			</div>
+			<FancyButton
+				iconPath="/icons/right.svg"
+				onclick={() => {
+					submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage + 1));
+				}}
+				disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
+				className="w-min justify-self-center"
+			/>
+		</form>
+	</header>
+	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-64 justify-evenly mx-auto mt-4 gap-8">
+		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
+			<CardProductThumbnail id={product.id} />
+		{/each}
+	</article>
+</section>
