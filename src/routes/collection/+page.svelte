@@ -171,12 +171,12 @@
 	if (sortReversed) productList.reverse();
 </script>
 
-<section class="w-full mx-auto">
-	<header class="w-screen 2xl:w-[90rem] 2xl:mx-auto px-4 2xl:px-0">
+<section class="w-full mx-auto [&>*]:w-screen [&>*]:2xl:w-[90rem] [&>*]:2xl:mx-auto">
+	<header class="px-4 2xl:px-0">
 		<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
 			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3 lg:hidden" />
 			<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3 lg:hidden" />
-			<article class="absolute lg:flex lg:flex-col left-0 top-0 w-screen lg:w-fit h-screen lg:h-auto overflow-y-scroll lg:overflow-y-visible z-20 lg:z-0 [&>article]:absolute [&>article]:lg:flex [&>article]:lg:flex-col [&>article]:bg-glass [&>article]:lg:bg-transparent [&>article]:lg:backdrop-blur-none [&>article]:lg:border-none [&>article]:rounded-lg [&>article]:p-2 [&>article]:pb-24 [&>article]:lg:pb-0 [&>article]:w-full [&>article]:lg:w-auto [&>article]:min-h-[40vh] [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:lg:bg-primary [&>article>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
+			<article class="absolute lg:flex lg:flex-col left-0 top-0 w-screen lg:w-fit h-screen lg:h-auto overflow-y-scroll lg:overflow-y-visible z-20 lg:z-0 [&>article]:absolute [&>article]:lg:flex [&>article]:lg:flex-col [&>article]:bg-glass [&>article]:lg:bg-transparent [&>article]:lg:backdrop-blur-none [&>article]:lg:border-none [&>article]:rounded-lg [&>article]:p-2 [&>article]:pb-24 [&>article:nth-of-type(1)]:lg:pb-0 [&>article]:w-full [&>article]:lg:w-auto [&>article]:min-h-[40vh] [&>article]:lg:min-h-0 [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:lg:bg-primary [&>article>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
