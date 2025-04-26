@@ -84,13 +84,16 @@
 			const product = await supabase
 				.from("products")
 				.update({ file_extensions: [frontExtension, backExtension] })
-				.eq("item_id", data[0].id);
+				.eq("item_id", data[0].id)
+				.select();
+
+			const productID = product.data == null ? "unknown" : product.data[0].id;
 
 			[
 				{ name: `0.${frontExtension}`, file: ((document.getElementById("front") as HTMLInputElement).files as FileList)[0] },
 				{ name: `1.${backExtension}`, file: ((document.getElementById("back") as HTMLInputElement).files as FileList)[0] },
 			].forEach(async (fileData) => {
-				const { error } = await supabase.storage.from("product_images").upload(`${product.data ? (product.data[0] as { id: string }).id : "unknown"}/${fileData.name}`, fileData.file, {
+				const { error } = await supabase.storage.from("product_images").upload(`${productID}/${fileData.name}`, fileData.file, {
 					contentType: fileData.file.type,
 					upsert: true,
 				});
