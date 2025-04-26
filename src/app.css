@@ -48,8 +48,14 @@
 	input[type="text"],
 	input[type="email"],
 	input[type="password"],
+	input[type="number"],
+	input[type="date"],
 	select {
 		@apply !bg-primary border-[3px] rounded-lg [&>:not(:focus)]:hover-effect;
+	}
+
+	input[type="date"]::-webkit-calendar-picker-indicator {
+		@apply hidden;
 	}
 
 	input,
