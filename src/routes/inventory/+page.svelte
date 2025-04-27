@@ -9,15 +9,14 @@
 	let columns: [{ column_name: string; data_type: string }] = $state([{ column_name: "", data_type: "" }]);
 
 	const convertTimestampToReadable = (timestamp: string) => {
+		if (timestamp == null) return "❌";
+
 		const date = new Date(timestamp);
 
 		const options: Intl.DateTimeFormatOptions = {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-			second: "2-digit",
 		};
 
 		const formatter = new Intl.DateTimeFormat("en-US", options);
@@ -152,9 +151,9 @@
 <section class:hidden={!isNewCardFormVisible} class="absolute w-screen h-screen left-0 top-0 z-20 overflow-y-scroll [&_hr]:border-none [&_hr]:mt-2 [&_hr]:col-span-6 [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-tertiary [&_hr]:rounded-full">
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="bg-black/80 w-full h-[50vh]" onclick={closeNewCardForm}></div>
-	<article class="bg-glass w-full mx-auto p-4 pb-24 rounded-lg">
-		<form class="grid grid-cols-6 gap-x-2 gap-y-1 [&_input[type=text]]:pr-0 [&_label]:col-span-6 [&>p]:col-span-6 [&>p]:mb-4 [&>p]:text-sm [&>p]:lg:text-base" id="new-card-form">
+	<div class="bg-black/80 w-full h-[50vh] sm:h-full" onclick={closeNewCardForm}></div>
+	<article class="sm:absolute sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-glass sm:bg-glass-sm w-full sm:w-max mx-auto p-4 pb-24 sm:pb-4 rounded-lg">
+		<form class="flex flex-col lg:flex-row gap-2 [&>div]:h-fit [&>div]:sm:w-[32rem] [&>div]:lg:w-[24rem] [&>div]:grid [&>div]:grid-cols-6 [&>div]:gap-x-2 [&>div]:gap-y-1 [&>div>p]:col-span-6 [&>div>p]:mb-4 [&>div>p]:text-sm [&>div>p]:lg:text-base [&_input[type=text]]:pr-0 [&_label]:col-span-6" id="new-card-form">
 			<datalist id="brands">
 				{#each data.cards.map((e) => e.brand) as brand}
 					<option value={brand}>{brand}</option>
@@ -187,32 +186,36 @@
 					<option value={grade}>{grade}</option>
 				{/each}
 			</datalist>
-			<h2 class="text-center col-span-6">Add a new card</h2>
-			<p>Please use full names and proper capitalization (e.g. "PSA 10", "Upper Deck", "Chrome", "Kylian Mbappe")</p>
-			<FancyTextInput name="brand" placeholder="Brand" required list="brands" bind:value={brand} className="col-span-3" />
-			<FancyTextInput name="set" placeholder={brand == "" ? "Set" : `Set (${brand})`} required bind:value={set} list="set-{stringToHTMLName(brand)}" className="col-span-3" />
-			<FancyTextInput name="player" placeholder="Player" required list="players" bind:value={player} className="col-span-6" />
-			<FancyTextInput name="year" placeholder="Year" required list="years" bind:value={year} className="col-span-2" />
-			<FancyTextInput name="number" placeholder="Number" list="numbers" className="col-span-2" />
-			<FancyTextInput name="grade" placeholder="Grade" list="grades" className="col-span-2" />
-			<FancyCheckbox text="Auto" id="auto" className="col-span-2" />
-			<FancyCheckbox text="Patch" id="patch" className="col-span-2" />
+			<div>
+				<h2 class="text-center col-span-6">Add a new card</h2>
+				<p>Please use full names and proper capitalization (e.g. "PSA 10", "Upper Deck", "Chrome", "Kylian Mbappe")</p>
+				<FancyTextInput name="brand" placeholder="Brand" required list="brands" bind:value={brand} className="col-span-3" />
+				<FancyTextInput name="set" placeholder={brand == "" ? "Set" : `Set (${brand})`} required bind:value={set} list="set-{stringToHTMLName(brand)}" className="col-span-3" />
+				<FancyTextInput name="player" placeholder="Player" required list="players" bind:value={player} className="col-span-6" />
+				<FancyTextInput name="year" placeholder="Year" required list="years" bind:value={year} className="col-span-2" />
+				<FancyTextInput name="number" placeholder="Number" list="numbers" className="col-span-2" />
+				<FancyTextInput name="grade" placeholder="Grade" list="grades" className="col-span-2" />
+				<FancyCheckbox text="Auto" id="auto" className="col-span-2" />
+				<FancyCheckbox text="Patch" id="patch" className="col-span-2" />
+			</div>
 			<hr />
-			<label for="bought">Buy Information</label>
-			<FancyTextInput type="number" name="buy" placeholder="Buy Price" required bind:value={buyPrice} step="any" className="col-span-3" />
-			<FancyTextInput type="date" name="bought" required value={`${date.getFullYear()}-${(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + date.getDate()}`} className="col-span-3" />
-			<label for="sold">Product Information</label>
-			<FancyTextInput type="number" name="comp" placeholder="Comp" required bind:value={comp} step="any" className="col-span-3" />
-			<FancyTextInput type="number" name="sell" placeholder="Sell Price" required bind:value={sellPrice} step="any" className="col-span-3" />
-			<FancyCheckbox text="Retail (should this card appear on the website?)" id="retail" className="col-span-6" />
-			<hr />
-			<label for="front-image" class="!col-span-3">Front Image</label>
-			<label for="back-image" class="!col-span-3">Back Image</label>
-			<FancyTextInput type="file" name="front" required bind:value={frontImage} accept="image/*" className="col-span-3" />
-			<FancyTextInput type="file" name="back" required bind:value={backImage} accept="image/*" className="col-span-3" />
-			<p>Both images should be oriented properly and cropped along the border of the mag / slab / card</p>
-			<FancyButton text="Add Card" onclick={submitNewCardForm} disabled={[brand, year, set, player, comp, buyPrice, sellPrice, frontImage, backImage].some((e) => e == null || e == "")} className="bg-accent/60 justify-center mt-4 col-span-6" />
-			<hr />
+			<div>
+				<label for="bought">Buy Information</label>
+				<FancyTextInput type="number" name="buy" placeholder="Buy Price" required bind:value={buyPrice} step="any" className="col-span-3" />
+				<FancyTextInput type="date" name="bought" required value={`${date.getFullYear()}-${(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + date.getDate()}`} className="col-span-3" />
+				<label for="sold">Product Information</label>
+				<FancyTextInput type="number" name="comp" placeholder="Comp" required bind:value={comp} step="any" className="col-span-3" />
+				<FancyTextInput type="number" name="sell" placeholder="Sell Price" required bind:value={sellPrice} step="any" className="col-span-3" />
+				<FancyCheckbox text="Retail (should this card appear on the website?)" id="retail" className="col-span-6" />
+				<hr />
+				<label for="front-image" class="!col-span-3">Front Image</label>
+				<label for="back-image" class="!col-span-3">Back Image</label>
+				<FancyTextInput type="file" name="front" required bind:value={frontImage} accept="image/*" className="col-span-3" />
+				<FancyTextInput type="file" name="back" required bind:value={backImage} accept="image/*" className="col-span-3" />
+				<p>Both images should be oriented properly and cropped along the border of the mag / slab / card</p>
+				<FancyButton text="Add Card" onclick={submitNewCardForm} disabled={[brand, year, set, player, comp, buyPrice, sellPrice, frontImage, backImage].some((e) => e == null || e == "")} className="bg-accent/60 justify-center mt-4 col-span-6" />
+				<hr class="sm:hidden" />
+			</div>
 		</form>
 	</article>
 </section>
