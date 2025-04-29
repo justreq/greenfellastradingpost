@@ -9,6 +9,7 @@ export default {
 		extend: {
 			fontFamily: {
 				heading: "'Bebas Neue', serif",
+				subheading: "'Spline Sans', sans-serif",
 				body: "'Kanit', serif",
 			},
 			colors: {

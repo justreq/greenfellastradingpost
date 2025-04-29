@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { supabase } from "$lib/supabaseClient";
+	import type { UserResponse } from "@supabase/supabase-js";
 
 	let isNavMenuVisible = false;
 	let isProfileMenuVisible = false;
 
-	let getUser = supabase.auth.getUser();
+	export let getUser: Promise<UserResponse>;
 
 	supabase.auth.onAuthStateChange((event) => {
 		getUser = supabase.auth.getUser();
@@ -61,7 +62,7 @@
 		<nav>
 			<a
 				href="/"
-				class:fancy-anchor-on={page.route.id == "/"}
+				class:fancy-anchor-on={page.url.pathname == "/"}
 				onclick={() => {
 					isNavMenuVisible = false;
 				}}
@@ -103,7 +104,16 @@
 				{#if data.user}
 					<a href="/" class="fancy-button">{data.user.user_metadata.displayName || data.user.user_metadata.full_name}</a>
 				{:else}
-					<!-- ! REMEMBER TO ADD THE SIGN UP BUTTON HERE PRIOR TO LAUNCH -->
+					<a
+						href="/signup"
+						class="fancy-button"
+						class:fancy-anchor-on={page.route.id?.includes("signup")}
+						onclick={() => {
+							isProfileMenuVisible = false;
+						}}
+					>
+						Sign Up
+					</a>
 					<a
 						href="/login"
 						class="fancy-button"

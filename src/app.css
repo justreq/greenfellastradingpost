@@ -20,8 +20,7 @@
 	}
 
 	h1,
-	h2,
-	h3 {
+	h2 {
 		@apply font-heading;
 	}
 
@@ -30,7 +29,7 @@
 	}
 
 	h3 {
-		@apply text-3xl lg:text-4xl;
+		@apply text-2xl lg:text-3xl font-bold;
 	}
 
 	body {

@@ -1,4 +1,8 @@
-<footer id="page-footer" class="lg:fixed bottom-0 h-auto lg:h-16 lg:py-3 border-0 border-t-2 w-screen px-8 xl:px-16 bg-glass z-10">
+<script>
+	import { page } from "$app/state";
+</script>
+
+<footer id="page-footer" class:lg:fixed={page.url.pathname != "/"} class="bottom-0 h-auto lg:h-16 lg:py-3 border-0 border-t-2 w-screen px-8 xl:px-16 bg-glass z-10">
 	<div class="w-full h-full flex justify-center lg:justify-between flex-col-reverse lg:flex-row">
 		<div class="h-8 lg:h-full w-full lg:w-fit flex mt-2 lg:mt-0">
 			<p class="h-min lg:text-left m-auto text-xs">
