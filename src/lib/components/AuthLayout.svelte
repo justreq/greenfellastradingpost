@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { supabase } from "$lib/supabaseClient";
-	import type { Provider } from "@supabase/supabase-js";
+	import type { Provider, User } from "@supabase/supabase-js";
 	import FancyButton from "./FancyButton.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
 	import { goto } from "$app/navigation";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
-	import Page from "../../routes/+page.svelte";
 
 	export var authType: "signup" | "login";
 
@@ -27,7 +26,7 @@
 			return;
 		} else errorText = "0";
 
-		let { error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: !dontIncludeInEmailBlast } } });
+		let { data, error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: !dontIncludeInEmailBlast } } });
 		if (error) {
 			switch (error.code) {
 				case "validation_failed":
@@ -42,7 +41,10 @@
 			}
 
 			throw error;
-		} else goto("/");
+		} else {
+			const { error } = await supabase.from("users").insert({ id: (data.user as User).id, email: (data.user as User).email, display_name: (data.user as User).user_metadata.displayName, includeInEmailBlast: (data.user as User).user_metadata.includeInEmailBlast });
+			if (error) throw error;
+		}
 	};
 
 	const trySignIn = async (provider: Provider | "email") => {
@@ -59,10 +61,9 @@
 				}
 
 				throw error;
-			} else {
-				goto("/");
-				return;
 			}
+
+			return;
 		}
 
 		let { error } = await supabase.auth.signInWithOAuth({ provider: provider as Provider });
@@ -99,17 +100,6 @@
 				<div
 					class="flex cursor-pointer"
 					onclick={() => {
-						dontIncludeInEmailBlast = !dontIncludeInEmailBlast;
-					}}
-				>
-					<FancyCheckbox bind:value={dontIncludeInEmailBlast} />
-					<p>Check this to exclude yourself from occasional emails about GTP news, updates, offers, coupons, etc.</p>
-				</div>
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
-				<div
-					class="flex cursor-pointer"
-					onclick={() => {
 						acceptedTerms = !acceptedTerms;
 					}}
 				>
@@ -118,15 +108,28 @@
 						By checking this, you agree to the terms and conditions set forth by our <span><a href="/legal" class="underline border-none">Legal Notice</a></span>
 					</p>
 				</div>
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="flex cursor-pointer"
+					onclick={() => {
+						dontIncludeInEmailBlast = !dontIncludeInEmailBlast;
+					}}
+				>
+					<FancyCheckbox bind:value={dontIncludeInEmailBlast} />
+					<p>I want occasional emails about news, updates, offers, coupons, etc., to be sent anywhere but to my email.</p>
+				</div>
 			{/if}
 			<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
 			<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 || !acceptedTerms : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer" />
 		</form>
-		<hr class="h-1 border-none bg-tertiary rounded-full" />
-		<p class="text-center">or sign in via</p>
-		<div class="flex gap-4 justify-center [&>button]:h-12 [&>button]:aspect-square [&>button]:bg-secondary [&>button]:rounded-full [&>button]:transition-transform [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:w-2/3 [&>button>img]:h-2/3 [&>button>img]:m-auto">
-			<button type="button" onclick={() => trySignIn("google")}><img src="/icons/google.svg" alt="Sign In With Google" /></button>
-			<button type="button" onclick={() => trySignIn("discord")}><img src="/icons/discord.svg" alt="Sign In With Discord" /></button>
+		<div class="hidden">
+			<hr class="h-1 border-none bg-tertiary rounded-full" />
+			<p class="text-center">or sign in via</p>
+			<div class="flex gap-4 justify-center [&>button]:h-12 [&>button]:aspect-square [&>button]:bg-secondary [&>button]:rounded-full [&>button]:transition-transform [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:w-2/3 [&>button>img]:h-2/3 [&>button>img]:m-auto">
+				<button type="button" onclick={() => trySignIn("google")}><img src="/icons/google.svg" alt="Sign In With Google" /></button>
+				<button type="button" onclick={() => trySignIn("discord")}><img src="/icons/discord.svg" alt="Sign In With Discord" /></button>
+			</div>
 		</div>
 	</div>
 </article>

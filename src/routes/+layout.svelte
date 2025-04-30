@@ -8,9 +8,11 @@
 	import { dev } from "$app/environment";
 	import CardProductCarousel from "$lib/components/CardProductCarousel.svelte";
 	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
+	import type { User } from "@supabase/supabase-js";
 	let { children, data } = $props();
 
 	let getUser = supabase.auth.getUser();
+	let currentUser: User | null = $state(null);
 
 	const greenfellas = ["2b5c3202-96ca-4ce2-b9dc-b4c4661e6f7b", "bb6b222d-c0c1-426e-bd7e-447c5089f675", "ca860e56-c5ae-4cb2-8b47-7195c5ee17f4", "d7f62e3e-9dad-4551-9aff-5ad5e24c3577"];
 
@@ -49,6 +51,7 @@
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
 {#await getUser then { data: user }}
+	<div class="hidden">(currentUser = user)</div>
 	{#if user.user || page.url.pathname != "/"}
 		<Header {getUser}></Header>
 	{/if}

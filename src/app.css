@@ -5,6 +5,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit&display=swap");
 
 @layer base {
+	html {
+		@apply scroll-smooth;
+	}
+
 	*,
 	*::before,
 	*::after {
@@ -30,6 +34,10 @@
 
 	h3 {
 		@apply text-2xl lg:text-3xl font-bold;
+	}
+
+	h4 {
+		@apply text-lg lg:text-xl font-bold;
 	}
 
 	body {
