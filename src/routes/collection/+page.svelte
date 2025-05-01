@@ -24,7 +24,7 @@
 		],
 	};
 
-	let searchParams = new URLSearchParams(window.location.search);
+	let searchParams: URLSearchParams;
 	let areSortingOptionsVisible = $state(false);
 	let areFiltersVisible = $state(false);
 
@@ -44,10 +44,8 @@
 	};
 
 	let sortingMethods = ["popularity", "name", "price", "newest"];
-	// svelte-ignore non_reactive_update
-	let sortReversed = $state(searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false);
-	// svelte-ignore non_reactive_update
-	let sortingMethod = $state(searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0);
+	let sortReversed = $state(false);
+	let sortingMethod = $state(0);
 
 	const setSortIcon = () => ((document.getElementById("button-sorting-options-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
 
@@ -74,11 +72,11 @@
 		}
 	};
 
-	let priceFilters = $state(searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => filtersList.prices.map((f) => f.value).includes(e)) : []);
-	let yearFilters = $state(searchParams.get("years") != null ? (searchParams.get("years") as string).split("_").filter((e) => filtersList.years.map((f) => f.value).includes(e)) : []);
-	let setFilters = $state(searchParams.get("sets") != null ? (searchParams.get("sets") as string).split("_").filter((e) => filtersList.sets.map((f) => f.value).includes(e)) : []);
-	let playerFilters = $state(searchParams.get("players") != null ? (searchParams.get("players") as string).split("_").filter((e) => filtersList.players.map((f) => f.value).includes(e)) : []);
-	let otherFilters = $state(searchParams.get("other") != null ? (searchParams.get("other") as string).split("_").filter((e) => filtersList.other.map((f) => f.value).includes(e)) : []);
+	let priceFilters: string[] = $state([]);
+	let yearFilters: string[] = $state([]);
+	let setFilters: string[] = $state([]);
+	let playerFilters: string[] = $state([]);
+	let otherFilters: string[] = $state([]);
 
 	const getFilters = (type: string) => {
 		switch (type) {
@@ -141,8 +139,7 @@
 		return isValid;
 	};
 
-	// svelte-ignore non_reactive_update
-	let currentPage = searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1;
+	let currentPage = $state(1);
 
 	const setPage = (page: number) => {
 		currentPage = page;
@@ -163,6 +160,15 @@
 	};
 
 	onMount(() => {
+		searchParams = new URLSearchParams(window.location.search);
+		sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false;
+		sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
+		priceFilters = searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => filtersList.prices.map((f) => f.value).includes(e)) : [];
+		yearFilters = searchParams.get("years") != null ? (searchParams.get("years") as string).split("_").filter((e) => filtersList.years.map((f) => f.value).includes(e)) : [];
+		setFilters = searchParams.get("sets") != null ? (searchParams.get("sets") as string).split("_").filter((e) => filtersList.sets.map((f) => f.value).includes(e)) : [];
+		playerFilters = searchParams.get("players") != null ? (searchParams.get("players") as string).split("_").filter((e) => filtersList.players.map((f) => f.value).includes(e)) : [];
+		otherFilters = searchParams.get("other") != null ? (searchParams.get("other") as string).split("_").filter((e) => filtersList.other.map((f) => f.value).includes(e)) : [];
+		currentPage = searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1;
 		setSortIcon();
 	});
 

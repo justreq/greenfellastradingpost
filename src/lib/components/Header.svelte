@@ -1,30 +1,9 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { supabase } from "$lib/supabaseClient";
-	import type { UserResponse } from "@supabase/supabase-js";
+	import { currentUser } from "$lib/supabaseClient";
 
 	let isNavMenuVisible = false;
 	let isProfileMenuVisible = false;
-
-	export let getUser: Promise<UserResponse>;
-
-	supabase.auth.onAuthStateChange((event) => {
-		getUser = supabase.auth.getUser();
-
-		if (event === "INITIAL_SESSION") {
-			// handle initial session
-		} else if (event === "SIGNED_IN") {
-			// handle sign in event
-		} else if (event === "SIGNED_OUT") {
-			// handle sign out event
-		} else if (event === "PASSWORD_RECOVERY") {
-			// handle password recovery event
-		} else if (event === "TOKEN_REFRESHED") {
-			// handle token refreshed event
-		} else if (event === "USER_UPDATED") {
-			// handle user updated event
-		}
-	});
 </script>
 
 <header class="sticky top-0 h-24 border-0 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between z-20 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-24 [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
@@ -98,36 +77,34 @@
 			</a>
 		</nav>
 	</div>
-	{#await getUser then { data }}
-		<div class:hidden={!isProfileMenuVisible}>
-			<nav>
-				{#if data.user}
-					<a href="/" class="fancy-button">{data.user.user_metadata.displayName || data.user.user_metadata.full_name}</a>
-				{:else}
-					<a
-						href="/signup"
-						class="fancy-button"
-						class:fancy-anchor-on={page.route.id?.includes("signup")}
-						onclick={() => {
-							isProfileMenuVisible = false;
-						}}
-					>
-						Sign Up
-					</a>
-					<a
-						href="/login"
-						class="fancy-button"
-						class:fancy-anchor-on={page.route.id?.includes("login")}
-						onclick={() => {
-							isProfileMenuVisible = false;
-						}}
-					>
-						Log In
-					</a>
-				{/if}
-			</nav>
-		</div>
-	{/await}
+	<div class:hidden={!isProfileMenuVisible}>
+		<nav>
+			{#if $currentUser}
+				<a href="/" class="fancy-button">{$currentUser.user_metadata.displayName || $currentUser.user_metadata.full_name}</a>
+			{:else}
+				<a
+					href="/signup"
+					class="fancy-button"
+					class:fancy-anchor-on={page.route.id?.includes("signup")}
+					onclick={() => {
+						isProfileMenuVisible = false;
+					}}
+				>
+					Sign Up
+				</a>
+				<a
+					href="/login"
+					class="fancy-button"
+					class:fancy-anchor-on={page.route.id?.includes("login")}
+					onclick={() => {
+						isProfileMenuVisible = false;
+					}}
+				>
+					Log In
+				</a>
+			{/if}
+		</nav>
+	</div>
 </header>
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->

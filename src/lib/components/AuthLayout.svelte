@@ -70,7 +70,7 @@
 		if (error) throw error;
 	};
 
-	supabase.auth.signOut();
+	// supabase.auth.signOut();
 </script>
 
 <article class="w-[90vw] sm:w-[32rem] mx-auto flex flex-col gap-2">

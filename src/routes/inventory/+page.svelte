@@ -120,7 +120,7 @@
 				document.body.classList.add("!overflow-y-hidden");
 				isNewCardFormVisible = true;
 			}}
-			className="bg-secondary !transition-all lg:hover:scale-110"
+			className="bg-secondary !transition-all md:hover:scale-110"
 		/>
 	</header>
 	<table class="block table-fixed overflow-scroll border-separate [&_td]:whitespace-nowrap [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">

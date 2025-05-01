@@ -1,5 +1,5 @@
 <script lang="ts">
-	import StreamLayout from "$lib/components/StreamLayout.svelte";
+	import ServiceLayout from "$lib/components/ServiceLayout.svelte";
 </script>
 
-<StreamLayout type="breaks" />
+<ServiceLayout type="breaks" />

@@ -5,10 +5,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit&display=swap");
 
 @layer base {
-	html {
-		@apply scroll-smooth;
-	}
-
 	*,
 	*::before,
 	*::after {
