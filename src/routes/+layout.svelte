@@ -3,7 +3,7 @@
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import { page } from "$app/state";
-	import { currentUser, fetchCurrentUser, supabase } from "$lib/supabaseClient";
+	import { currentUser, fetchCurrentUser, loadedAuth, supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
 	import { dev } from "$app/environment";
 	import CardProductCarousel from "$lib/components/CardProductCarousel.svelte";
@@ -30,6 +30,7 @@
 	};
 
 	onMount(() => {
+		fetchCurrentUser();
 		moveParallaxBG(new Event(""));
 		updateTitle();
 	});
@@ -42,7 +43,7 @@
 
 <svelte:window on:scroll={moveParallaxBG} onresize={updateTitle} />
 
-{#await fetchCurrentUser() then user}
+{#if $loadedAuth}
 	<div class="w-screen h-screen fixed -z-10 blur-sm [&>img]:absolute">
 		<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 		<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
@@ -82,4 +83,4 @@
 		{/if}
 	</main>
 	<Footer></Footer>
-{/await}
+{/if}

@@ -44,6 +44,8 @@
 		} else {
 			const { error } = await supabase.from("users").insert({ id: (data.user as User).id, email: (data.user as User).email, display_name: (data.user as User).user_metadata.displayName, includeInEmailBlast: (data.user as User).user_metadata.includeInEmailBlast });
 			if (error) throw error;
+			goto("/");
+			location.reload();
 		}
 	};
 
@@ -104,7 +106,7 @@
 					}}
 				>
 					<FancyCheckbox bind:value={acceptedTerms} />
-					<p>
+					<p class="ml-2">
 						By checking this, you agree to the terms and conditions set forth by our <span><a href="/legal" class="underline border-none">Legal Notice</a></span>
 					</p>
 				</div>
@@ -117,7 +119,7 @@
 					}}
 				>
 					<FancyCheckbox bind:value={dontIncludeInEmailBlast} />
-					<p>I want occasional emails about news, updates, offers, coupons, etc., to be sent anywhere but to my email.</p>
+					<p class="ml-2">I want occasional emails about news, updates, offers, coupons, etc., to be sent anywhere but to my email.</p>
 				</div>
 			{/if}
 			<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>

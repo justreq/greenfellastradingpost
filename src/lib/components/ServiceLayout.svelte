@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { currentUser, isSuperUser, supabase } from "$lib/supabaseClient";
-	import FancyButton from "./FancyButton.svelte";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
 

@@ -7,6 +7,7 @@ const supabaseKey = PUBLIC_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
+export const loadedAuth: Writable<boolean> = writable(false);
 export const currentUser: Writable<User | null> = writable(null);
 
 export const fetchCurrentUser = async () => {
@@ -14,6 +15,7 @@ export const fetchCurrentUser = async () => {
 	if (error) throw error;
 
 	currentUser.set(data.user);
+	loadedAuth.set(true);
 };
 
 export const isSuperUser = (user: User | null) => {
