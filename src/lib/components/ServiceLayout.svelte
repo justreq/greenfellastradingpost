@@ -9,7 +9,8 @@
 	let selectedSpotCount = $state(0);
 	let allSpotsSelected = $state(false);
 
-	let creatingNewSpot = $state(false);
+	let isPopupVisible = $state(false);
+	let isBuyingSpot = $state(false);
 
 	const info: { [key: string]: { [key: string]: string } } = {
 		breaks: {
@@ -61,7 +62,7 @@
 			form.reset();
 		}
 
-		creatingNewSpot = value;
+		isPopupVisible = value;
 	};
 </script>
 
@@ -102,16 +103,28 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<div
-				id="create-new-spot-backdrop"
-				class:hidden={!creatingNewSpot}
+				id="popup-backdrop"
+				class:hidden={!isPopupVisible}
 				class="bg-black/80 w-screen h-screen fixed left-0 top-0 z-20 flex"
 				onclick={(event: Event) => {
-					if ((event.target as HTMLElement).id != "create-new-spot-backdrop") return;
+					if ((event.target as HTMLElement).id != "popup-backdrop") return;
 					toggleCreateSpotForm(false);
+					isBuyingSpot = false;
 				}}
 			>
 				<div class="m-auto w-3/4 sm:w-1/2 lg:w-fit p-4 bg-glass-sm rounded-lg">
+					<div class:hidden={!isBuyingSpot} class="min-w-[32rem]">
+						<div id="paypal-container-2Q7MW8YTLFWAW" class="[&_.amount-container]:pointer-events-none [&_.amount-container]:select-none [&_.amount-container]:[tabindex:-1]"></div>
+						<script>
+							paypal
+								.HostedButtons({
+									hostedButtonId: "2Q7MW8YTLFWAW",
+								})
+								.render("#paypal-container-2Q7MW8YTLFWAW");
+						</script>
+					</div>
 					<form
+						class:hidden={isBuyingSpot}
 						id="create-new-spot-form"
 						onsubmit={() => {
 							toggleCreateSpotForm(false, true);
@@ -208,7 +221,14 @@
 										{/if}
 										{#if key != "" && breakSpot[key] == null}
 											<span>
-												<button>Buy Spot</button>
+												<button
+													onclick={() => {
+														isPopupVisible = true;
+														isBuyingSpot = true;
+													}}
+												>
+													Buy Spot
+												</button>
 											</span>
 										{:else}
 											{key == "price" ? convertFloatToPrice(breakSpot[key]) : key == "owner_id" ? page.data.users.find((e: { id: any }) => e.id == breakSpot[key]).display_name : breakSpot[key]}

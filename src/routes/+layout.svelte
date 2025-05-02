@@ -37,6 +37,8 @@
 </script>
 
 <svelte:head>
+	<script src="https://www.paypal.com/sdk/js?client-id=BAAiDpoa6hKu2qzEnwK605Ix6mZuiIECKR7vhNx_GljZz2UMCvzZzs7ubI0UyeqXepMkFyvJ81dxnc-iNo&components=hosted-buttons&enable-funding=venmo&currency=USD">
+	</script>
 	<title>Greenfellas Trading Post</title>
 	<meta name="description" content="Get the highest quality soccer trading cards. Mags, slabs, repacks, breaks, and more available here!" />
 </svelte:head>
