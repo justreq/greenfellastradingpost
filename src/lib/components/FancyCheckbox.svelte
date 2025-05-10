@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	let { text = "", id = "", onclick = (cb: HTMLInputElement) => {}, canFocus = true, value = $bindable(false), className = "" } = $props();
+	let { children = null, id = "", onclick = (cb: HTMLInputElement) => {}, canFocus = true, value = $bindable(false), className = "" } = $props();
 
 	let button: HTMLButtonElement;
 	// svelte-ignore non_reactive_update
@@ -30,7 +30,8 @@
 	/>
 	<!-- svelte-ignore a11y_consider_explicit_label -->
 	<div class:!border-accent2={value} class="p-1 min-w-6 h-6 rounded-md border-[3px] border-text"><div class:bg-accent2={value} class="w-full h-full rounded-sm"></div></div>
-	{#if text != ""}
-		<p class="text-left text-sm lg:text-base my-auto">{text}</p>
+
+	{#if children}
+		<p class="text-left text-sm lg:text-base my-auto">{@render children()}</p>
 	{/if}
 </button>

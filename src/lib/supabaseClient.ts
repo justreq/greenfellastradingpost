@@ -1,18 +1,18 @@
-import { createClient, type User } from "@supabase/supabase-js";
+import { type User } from "@supabase/supabase-js";
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
 import { writable, type Writable } from "svelte/store";
+import { createBrowserClient } from "@supabase/ssr";
 
 const supabaseUrl = PUBLIC_SUPABASE_URL;
 const supabaseKey = PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createBrowserClient(supabaseUrl, supabaseKey);
 
 export const loadedAuth: Writable<boolean> = writable(false);
 export const currentUser: Writable<User | null> = writable(null);
 
 export const fetchCurrentUser = async () => {
-	const { data, error } = await supabase.auth.getUser();
-	if (error) throw error;
+	const { data } = await supabase.auth.getUser();
 
 	currentUser.set(data.user);
 	loadedAuth.set(true);

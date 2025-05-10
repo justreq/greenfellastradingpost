@@ -114,14 +114,14 @@
 			>
 				<div class="m-auto w-3/4 sm:w-1/2 lg:w-fit p-4 bg-glass-sm rounded-lg">
 					<div class:hidden={!isBuyingSpot} class="min-w-[32rem]">
-						<div id="paypal-container-2Q7MW8YTLFWAW" class="[&_.amount-container]:pointer-events-none [&_.amount-container]:select-none [&_.amount-container]:[tabindex:-1]"></div>
+						<!-- <div id="paypal-container-2Q7MW8YTLFWAW"></div>
 						<script>
 							paypal
 								.HostedButtons({
 									hostedButtonId: "2Q7MW8YTLFWAW",
 								})
 								.render("#paypal-container-2Q7MW8YTLFWAW");
-						</script>
+						</script> -->
 					</div>
 					<form
 						class:hidden={isBuyingSpot}

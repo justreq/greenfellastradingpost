@@ -195,8 +195,8 @@
 				<FancyTextInput name="year" placeholder="Year" required list="years" bind:value={year} className="col-span-2" />
 				<FancyTextInput name="number" placeholder="Number" list="numbers" className="col-span-2" />
 				<FancyTextInput name="grade" placeholder="Grade" list="grades" className="col-span-2" />
-				<FancyCheckbox text="Auto" id="auto" className="col-span-2" />
-				<FancyCheckbox text="Patch" id="patch" className="col-span-2" />
+				<FancyCheckbox id="auto" className="col-span-2">Auto</FancyCheckbox>
+				<FancyCheckbox id="patch" className="col-span-2">Patch</FancyCheckbox>
 			</div>
 			<hr />
 			<div>
@@ -206,7 +206,7 @@
 				<label for="sold">Product Information</label>
 				<FancyTextInput type="number" name="comp" placeholder="Comp" required bind:value={comp} step="any" className="col-span-3" />
 				<FancyTextInput type="number" name="sell" placeholder="Sell Price" required bind:value={sellPrice} step="any" className="col-span-3" />
-				<FancyCheckbox text="Retail (should this card appear on the website?)" id="retail" className="col-span-6" />
+				<FancyCheckbox id="retail" className="col-span-6">Retail (should this card appear on the website?)</FancyCheckbox>
 				<hr />
 				<label for="front-image" class="!col-span-3">Front Image</label>
 				<label for="back-image" class="!col-span-3">Back Image</label>
