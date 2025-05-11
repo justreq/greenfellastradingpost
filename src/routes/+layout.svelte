@@ -3,14 +3,12 @@
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import { page } from "$app/state";
-	import { currentUser, fetchCurrentUser, loadedAuth, supabase } from "$lib/supabaseClient";
+	import { currentUser, fetchCurrentUser, isSuperUser, loadedAuth, supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
-	import { dev } from "$app/environment";
-	import CardProductCarousel from "$lib/components/CardProductCarousel.svelte";
-	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import { globalPopupState, superUsers } from "$lib/globals";
-	let { children, data } = $props();
+	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
+	let { children } = $props();
 
 	let innerWidth = $state(0);
 	let innerHeight = $state(0);
@@ -32,6 +30,7 @@
 	};
 
 	const updateTitle = () => {
+		if (window.innerWidth > 1024 && ($globalPopupState == "headernav" || ($globalPopupState == "profile" && $loadedAuth && !$currentUser))) $globalPopupState = "none";
 		if (document.getElementById("title")) (document.getElementById("title") as HTMLImageElement).src = getTitleImage();
 	};
 
@@ -62,7 +61,52 @@
 {#if $loadedAuth}
 	<Header></Header>
 	<main class:pb-32={page.url.pathname != "/" || $currentUser} class="w-screen pt-12 lg:pt-24 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-		{#if ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal")}
+		{#if page.url.pathname.includes("repacks")}
+			<div class="px-2 mx-auto w-fit flex flex-col gap-4 justify-center text-center">
+				<h2>Available Numbers</h2>
+				<h4>Refresh the page for the current numbers</h4>
+				{#if isSuperUser($currentUser)}
+					<div class="flex flex-col gap-4 [&>button]:fancy-anchor [&>button]:fancy-button whitespace-nowrap [&>button]:bg-glass-sm [&>button]:my-auto">
+						<FancyTextInput type="number" name="repack-number" placeholder="Spot Number" />
+						<button
+							onclick={async () => {
+								const { error } = await supabase
+									.from("repacks")
+									.update({ numbers: page.data.repack.numbers.filter((e: number) => e != parseInt((document.getElementById("repack-number") as HTMLInputElement).value)) })
+									.eq("id", page.data.repack.id);
+								if (error) throw error;
+
+								location.reload();
+							}}
+							type="button"
+							class="!bg-red-500/80 !text-text !border-red-500"
+						>
+							Remove Spot
+						</button>
+						<button
+							type="button"
+							onclick={async () => {
+								const { error } = await supabase
+									.from("repacks")
+									.update({ numbers: Array.from(Array(50).keys()).map((x) => x + 1) })
+									.eq("id", page.data.repack.id);
+								if (error) throw error;
+
+								location.reload();
+							}}
+						>
+							Reset Spots
+						</button>
+					</div>
+				{/if}
+				<div class="w-auto max-w-[40rem] mx-auto sm:w-screen flex justify-evenly flex-wrap gap-4 [&>*]:bg-glass-sm [&>*]:rounded-md [&>*]:text-center [&>*]:w-12 [&>*]:py-2">
+					{#each Array.from(Array(50).keys()).map((x) => x + 1) as spot}
+						<div class:opacity-50={!page.data.repack.numbers.includes(spot)} class:text-tertiary={!page.data.repack.numbers.includes(spot)}>{spot}</div>
+					{/each}
+				</div>
+				<h2>GTP 1 of 1 Repack Checklist</h2>
+			</div>
+		{:else if ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal")}
 			<article class:hidden={$currentUser || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
 				<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
 				<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>

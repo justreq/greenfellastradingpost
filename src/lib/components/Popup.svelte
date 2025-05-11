@@ -5,6 +5,9 @@
 	import AuthForm from "./AuthForm.svelte";
 	import { currentUser, supabase } from "$lib/supabaseClient";
 	import { page } from "$app/state";
+	import { onMount } from "svelte";
+	import HeaderNav from "./HeaderNav.svelte";
+	import ProfileNav from "./ProfileNav.svelte";
 
 	let { className = "" } = $props();
 	// svelte-ignore non_reactive_update
@@ -33,88 +36,22 @@
 {#if $globalPopupState != "none"}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div bind:this={popupElement} class="fixed left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/80" class:hidden={!visible} transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}>
+	<div bind:this={popupElement} class="fixed sm:flex left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/80" class:hidden={!visible} transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}>
 		<div
-			class="h-[60vh]"
+			class="h-[60vh] sm:absolute sm:w-full sm:h-full"
 			onclick={() => {
 				$globalPopupState = "none";
 			}}
 		></div>
-		<article class="bg-glass-sm w-full min-h-[50vh] rounded-t-lg bottom-0 pb-24 {className}" transition:fly={{ duration: 200, y: 500, easing: sineInOut }}>
+		<article class="bg-glass-sm sm:m-auto w-full max-w-[640px] min-h-[50vh] sm:min-h-0 rounded-t-lg sm:rounded-b-lg bottom-0 pb-24 sm:p-4 {className}" transition:fly={{ duration: 200, y: 500, easing: sineInOut }}>
 			{#if $globalPopupState == "headernav"}
-				<div class="pt-8 px-2 flex flex-col gap-4 [&>*]:bg-text/10">
-					<a
-						href="/"
-						class:fancy-anchor-on={page.url.pathname == "/"}
-						onclick={() => {
-							$globalPopupState = "none";
-						}}
-					>
-						Home
-					</a>
-					<a
-						href="/collection"
-						class:fancy-anchor-on={page.route.id?.includes("collection")}
-						onclick={() => {
-							$globalPopupState = "none";
-						}}
-					>
-						Collection
-					</a>
-					<a
-						href="/store"
-						class:fancy-anchor-on={page.route.id?.includes("store")}
-						onclick={() => {
-							$globalPopupState = "none";
-						}}
-					>
-						GTP Store
-					</a>
-					<a
-						href="/contact"
-						class:fancy-anchor-on={page.route.id?.includes("contact")}
-						onclick={() => {
-							$globalPopupState = "none";
-						}}
-					>
-						Contact Us
-					</a>
-				</div>
+				<nav class="pt-8 sm:py-2 px-2 flex flex-col gap-4 [&>*]:bg-text/10">
+					<HeaderNav />
+				</nav>
 			{:else if $globalPopupState == "profile"}
-				{#if $currentUser}
-					<div class="pt-8 px-2 flex flex-col gap-4">
-						<a href="/" class="fancy-button text-center">{$currentUser.user_metadata.displayName || $currentUser.user_metadata.full_name}</a>
-						<button
-							class="fancy-button border-none bg-text/40 font-bold"
-							type="button"
-							onclick={async () => {
-								await supabase.auth.signOut();
-							}}
-						>
-							Sign Out
-						</button>
-					</div>
-				{:else}
-					<div class="pt-8 px-2 flex flex-col gap-4 [&>button]:py-8 [&>button]:font-bold [&>button]:rounded-lg [&>button]:transition-transform [&>button]:duration-200 [&>button:hover]:md:scale-105">
-						<button
-							class="bg-text text-primary"
-							onclick={() => {
-								$globalPopupState = "login";
-							}}
-						>
-							Log In
-						</button>
-						<p class="text-center">or</p>
-						<button
-							class="bg-accent2/80"
-							onclick={() => {
-								$globalPopupState = "signup";
-							}}
-						>
-							Sign Up
-						</button>
-					</div>
-				{/if}
+				<article class="[&>*]:sm:py-4">
+					<ProfileNav />
+				</article>
 			{:else if $globalPopupState == "signup" || $globalPopupState == "login"}
 				<article class="flex flex-col gap-2 p-2"><AuthForm authType={$globalPopupState} /></article>
 			{:else if $globalPopupState == "sorts"}

@@ -6,7 +6,7 @@
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	import { globalPopupState } from "$lib/globals";
 
-	export var authType: "signup" | "login";
+	export var authType = "";
 
 	var email = "";
 	var displayName = "";
@@ -98,7 +98,7 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<span onclick={() => ($globalPopupState = "none")}><a href="/legal" class="underline border-none">Legal Notice</a></span>
 		</FancyCheckbox>
-		<FancyCheckbox bind:value={dontIncludeInEmailBlast}>You want occasional emails about news, updates, offers, coupons, etc., to be sent anywhere but to my email.</FancyCheckbox>
+		<FancyCheckbox bind:value={dontIncludeInEmailBlast}>You want occasional emails about news, updates, offers, coupons, etc., to be sent anywhere but to your email.</FancyCheckbox>
 	{/if}
 	<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
 	<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 || !acceptedTerms : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
