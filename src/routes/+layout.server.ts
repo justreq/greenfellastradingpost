@@ -7,6 +7,7 @@ export const load = async () => {
 	const breaks = await supabase.from("breaks").select();
 	const breakSpots = await supabase.from("break_spots").select();
 	const repacks = await supabase.from("repacks").select();
+	const repackChecklist = await supabase.from("repack_checklist").select();
 
 	return {
 		users: users.data ?? [],
@@ -15,5 +16,6 @@ export const load = async () => {
 		break: (breaks.data as any[])[0] ?? null,
 		breakSpots: breakSpots.data ?? [],
 		repack: (repacks.data as any[])[0] ?? null,
+		repackChecklist: repackChecklist.data ?? [],
 	};
 };
