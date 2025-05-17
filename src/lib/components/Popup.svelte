@@ -8,6 +8,8 @@
 	import { onMount } from "svelte";
 	import HeaderNav from "./HeaderNav.svelte";
 	import ProfileNav from "./ProfileNav.svelte";
+	import SortingOptions from "./SortingOptions.svelte";
+	import Filters from "./Filters.svelte";
 
 	let { className = "" } = $props();
 	// svelte-ignore non_reactive_update
@@ -55,9 +57,9 @@
 			{:else if $globalPopupState == "signup" || $globalPopupState == "login"}
 				<article class="flex flex-col gap-2 p-2"><AuthForm authType={$globalPopupState} /></article>
 			{:else if $globalPopupState == "sorts"}
-				<div>sorts</div>
+				<SortingOptions />
 			{:else if $globalPopupState == "filters"}
-				<div>filters</div>
+				<Filters />
 			{:else if $globalPopupState == "checkout"}
 				<div>checkout</div>
 			{/if}

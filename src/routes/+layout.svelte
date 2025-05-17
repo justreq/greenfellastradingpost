@@ -3,15 +3,30 @@
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import { page } from "$app/state";
-	import { currentUser, fetchCurrentUser, isSuperUser, loadedAuth, supabase } from "$lib/supabaseClient";
+	import { currentUser, fetchCurrentUser, loadedAuth, supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
-	import { globalPopupState, superUsers } from "$lib/globals";
-	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
+	import { filtersList, globalPopupState, superUsers } from "$lib/globals";
+	import { dev } from "$app/environment";
 	let { children } = $props();
 
-	let innerWidth = $state(0);
-	let innerHeight = $state(0);
+	$filtersList = {
+		prices: [
+			{ name: "Free - $10", value: "lowest" },
+			{ name: "$11 - $25", value: "affordable" },
+			{ name: "$26 - $75", value: "midrange" },
+			{ name: "$75 - $150", value: "premium" },
+			{ name: "$151+", value: "luxury" },
+		],
+		years: page.data.cards.map((e: { year: string }) => ({ name: e.year, value: e.year.toLowerCase() })),
+		sets: page.data.cards.map((e: { brand: string; set: string }) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })),
+		players: page.data.cards.map((e: { player: string }) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })),
+		other: [
+			{ name: "Is Numbered", value: "numbered" },
+			{ name: "Has Auto", value: "auto" },
+			{ name: "Has Patch", value: "patch" },
+		],
+	};
 
 	const moveParallaxBG = (event: Event) => {
 		let bg1 = document.getElementById("bg-1");
@@ -21,22 +36,12 @@
 
 		let scrollAmount = window.pageYOffset / (document.body.scrollHeight - innerHeight);
 
-		bg1.style.top = `-${scrollAmount * 50}px`;
-		bg2.style.top = `-${scrollAmount * 200}px`;
-	};
-
-	const getTitleImage = () => {
-		return `/images/title-${innerWidth >= 1024 ? "desktop" : "mobile"}.png`;
-	};
-
-	const updateTitle = () => {
-		if (window.innerWidth > 1024 && ($globalPopupState == "headernav" || ($globalPopupState == "profile" && $loadedAuth && !$currentUser))) $globalPopupState = "none";
-		if (document.getElementById("title")) (document.getElementById("title") as HTMLImageElement).src = getTitleImage();
+		bg1.style.top = `-${50 + scrollAmount * 50}px`;
+		bg2.style.top = `-${50 + scrollAmount * 50}px`;
 	};
 
 	onMount(() => {
 		moveParallaxBG(new Event(""));
-		updateTitle();
 	});
 
 	supabase.auth.onAuthStateChange(() => {
@@ -51,7 +56,12 @@
 	<meta name="description" content="Get the highest quality soccer trading cards. Mags, slabs, repacks, breaks, and more available here!" />
 </svelte:head>
 
-<svelte:window bind:innerWidth bind:innerHeight on:scroll={moveParallaxBG} onresize={updateTitle} />
+<svelte:window
+	onscroll={moveParallaxBG}
+	onresize={(event) => {
+		if ((event.target as Window).innerWidth > 1024 && ($globalPopupState == "headernav" || $globalPopupState == "profile" || $globalPopupState == "sorts" || $globalPopupState == "filters")) $globalPopupState = "none";
+	}}
+/>
 
 <Popup></Popup>
 <div class="w-screen h-screen fixed -z-10 blur-sm [&>img]:absolute">
@@ -59,89 +69,16 @@
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
 {#if $loadedAuth}
-	<Header></Header>
+	{#if page.url.pathname == "/" && !$currentUser}
+		<article class:hidden={$currentUser || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
+			<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
+			<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>
+		</article>
+	{:else}
+		<Header></Header>
+	{/if}
 	<main class:pb-32={page.url.pathname != "/" || $currentUser} class="w-screen pt-12 lg:pt-24 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-		{#if page.url.pathname.includes("repacks")}
-			<div class="px-2 mx-auto w-fit flex flex-col gap-4 justify-center text-center">
-				<h2>Available Numbers</h2>
-				<h4>Refresh the page for the current numbers</h4>
-				{#if isSuperUser($currentUser)}
-					<div class="flex flex-col w-full whitespace-nowrap gap-4 !overflow-x-scroll [&>button]:fancy-anchor [&>button]:fancy-button [&>button]:bg-glass-sm [&>button]:my-auto">
-						<FancyTextInput type="number" name="repack-number" placeholder="Spot Number" />
-						<button
-							onclick={async () => {
-								const { error } = await supabase
-									.from("repacks")
-									.update({ numbers: page.data.repack.numbers.filter((e: number) => e != parseInt((document.getElementById("repack-number") as HTMLInputElement).value)) })
-									.eq("id", page.data.repack.id);
-								if (error) throw error;
-
-								location.reload();
-							}}
-							type="button"
-							class="!bg-red-500/80 !text-text !border-red-500"
-						>
-							Remove Spot
-						</button>
-						<button
-							type="button"
-							onclick={async () => {
-								const { error } = await supabase
-									.from("repacks")
-									.update({ numbers: Array.from(Array(40).keys()).map((x) => x + 1) })
-									.eq("id", page.data.repack.id);
-								if (error) throw error;
-
-								location.reload();
-							}}
-						>
-							Reset Spots
-						</button>
-					</div>
-				{/if}
-				<div class="w-auto max-w-[40rem] mx-auto sm:w-screen flex justify-evenly flex-wrap gap-4 [&>*]:bg-glass-sm [&>*]:rounded-md [&>*]:text-center [&>*]:w-12 [&>*]:py-2">
-					{#each Array.from(Array(40).keys()).map((x) => x + 1) as spot}
-						<div class:opacity-50={!page.data.repack.numbers.includes(spot)} class:text-tertiary={!page.data.repack.numbers.includes(spot)}>{spot}</div>
-					{/each}
-				</div>
-				<h2>GTP 1 of 1 Repack Checklist</h2>
-				<div class="w-screen sm:w-auto overflow-x-scroll">
-					<table id="repack-checklist-table" class="block mx-auto w-fit table-fixed overflow-scroll border-separate [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">
-						<thead class="bg-accent2/60">
-							<tr>
-								{#each ["Year", "Player", "Team / Country", "Set", "Notes"] as column}
-									<td>
-										{column}
-									</td>
-								{/each}
-							</tr>
-						</thead>
-						<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text [&_button:not(:has(*))]:fancy-button [&_button:not(:has(*))]:bg-accent2/20 [&_button:not(:has(*))]:border-accent2/40">
-							{#each page.data.repackChecklist as checklistItem}
-								<tr data-id={checklistItem.id}>
-									{#each Object.keys(checklistItem).slice(2, 7) as key}
-										<td class:text-accent2={checklistItem[key] == null}>
-											{checklistItem[key]}
-										</td>
-									{/each}
-								</tr>
-							{/each}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		{:else if ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal")}
-			<article class:hidden={$currentUser || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
-				<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
-				<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>
-			</article>
-			<section class:hidden={$currentUser || page.url.pathname != "/"} class="w-screen">
-				<img src={getTitleImage()} alt="Title" id="title" class="mt-56 xl:-mt-20 mb-4 xl:mb-56 w-3/4 sm:w-1/2 lg:w-4/5 lg:max-w-[48rem] mx-auto" draggable="false" />
-				<article class="px-2 sm:px-8 pb-4 w-fit mx-auto flex flex-col gap-4">
-					<h2 class="text-center text-4xl sm:text-5xl lg:text-6xl text-balance">Filling your collections with high-end soccer cards</h2>
-					<a href="/collection" class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">Browse GTP Collection</a>
-				</article>
-			</section>
+		{#if dev || ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal")}
 			{@render children()}
 		{:else}
 			<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">

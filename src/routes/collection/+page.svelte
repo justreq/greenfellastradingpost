@@ -1,82 +1,24 @@
 <script lang="ts">
 	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 	import FancyButton from "$lib/components/FancyButton.svelte";
+	import Filters from "$lib/components/Filters.svelte";
+	import SortingOptions from "$lib/components/SortingOptions.svelte";
+	import { filtersList, globalPopupState } from "$lib/globals.js";
 	import { onMount } from "svelte";
 	let { data } = $props();
 
-	const itemsPerPage = 15;
-
-	let filtersList: { [key: string]: { name: string; value: string }[] } = {
-		prices: [
-			{ name: "Free - $10", value: "lowest" },
-			{ name: "$11 - $25", value: "affordable" },
-			{ name: "$26 - $75", value: "midrange" },
-			{ name: "$75 - $150", value: "premium" },
-			{ name: "$151+", value: "luxury" },
-		],
-		years: data.cards.map((e) => ({ name: e.year, value: e.year.toLowerCase() })),
-		sets: data.cards.map((e) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })),
-		players: data.cards.map((e) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })),
-		other: [
-			{ name: "Is Numbered", value: "numbered" },
-			{ name: "Has Auto", value: "auto" },
-			{ name: "Has Patch", value: "patch" },
-		],
-	};
-
-	let searchParams: URLSearchParams;
-	let areSortingOptionsVisible = $state(false);
-	let areFiltersVisible = $state(false);
-
-	const setCollectionModals = (sortingOptions: boolean, filters: boolean) => {
-		areSortingOptionsVisible = sortingOptions;
-		areFiltersVisible = filters;
-
-		if (sortingOptions || filters) {
-			document.body.querySelector("footer")?.firstElementChild?.classList.add("!invisible");
-			scrollTo({ top: 0 });
-			document.body.classList.add("!overflow-y-hidden");
-		} else {
-			document.body.querySelector("footer")?.firstElementChild?.classList.remove("!invisible");
-			document.body.classList.remove("!overflow-y-hidden");
-			submitCollectionForm();
-		}
-	};
-
 	let sortingMethods = ["popularity", "name", "price", "newest"];
+
 	let sortReversed = $state(false);
 	let sortingMethod = $state(0);
-
-	const setSortIcon = () => ((document.getElementById("button-sorting-options-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
-
-	const setSort = (reversed: boolean, method: number) => {
-		sortReversed = reversed;
-		sortingMethod = method;
-
-		(document.getElementById("sortby") as HTMLInputElement).value = sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "");
-		setSortIcon();
-	};
-
-	const sortProductList = (a: any, b: any) => {
-		switch (sortingMethod) {
-			case 0:
-				return a.reputation - b.reputation;
-			case 1:
-				return data.cards.find((e) => e.id == a.item_id).player.localeCompare(data.cards.find((e) => e.id == b.item_id).player);
-			case 2:
-				return a.price - b.price;
-			case 3:
-				return a.created - b.created;
-			default:
-				return 0;
-		}
-	};
 
 	let priceFilters: string[] = $state([]);
 	let yearFilters: string[] = $state([]);
 	let setFilters: string[] = $state([]);
 	let playerFilters: string[] = $state([]);
 	let otherFilters: string[] = $state([]);
+
+	let optionsLoaded = $state(false);
 
 	const getFilters = (type: string) => {
 		switch (type) {
@@ -95,32 +37,34 @@
 		}
 	};
 
-	const toggleFilter = (type: string, filter: string) => {
-		if (getFilters(type).includes(filter)) getFilters(type).splice(getFilters(type).indexOf(filter), 1);
-		else getFilters(type).push(filter);
+	const itemsPerPage = 15;
 
-		(document.getElementById(type) as HTMLInputElement).value = getFilters(type).join("_");
-		(document.getElementById(type) as HTMLInputElement).disabled = getFilters(type).length == 0;
+	let searchParams: URLSearchParams = $state(new URLSearchParams());
+
+	const setSortIcon = () => ((document.getElementById("button-sorting-options-icon") as HTMLImageElement).src = `/icons/sort${["", "-alpha", "-number", "-number"][sortingMethod]}${["", "-reversed"][Number(sortReversed)]}.svg`);
+
+	const sortProductList = (a: any, b: any) => {
+		switch (sortingMethod) {
+			case 0:
+				return a.reputation - b.reputation;
+			case 1:
+				return data.cards.find((e) => e.id == a.item_id).player.localeCompare(data.cards.find((e) => e.id == b.item_id).player);
+			case 2:
+				return a.price - b.price;
+			case 3:
+				return new Date(b.created).getTime() - new Date(a.created).getTime();
+			default:
+				return 0;
+		}
 	};
 
-	const clearFilters = () => {
-		Object.keys(filtersList).forEach((type) => {
-			(document.getElementById(type) as HTMLInputElement).value = "";
-			(document.getElementById(type) as HTMLInputElement).disabled = true;
-		});
-
-		priceFilters = [];
-		yearFilters = [];
-		setFilters = [];
-		playerFilters = [];
-		otherFilters = [];
-	};
+	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && otherFilters.length == 0)]}.svg`);
 
 	const filterProductList = (e: any) => {
 		const itemData = data.cards.find((card) => card.id == e.item_id);
 		let isValid = false;
 
-		if (priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && otherFilters.length == 0) return true;
+		if (priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && otherFilters.length == 0) return true;
 
 		if (priceFilters.includes("lowest") && e.price <= 10.0) isValid = true;
 		if (priceFilters.includes("affordable") && e.price > 10.0 && e.price <= 25.0) isValid = true;
@@ -148,93 +92,74 @@
 		(document.getElementById("page") as HTMLInputElement).disabled = currentPage == 1;
 	};
 
-	const submitCollectionForm = (reversed = sortReversed, method = sortingMethod, page = currentPage) => {
-		setSort(reversed, method);
-
-		Object.keys(filtersList).forEach((e) => {
-			(document.getElementById(e) as HTMLInputElement).disabled = getFilters(e).length == 0;
-		});
-
+	const submitCollectionForm = (page = currentPage) => {
+		setSortIcon();
+		setFilterIcon();
 		setPage(page);
 		(document.getElementById("collection-form") as HTMLFormElement).submit();
 	};
 
+	let productList: any[] = $state([]);
+
 	onMount(() => {
 		searchParams = new URLSearchParams(window.location.search);
-		sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).split("-")[1] == "reversed" ? true : false) : false;
+		sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).includes("reversed") ? true : false) : false;
 		sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
-		priceFilters = searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => filtersList.prices.map((f) => f.value).includes(e)) : [];
-		yearFilters = searchParams.get("years") != null ? (searchParams.get("years") as string).split("_").filter((e) => filtersList.years.map((f) => f.value).includes(e)) : [];
-		setFilters = searchParams.get("sets") != null ? (searchParams.get("sets") as string).split("_").filter((e) => filtersList.sets.map((f) => f.value).includes(e)) : [];
-		playerFilters = searchParams.get("players") != null ? (searchParams.get("players") as string).split("_").filter((e) => filtersList.players.map((f) => f.value).includes(e)) : [];
-		otherFilters = searchParams.get("other") != null ? (searchParams.get("other") as string).split("_").filter((e) => filtersList.other.map((f) => f.value).includes(e)) : [];
+		priceFilters = searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => $filtersList.prices.map((f) => f.value).includes(e)) : [];
+		yearFilters = searchParams.get("years") != null ? (searchParams.get("years") as string).split("_").filter((e) => $filtersList.years.map((f) => f.value).includes(e)) : [];
+		setFilters = searchParams.get("sets") != null ? (searchParams.get("sets") as string).split("_").filter((e) => $filtersList.sets.map((f) => f.value).includes(e)) : [];
+		playerFilters = searchParams.get("players") != null ? (searchParams.get("players") as string).split("_").filter((e) => $filtersList.players.map((f) => f.value).includes(e)) : [];
+		otherFilters = searchParams.get("other") != null ? (searchParams.get("other") as string).split("_").filter((e) => $filtersList.other.map((f) => f.value).includes(e)) : [];
 		currentPage = searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1;
 		setSortIcon();
-	});
+		setFilterIcon();
 
-	const productList = data.products.filter(filterProductList).sort(sortProductList);
-	// svelte-ignore state_referenced_locally
-	if (sortReversed) productList.reverse();
+		productList = data.products.filter(filterProductList).sort(sortProductList);
+		if (sortReversed) productList.reverse();
+
+		optionsLoaded = true;
+	});
 </script>
 
 <section class="w-full mx-auto [&>*]:w-screen [&>*]:2xl:w-[90rem] [&>*]:2xl:mx-auto">
 	<header class="px-4 2xl:px-0">
-		<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>div]:bg-glass [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
-			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => setCollectionModals(true, false)} className="col-span-3 lg:hidden" />
-			<FancyButton iconPath="/icons/filter.svg" text="Filters" onclick={() => setCollectionModals(false, true)} className="col-span-3 lg:hidden" />
-			<article class="absolute lg:flex lg:flex-col left-0 top-0 w-screen lg:w-fit h-screen lg:h-auto overflow-y-scroll lg:overflow-y-visible z-20 lg:z-0 [&>article]:absolute [&>article]:lg:flex [&>article]:lg:flex-col [&>article]:bg-glass [&>article]:lg:bg-transparent [&>article]:lg:backdrop-blur-none [&>article]:lg:border-none [&>article]:rounded-lg [&>article]:p-2 [&>article]:pb-24 [&>article:nth-of-type(1)]:lg:pb-0 [&>article]:w-full [&>article]:lg:w-auto [&>article]:min-h-[40vh] [&>article]:lg:min-h-0 [&>article]:gap-2 [&>article>button]:uppercase [&>article>button]:h-min [&>article>button]:p-2 [&>article>button]:bg-secondary [&>article>button]:lg:bg-primary [&>article>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full" class:hidden={!areSortingOptionsVisible && !areFiltersVisible}>
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<div class="w-full h-[60vh] bg-black/40 lg:hidden" onclick={() => setCollectionModals(false, false)}></div>
-				<article class:hidden={!areSortingOptionsVisible} class="!static grid grid-cols-2 auto-rows-min">
-					<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
-					<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Sorting</button>
-					<hr />
-					<FancyButton iconPath="/icons/sort.svg" text="Default" onclick={() => (sortReversed = false)} isTogglable toggleValue={!sortReversed} />
-					<FancyButton iconPath="/icons/sort-reversed.svg" text="Reversed" onclick={() => (sortReversed = true)} isTogglable toggleValue={sortReversed} />
-					<hr />
-					<FancyButton text="Popularity" onclick={() => (sortingMethod = 0)} isTogglable toggleValue={sortingMethod == 0} />
-					<FancyButton text="Name" onclick={() => (sortingMethod = 1)} isTogglable toggleValue={sortingMethod == 1} />
-					<FancyButton text="Price" onclick={() => (sortingMethod = 2)} isTogglable toggleValue={sortingMethod == 2} />
-					<FancyButton text="Newest" onclick={() => (sortingMethod = 3)} isTogglable toggleValue={sortingMethod == 3} />
-				</article>
-				<hr class="hidden lg:block border-tertiary lg:mt-4 lg:mb-2" />
-				<article class:hidden={!areFiltersVisible} class="!static flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4">
-					<button type="submit" onclick={() => submitCollectionForm()} class="!bg-tertiary col-span-2">Apply Filters</button>
-					<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
-					{#each Object.keys(filtersList) as filterType}
-						<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
-						<p>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</p>
-						{#each filtersList[filterType] as filter}
-							<FancyButton text={filter.name} id={`filter-${filterType}-${filter.value}`} onclick={() => toggleFilter(filterType, filter.value)} isTogglable toggleValue={getFilters(filterType).includes(filter.value)} />
-						{/each}
-						<hr />
-					{/each}
-				</article>
-			</article>
+		<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+			<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
+			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => ($globalPopupState = "sorts")} className="col-span-3 lg:hidden" />
+			{#each Object.keys($filtersList) as filterType}
+				<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
+			{/each}
+			{#if optionsLoaded}
+				<div class="pb-24 hidden lg:flex flex-col gap-4 absolute left-0 [&_button]:bg-primary/60 [&_button]:backdrop-blur-sm [&_button]:border-2 [&_button]:border-secondary/60">
+					<SortingOptions />
+					<hr class="col-span-2 border-none h-0.5 lg:h-1 bg-secondary rounded-full" />
+					<Filters />
+				</div>
+			{/if}
+			<FancyButton iconPath="/icons/filter.svg" id="filters" text="Filters" onclick={() => ($globalPopupState = "filters")} className="col-span-3 lg:hidden" />
 			<FancyButton
 				iconPath="/icons/left.svg"
 				onclick={() => {
-					submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage - 1));
+					submitCollectionForm(Math.max(1, currentPage - 1));
 				}}
 				disabled={currentPage <= 1}
 				className="w-min justify-self-center"
 			/>
-			<div class="col-span-4 flex">
+			<div class="bg-glass col-span-4 flex">
 				<input type="number" name="page" id="page" value={currentPage.toString()} class="hidden" />
-				<p class="h-min m-auto px-4 whitespace-nowrap">{(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, productList.length)} ({productList.length})</p>
+				<p class="h-min m-auto px-4 whitespace-nowrap">{productList.length == 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, productList.length)} ({productList.length})</p>
 			</div>
 			<FancyButton
 				iconPath="/icons/right.svg"
 				onclick={() => {
-					submitCollectionForm(sortReversed, sortingMethod, Math.max(1, currentPage + 1));
+					submitCollectionForm(Math.max(1, currentPage + 1));
 				}}
 				disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
 				className="w-min justify-self-center"
 			/>
 		</form>
 	</header>
-	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-64 justify-evenly mx-auto mt-4 gap-8">
+	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-72 justify-evenly mx-auto mt-4 gap-8">
 		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
 			<CardProductThumbnail id={product.id} />
 		{/each}
