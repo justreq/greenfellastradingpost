@@ -7,7 +7,7 @@
 	import { onMount } from "svelte";
 	let { data } = $props();
 
-	let sortingMethods = ["popularity", "name", "price", "newest"];
+	let sortingMethods = ["default", "name", "price", "newest"];
 
 	let sortReversed = $state(false);
 	let sortingMethod = $state(0);
@@ -91,7 +91,7 @@
 	};
 
 	const submitCollectionForm = (page = currentPage) => {
-		(document.getElementById("sortby") as HTMLInputElement).value = ["popularity", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
+		(document.getElementById("sortby") as HTMLInputElement).value = ["default", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
 		Object.keys($filtersList).forEach((e) => {
 			(document.getElementById(e) as HTMLInputElement).value = getFilters(e).join("_");
 			(document.getElementById(e) as HTMLInputElement).disabled = getFilters(e).length == 0;

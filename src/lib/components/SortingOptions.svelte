@@ -6,13 +6,13 @@
 	let sortingMethod = $state(0);
 
 	const setSort = () => {
-		(document.getElementById("sortby") as HTMLInputElement).value = ["popularity", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
+		(document.getElementById("sortby") as HTMLInputElement).value = ["default", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
 		(document.getElementById("collection-form") as HTMLFormElement).submit();
 	};
 
 	onMount(() => {
 		sortReversed = (document.getElementById("sortby") as HTMLInputElement).value.includes("-reversed");
-		sortingMethod = ["popularity", "name", "price", "newest"].indexOf((document.getElementById("sortby") as HTMLInputElement).value.split("-")[0]);
+		sortingMethod = ["default", "name", "price", "newest"].indexOf((document.getElementById("sortby") as HTMLInputElement).value.split("-")[0]);
 	});
 </script>
 
@@ -22,7 +22,7 @@
 	<FancyButton iconPath="/icons/sort.svg" text="Default" onclick={() => (sortReversed = false)} isTogglable toggleValue={!sortReversed} />
 	<FancyButton iconPath="/icons/sort-reversed.svg" text="Reversed" onclick={() => (sortReversed = true)} isTogglable toggleValue={sortReversed} />
 	<hr />
-	<FancyButton text="Popularity" onclick={() => (sortingMethod = 0)} isTogglable toggleValue={sortingMethod == 0} />
+	<FancyButton text="Default" onclick={() => (sortingMethod = 0)} isTogglable toggleValue={sortingMethod == 0} />
 	<FancyButton text="Name" onclick={() => (sortingMethod = 1)} isTogglable toggleValue={sortingMethod == 1} />
 	<FancyButton text="Price" onclick={() => (sortingMethod = 2)} isTogglable toggleValue={sortingMethod == 2} />
 	<FancyButton text="Newest" onclick={() => (sortingMethod = 3)} isTogglable toggleValue={sortingMethod == 3} />
