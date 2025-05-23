@@ -119,7 +119,7 @@
 	<table class="block table-fixed overflow-scroll border-separate [&_td]:whitespace-nowrap [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">
 		<thead class="bg-accent2/60">
 			<tr>
-				{#each Object.keys(page.data.cards[0]).slice(3) as column}
+				{#each page.data.cards.length == 0 ? [] : Object.keys(page.data.cards[0]).slice(3) as column}
 					<td>
 						{column[0].toUpperCase() + column.slice(1).replaceAll("_", " ")}
 					</td>
