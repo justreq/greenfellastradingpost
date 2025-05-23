@@ -1,5 +1,5 @@
-<script lang="ts">
+<script>
 	import ServiceLayout from "$lib/components/ServiceLayout.svelte";
 </script>
 
-<ServiceLayout type="breaks" />
+<ServiceLayout type="mags" />

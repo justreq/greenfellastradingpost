@@ -62,7 +62,7 @@
 </script>
 
 <article class="p-2 sm:p-0 gap-2 flex flex-col [&>*]:w-full [&>p]:text-lg [&>p]:pl-4 [&>button]:uppercase [&>button]:h-min [&>button]:p-2 [&>button]:bg-secondary [&>button]:lg:bg-primary [&>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full">
-	<button type="submit" onclick={() => applyFilters()} class="!bg-tertiary col-span-2">Apply Filters</button>
+	<button type="button" onclick={() => applyFilters()} class="!bg-tertiary col-span-2">Apply Filters</button>
 	<button type="button" onclick={() => clearFilters()} class="!bg-tertiary col-span-2">Clear Filters</button>
 	{#each Object.keys($filtersList) as filterType}
 		<p>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</p>

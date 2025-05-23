@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import { globalPopupState } from "$lib/globals";
 	import { currentUser, loadedAuth } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
@@ -59,7 +58,7 @@
 			<div>
 				<h3>Invest in our breaks</h3>
 				<p>Secure a team spot and get all of their player cards from 2 cases. Watch a live broadcast of the case breaks on Whatnot</p>
-				<a href="/breaks">
+				<a href="/break#stream">
 					<span>Next break stream</span>
 					→
 				</a>

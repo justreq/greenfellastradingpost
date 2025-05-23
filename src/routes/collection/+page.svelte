@@ -93,6 +93,12 @@
 	};
 
 	const submitCollectionForm = (page = currentPage) => {
+		(document.getElementById("sortby") as HTMLInputElement).value = ["popularity", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
+		Object.keys($filtersList).forEach((e) => {
+			(document.getElementById(e) as HTMLInputElement).value = getFilters(e).join("_");
+			(document.getElementById(e) as HTMLInputElement).disabled = getFilters(e).length == 0;
+		});
+
 		setSortIcon();
 		setFilterIcon();
 		setPage(page);
@@ -127,7 +133,7 @@
 			<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
 			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => ($globalPopupState = "sorts")} className="col-span-3 lg:hidden" />
 			{#each Object.keys($filtersList) as filterType}
-				<input type="text" name={filterType} id={filterType} value={getFilters(filterType).join("_")} class="hidden" />
+				<input type="text" name={filterType} id={filterType} disabled={getFilters(filterType).length == 0} value={getFilters(filterType).join("_")} class="hidden" />
 			{/each}
 			{#if optionsLoaded}
 				<div class="pb-24 hidden lg:flex flex-col gap-4 absolute left-0 [&_button]:bg-primary/60 [&_button]:backdrop-blur-sm [&_button]:border-2 [&_button]:border-secondary/60">

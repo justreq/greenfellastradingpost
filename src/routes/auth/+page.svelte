@@ -1,12 +1,11 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import FancyCheckbox from "$lib/components/FancyCheckbox.svelte";
 	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
 	import { supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
 	let { data } = $props();
-
-	let columns: [{ column_name: string; data_type: string }] = $state([{ column_name: "", data_type: "" }]);
 
 	const convertTimestampToReadable = (timestamp: string) => {
 		if (timestamp == null) return "❌";
@@ -103,12 +102,6 @@
 
 		closeNewCardForm();
 	};
-
-	onMount(async () => {
-		const { data, error } = await supabase.rpc("get_types", { tname: "cards" });
-		if (error) throw error;
-		columns = data.slice(3);
-	});
 </script>
 
 <section class="w-[90%] 2xl:w-[90rem] h-full p-4 mx-auto bg-glass-sm rounded-lg">
@@ -126,12 +119,9 @@
 	<table class="block table-fixed overflow-scroll border-separate [&_td]:whitespace-nowrap [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">
 		<thead class="bg-accent2/60">
 			<tr>
-				{#each columns as column}
+				{#each Object.keys(page.data.cards[0]).slice(3) as column}
 					<td>
-						{column.column_name
-							.split("_")
-							.map((e) => e.slice(0, 1).toUpperCase() + e.slice(1))
-							.join(" ")}
+						{column[0].toUpperCase() + column.slice(1).replaceAll("_", " ")}
 					</td>
 				{/each}
 			</tr>

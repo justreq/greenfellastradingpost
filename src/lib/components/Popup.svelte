@@ -3,13 +3,13 @@
 	import { sineInOut } from "svelte/easing";
 	import { fade, fly } from "svelte/transition";
 	import AuthForm from "./AuthForm.svelte";
-	import { currentUser, supabase } from "$lib/supabaseClient";
-	import { page } from "$app/state";
-	import { onMount } from "svelte";
 	import HeaderNav from "./HeaderNav.svelte";
 	import ProfileNav from "./ProfileNav.svelte";
 	import SortingOptions from "./SortingOptions.svelte";
 	import Filters from "./Filters.svelte";
+	import FancyTextInput from "./FancyTextInput.svelte";
+	import { supabase } from "$lib/supabaseClient";
+	import { page } from "$app/state";
 
 	let { className = "" } = $props();
 	// svelte-ignore non_reactive_update
@@ -60,8 +60,32 @@
 				<SortingOptions />
 			{:else if $globalPopupState == "filters"}
 				<Filters />
+			{:else if $globalPopupState == "createbreakspot"}
+				<form
+					method="POST"
+					onsubmit={async (event) => {
+						const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
+
+						const { error } = await supabase.from("break_spots").insert({ name: data.spot_name, price: data.spot_price, break_id: page.data.break.id });
+						if (error) throw error;
+
+						location.reload();
+					}}
+					class="flex flex-col gap-4 p-4"
+				>
+					<FancyTextInput name="spot_name" placeholder="Spot Name" required />
+					<FancyTextInput name="spot_price" type="number" placeholder="Spot Price" step="any" required />
+					<button type="submit" class="fancy-button fancy-anchor-on w-full mt-4">Create New Spot</button>
+				</form>
 			{:else if $globalPopupState == "checkout"}
-				<div>checkout</div>
+				<!-- <div id="paypal-container-2Q7MW8YTLFWAW"></div>
+						<script>
+							paypal
+								.HostedButtons({
+									hostedButtonId: "2Q7MW8YTLFWAW",
+								})
+								.render("#paypal-container-2Q7MW8YTLFWAW");
+						</script> -->
 			{/if}
 		</article>
 	</div>

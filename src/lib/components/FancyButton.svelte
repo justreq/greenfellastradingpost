@@ -6,7 +6,7 @@
 	export let id: string = "";
 	export let iconPath = "";
 	export let text = "";
-	export let onclick = () => {};
+	export let onclick: any = () => {};
 	export let className = "";
 	export let canFocus = true;
 	export let reverse = false;

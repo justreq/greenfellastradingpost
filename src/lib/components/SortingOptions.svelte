@@ -17,7 +17,7 @@
 </script>
 
 <article class="p-2 sm:p-0 grid grid-cols-2 auto-rows-min gap-2 [&>button]:uppercase [&>button]:h-min [&>button]:p-2 [&>button]:bg-secondary [&>button]:lg:bg-primary [&>button]:rounded-lg [&_hr]:col-span-2 [&_hr]:border-none [&_hr]:h-0.5 [&_hr]:lg:h-1 [&_hr]:bg-secondary [&_hr]:rounded-full">
-	<button type="submit" onclick={() => setSort()} class="!bg-tertiary col-span-2">Apply Sorting</button>
+	<button type="button" onclick={() => setSort()} class="!bg-tertiary col-span-2">Apply Sorting</button>
 	<hr />
 	<FancyButton iconPath="/icons/sort.svg" text="Default" onclick={() => (sortReversed = false)} isTogglable toggleValue={!sortReversed} />
 	<FancyButton iconPath="/icons/sort-reversed.svg" text="Reversed" onclick={() => (sortReversed = true)} isTogglable toggleValue={sortReversed} />
