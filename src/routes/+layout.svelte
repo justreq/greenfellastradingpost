@@ -11,6 +11,12 @@
 	let { children } = $props();
 
 	$filtersList = {
+		special: [
+			{ name: "Numbered", value: "numbered" },
+			{ name: "Graded", value: "graded" },
+			{ name: "Autographed", value: "auto" },
+			{ name: "Has Patch", value: "patch" },
+		],
 		prices: [
 			{ name: "Free - $10", value: "lowest" },
 			{ name: "$11 - $25", value: "affordable" },
@@ -18,14 +24,8 @@
 			{ name: "$75 - $150", value: "premium" },
 			{ name: "$151+", value: "luxury" },
 		],
-		years: page.data.cards.map((e: { year: string }) => ({ name: e.year, value: e.year.toLowerCase() })),
-		sets: page.data.cards.map((e: { brand: string; set: string }) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })),
-		players: page.data.cards.map((e: { player: string }) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })),
-		other: [
-			{ name: "Is Numbered", value: "numbered" },
-			{ name: "Has Auto", value: "auto" },
-			{ name: "Has Patch", value: "patch" },
-		],
+		sets: page.data.cards.map((e: any) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
+		players: page.data.cards.map((e: any) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
 	};
 
 	const moveParallaxBG = (event: Event) => {

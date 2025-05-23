@@ -4,23 +4,20 @@
 	import { filtersList } from "$lib/globals";
 
 	let priceFilters: string[] = $state([]);
-	let yearFilters: string[] = $state([]);
 	let setFilters: string[] = $state([]);
 	let playerFilters: string[] = $state([]);
-	let otherFilters: string[] = $state([]);
+	let specialFilters: string[] = $state([]);
 
 	const getFilters = (type: string) => {
 		switch (type) {
 			case "prices":
 				return priceFilters;
-			case "years":
-				return yearFilters;
 			case "sets":
 				return setFilters;
 			case "players":
 				return playerFilters;
-			case "other":
-				return otherFilters;
+			case "special":
+				return specialFilters;
 			default:
 				return [];
 		}
@@ -54,10 +51,9 @@
 
 	onMount(() => {
 		priceFilters = (document.getElementById("prices") as HTMLInputElement).value.split("_").filter((e) => $filtersList.prices.map((f) => f.value).includes(e));
-		yearFilters = (document.getElementById("years") as HTMLInputElement).value.split("_").filter((e) => $filtersList.years.map((f) => f.value).includes(e));
 		setFilters = (document.getElementById("sets") as HTMLInputElement).value.split("_").filter((e) => $filtersList.sets.map((f) => f.value).includes(e));
 		playerFilters = (document.getElementById("players") as HTMLInputElement).value.split("_").filter((e) => $filtersList.players.map((f) => f.value).includes(e));
-		otherFilters = (document.getElementById("other") as HTMLInputElement).value.split("_").filter((e) => $filtersList.other.map((f) => f.value).includes(e));
+		specialFilters = (document.getElementById("special") as HTMLInputElement).value.split("_").filter((e) => $filtersList.special.map((f) => f.value).includes(e));
 	});
 </script>
 

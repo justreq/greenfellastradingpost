@@ -13,10 +13,9 @@
 	let sortingMethod = $state(0);
 
 	let priceFilters: string[] = $state([]);
-	let yearFilters: string[] = $state([]);
 	let setFilters: string[] = $state([]);
 	let playerFilters: string[] = $state([]);
-	let otherFilters: string[] = $state([]);
+	let specialFilters: string[] = $state([]);
 
 	let optionsLoaded = $state(false);
 
@@ -24,14 +23,12 @@
 		switch (type) {
 			case "prices":
 				return priceFilters;
-			case "years":
-				return yearFilters;
 			case "sets":
 				return setFilters;
 			case "players":
 				return playerFilters;
-			case "other":
-				return otherFilters;
+			case "special":
+				return specialFilters;
 			default:
 				return [];
 		}
@@ -58,13 +55,13 @@
 		}
 	};
 
-	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && otherFilters.length == 0)]}.svg`);
+	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0)]}.svg`);
 
 	const filterProductList = (e: any) => {
 		const itemData = data.cards.find((card) => card.id == e.item_id);
 		let isValid = false;
 
-		if (priceFilters.length == 0 && yearFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && otherFilters.length == 0) return true;
+		if (priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0) return true;
 
 		if (priceFilters.includes("lowest") && e.price <= 10.0) isValid = true;
 		if (priceFilters.includes("affordable") && e.price > 10.0 && e.price <= 25.0) isValid = true;
@@ -72,24 +69,25 @@
 		if (priceFilters.includes("premium") && e.price > 75.0 && e.price <= 150.0) isValid = true;
 		if (priceFilters.includes("luxury") && e.price > 150.0) isValid = true;
 
-		if (yearFilters.length > 0 && yearFilters.includes(itemData.year.toLowerCase())) isValid = true;
 		if (setFilters.length > 0 && setFilters.includes(`${itemData.brand.toLowerCase().split(" ").join("-")}-${itemData.set.toLowerCase().split(" ").join("-")}`)) isValid = true;
 		if (playerFilters.length > 0 && playerFilters.includes(itemData.player.toLowerCase().split(" ").join("-"))) isValid = true;
 
-		if (otherFilters.includes("numbered") && itemData.number != "") isValid = true;
-		if (otherFilters.includes("auto") && itemData.auto) isValid = true;
-		if (otherFilters.includes("patch") && itemData.patch) isValid = true;
+		if (specialFilters.includes("numbered") && itemData.number != "") isValid = true;
+		if (specialFilters.includes("graded") && itemData.grade != "") isValid = true;
+		if (specialFilters.includes("auto") && itemData.auto) isValid = true;
+		if (specialFilters.includes("patch") && itemData.patch) isValid = true;
 
 		return isValid;
 	};
 
-	let currentPage = $state(1);
+	// svelte-ignore non_reactive_update
+	let currentPage = 1;
 
 	const setPage = (page: number) => {
 		currentPage = page;
 
-		(document.getElementById("page") as HTMLInputElement).value = currentPage.toString();
-		(document.getElementById("page") as HTMLInputElement).disabled = currentPage == 1;
+		(document.getElementById("page") as HTMLInputElement).value = page.toString();
+		(document.getElementById("page") as HTMLInputElement).disabled = page == 1;
 	};
 
 	const submitCollectionForm = (page = currentPage) => {
@@ -112,10 +110,9 @@
 		sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).includes("reversed") ? true : false) : false;
 		sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
 		priceFilters = searchParams.get("prices") != null ? (searchParams.get("prices") as string).split("_").filter((e) => $filtersList.prices.map((f) => f.value).includes(e)) : [];
-		yearFilters = searchParams.get("years") != null ? (searchParams.get("years") as string).split("_").filter((e) => $filtersList.years.map((f) => f.value).includes(e)) : [];
 		setFilters = searchParams.get("sets") != null ? (searchParams.get("sets") as string).split("_").filter((e) => $filtersList.sets.map((f) => f.value).includes(e)) : [];
 		playerFilters = searchParams.get("players") != null ? (searchParams.get("players") as string).split("_").filter((e) => $filtersList.players.map((f) => f.value).includes(e)) : [];
-		otherFilters = searchParams.get("other") != null ? (searchParams.get("other") as string).split("_").filter((e) => $filtersList.other.map((f) => f.value).includes(e)) : [];
+		specialFilters = searchParams.get("special") != null ? (searchParams.get("special") as string).split("_").filter((e) => $filtersList.special.map((f) => f.value).includes(e)) : [];
 		currentPage = searchParams.get("page") != null ? (isNaN(parseInt(searchParams.get("page") as string)) ? 1 : Math.max(1, parseInt(searchParams.get("page") as string))) : 1;
 		setSortIcon();
 		setFilterIcon();
@@ -146,9 +143,8 @@
 			<FancyButton
 				iconPath="/icons/left.svg"
 				onclick={() => {
-					submitCollectionForm(Math.max(1, currentPage - 1));
+					if (currentPage > 1) submitCollectionForm(Math.max(1, currentPage - 1));
 				}}
-				disabled={currentPage <= 1}
 				className="w-min justify-self-center"
 			/>
 			<div class="bg-glass col-span-4 flex">
@@ -158,14 +154,13 @@
 			<FancyButton
 				iconPath="/icons/right.svg"
 				onclick={() => {
-					submitCollectionForm(Math.max(1, currentPage + 1));
+					if (currentPage < Math.ceil(data.products.length / itemsPerPage)) submitCollectionForm(Math.max(1, currentPage + 1));
 				}}
-				disabled={currentPage >= Math.ceil(data.products.length / itemsPerPage)}
 				className="w-min justify-self-center"
 			/>
 		</form>
 	</header>
-	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-72 justify-evenly mx-auto mt-4 gap-8">
+	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-80 justify-evenly mx-auto mt-4 gap-8">
 		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
 			<CardProductThumbnail id={product.id} />
 		{/each}
