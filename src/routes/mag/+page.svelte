@@ -2,4 +2,4 @@
 	import ServiceLayout from "$lib/components/ServiceLayout.svelte";
 </script>
 
-<ServiceLayout type="mags" />
+<ServiceLayout type="mag" />

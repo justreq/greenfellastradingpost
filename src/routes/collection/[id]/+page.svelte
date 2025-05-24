@@ -23,8 +23,8 @@
 				</button>
 			{/each}
 		</aside>
-		<div class="w-4/5 sm:w-max sm:h-[32rem] xl:h-[36rem] m-auto object-contain">
-			<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{currentImage}.{productData.file_extensions[currentImage]}" alt="Product" draggable="false" class="rounded-lg h-full" />
+		<div class="w-[90%] sm:w-max sm:h-[32rem] xl:h-[36rem] m-auto object-contain">
+			<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{currentImage}.{productData.file_extensions[currentImage]}" alt="Product" draggable="false" class="rounded-lg w-full sm:w-auto sm:h-full" />
 		</div>
 	</article>
 	<article class="flex-grow p-4 sm:p-8 flex flex-col gap-8">
@@ -35,7 +35,7 @@
 				.join(" ")}
 		</h2>
 		<h3 class="text-accent font-bold">{formatter.format(cardData.sell_price)}</h3>
-		<div class="flex flex-col sm:flex-row gap-4 [&>*]:w-full [&>*]:font-bold [&>*]:flex [&>*]:justify-center [&>*]:p-4 [&>*]:text-xl [&>*]:rounded-xl [&>*]:transition-all [&>*:hover]:scale-105">
+		<div class="flex flex-col sm:flex-row gap-4 [&>*]:w-full [&>*]:font-bold [&>*]:flex [&>*]:justify-center [&>*]:p-4 [&>*]:text-xl [&>*]:rounded-xl [&>*]:transition-all [&>*:hover]:md:scale-105">
 			<FancyButton text="Add to Cart" iconPath="/icons/cart.svg" className="bg-tertiary/80" />
 			<FancyButton text="Buy Now" iconPath="/icons/buy-now.svg" className="bg-accent2/80 md:hover:!bg-accent2" />
 		</div>
