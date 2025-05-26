@@ -70,7 +70,7 @@
 			<div>
 				<h3>Bonus Grading Services</h3>
 				<p>Have any raw cards you own or purchase be cleaned and hand-delivered to PSA for expedited grading. Recieve your graded cards in 1 - 3 weeks!</p>
-				<a href="/grading">Learn More</a>
+				<a href="/psa">Learn More</a>
 			</div>
 			<img src="/images/logo-psa.png" alt="PSA logo" draggable="false" />
 		</article>

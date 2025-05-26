@@ -3,30 +3,12 @@
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import { page } from "$app/state";
-	import { currentUser, fetchCurrentUser, loadedAuth, supabase } from "$lib/supabaseClient";
+	import { currentUser, loadedAuth, supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
-	import { filtersList, globalPopupState, superUsers } from "$lib/globals";
+	import { globalPopupState, superUsers } from "$lib/globals";
 	import { dev } from "$app/environment";
 	let { children } = $props();
-
-	$filtersList = {
-		special: [
-			{ name: "Numbered", value: "numbered" },
-			{ name: "Graded", value: "graded" },
-			{ name: "Autographed", value: "auto" },
-			{ name: "Has Patch", value: "patch" },
-		],
-		prices: [
-			{ name: "Free - $10", value: "lowest" },
-			{ name: "$11 - $25", value: "affordable" },
-			{ name: "$26 - $75", value: "midrange" },
-			{ name: "$75 - $150", value: "premium" },
-			{ name: "$151+", value: "luxury" },
-		],
-		sets: page.data.cards.map((e: any) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
-		players: page.data.cards.map((e: any) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
-	};
 
 	const moveParallaxBG = (event: Event) => {
 		let bg1 = document.getElementById("bg-1");
@@ -40,12 +22,27 @@
 		bg2.style.top = `-${50 + scrollAmount * 50}px`;
 	};
 
+	let showCart = $state(false);
+
 	onMount(() => {
 		moveParallaxBG(new Event(""));
+
+		console.log(localStorage.getItem("cart"));
+		if (localStorage.getItem("cart") != null) {
+			showCart = true;
+		}
 	});
 
-	supabase.auth.onAuthStateChange(() => {
-		fetchCurrentUser();
+	supabase.auth.onAuthStateChange(async (event) => {
+		$loadedAuth = false;
+
+		const { data } = await supabase.auth.getUser();
+
+		if (data.user != null) {
+			$currentUser = data.user;
+		}
+
+		$loadedAuth = true;
 	});
 </script>
 
@@ -64,6 +61,7 @@
 />
 
 <Popup></Popup>
+
 <div class="w-screen h-screen fixed -z-10 blur-sm [&>img]:absolute">
 	<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
@@ -78,7 +76,7 @@
 		<Header></Header>
 	{/if}
 	<main class:pb-32={page.url.pathname != "/" || $currentUser} class="w-screen pt-12 lg:pt-24 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-		{#if dev || ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal")}
+		{#if dev || ($currentUser && superUsers.includes($currentUser.id)) || page.route.id?.includes("legal") || page.route.id?.includes("psa")}
 			{@render children()}
 		{:else}
 			<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
@@ -88,5 +86,10 @@
 			</article>
 		{/if}
 	</main>
+	{#if showCart}
+		<button type="button" class="right-4 bottom-4 fixed aspect-square w-16 bg-glass-sm p-4 rounded-lg z-10">
+			<img src="/icons/cart.svg" alt="Cart" class="m-auto h-full" />
+		</button>
+	{/if}
 	<Footer></Footer>
 {/if}

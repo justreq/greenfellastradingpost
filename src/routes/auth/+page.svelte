@@ -5,7 +5,6 @@
 	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
 	import { supabase } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
-	let { data } = $props();
 
 	const convertTimestampToReadable = (timestamp: string) => {
 		if (timestamp == null) return "❌";
@@ -126,7 +125,7 @@
 				{/each}
 			</tr>
 		</thead>
-		{#each data.cards as card}
+		{#each page.data.cards as card}
 			<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text">
 				<tr>
 					{#each Object.keys(card).slice(3) as key}
@@ -145,34 +144,34 @@
 	<article class="sm:absolute sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-glass sm:bg-glass-sm w-full sm:w-max mx-auto p-4 pb-24 sm:pb-4 rounded-lg">
 		<form class="flex flex-col lg:flex-row gap-2 [&>div]:h-fit [&>div]:sm:w-[32rem] [&>div]:lg:w-[24rem] [&>div]:grid [&>div]:grid-cols-6 [&>div]:gap-x-2 [&>div]:gap-y-1 [&>div>p]:col-span-6 [&>div>p]:mb-4 [&>div>p]:text-sm [&>div>p]:lg:text-base [&_input[type=text]]:pr-0 [&_label]:col-span-6" id="new-card-form">
 			<datalist id="brands">
-				{#each data.cards.map((e) => e.brand) as brand}
+				{#each page.data.cards.map((e: { brand: any }) => e.brand) as brand}
 					<option value={brand}>{brand}</option>
 				{/each}
 			</datalist>
-			{#each data.cards.map((e) => e.brand) as brand}
+			{#each page.data.cards.map((e: { brand: any }) => e.brand) as brand}
 				<datalist id="set-{stringToHTMLName(brand)}">
-					{#each data.cards.filter((e) => e.brand == brand).map((e) => e.set) as set}
+					{#each page.data.cards.filter((e: { brand: any }) => e.brand == brand).map((e: { set: any }) => e.set) as set}
 						<option value={set}>{set}</option>
 					{/each}
 				</datalist>
 			{/each}
 			<datalist id="years">
-				{#each data.cards.map((e) => e.year) as year}
+				{#each page.data.cards.map((e: { year: any }) => e.year) as year}
 					<option value={year}>{year}</option>
 				{/each}
 			</datalist>
 			<datalist id="players">
-				{#each data.cards.map((e) => e.player) as player}
+				{#each page.data.cards.map((e: { player: any }) => e.player) as player}
 					<option value={player}>{player}</option>
 				{/each}
 			</datalist>
 			<datalist id="numbers">
-				{#each data.cards.map((e) => e.number) as number}
+				{#each page.data.cards.map((e: { number: any }) => e.number) as number}
 					<option value={number}>{number}</option>
 				{/each}
 			</datalist>
 			<datalist id="grades">
-				{#each data.cards.map((e) => e.grade) as grade}
+				{#each page.data.cards.map((e: { grade: any }) => e.grade) as grade}
 					<option value={grade}>{grade}</option>
 				{/each}
 			</datalist>
