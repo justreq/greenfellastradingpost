@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import { globalPopupState } from "$lib/globals";
-	import { currentUser, loadedAuth } from "$lib/supabaseClient";
 	import { onMount } from "svelte";
+	let { user } = $derived(page.data);
 
 	let innerWidth = $state(0);
 	let innerHeight = $state(0);
@@ -11,7 +12,7 @@
 	};
 
 	const updateTitle = () => {
-		if (window.innerWidth > 1024 && ($globalPopupState == "headernav" || ($globalPopupState == "profile" && $loadedAuth && !$currentUser))) $globalPopupState = "none";
+		if (window.innerWidth > 1024 && ($globalPopupState == "headernav" || ($globalPopupState == "profile" && !user))) $globalPopupState = "none";
 		if (document.getElementById("title")) (document.getElementById("title") as HTMLImageElement).src = getTitleImage();
 	};
 
@@ -22,7 +23,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight onresize={updateTitle} />
 
-<section class:hidden={$currentUser} class="w-screen">
+<section class:hidden={user} class="w-screen">
 	<img src={getTitleImage()} alt="Title" id="title" class="mt-56 xl:-mt-20 mb-4 xl:mb-56 w-3/4 sm:w-1/2 lg:w-4/5 lg:max-w-[48rem] mx-auto" draggable="false" />
 	<article class="px-2 sm:px-8 pb-4 w-fit mx-auto flex flex-col gap-4">
 		<h2 class="text-center text-4xl sm:text-5xl lg:text-6xl text-balance">Filling your collections with high-end soccer cards</h2>

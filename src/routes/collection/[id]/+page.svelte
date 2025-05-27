@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import { globalPopupState } from "$lib/globals";
-	import { currentUser, supabase } from "$lib/supabaseClient";
+	let { supabase, user } = $derived(page.data);
 
 	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((p: { id: any }) => p.id == page.data.id).item_id);
 	let productData = page.data.products.find((c: { id: any }) => c.id == page.data.id);
@@ -23,11 +23,11 @@
 		if (error) throw error;
 
 		let order: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
-		if ($currentUser) order.owner_id = $currentUser.id;
+		if (user) order.owner_id = user.id;
 
 		const { data } = await supabase.from("orders").upsert(order).select();
 
-		if (!$currentUser && data != null) {
+		if (!user && data != null) {
 			$globalPopupState = "login";
 			localStorage.setItem("cart", data[0].id);
 		}

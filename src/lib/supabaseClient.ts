@@ -1,15 +1,6 @@
-import { type User } from "@supabase/supabase-js";
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
+import type { User } from "@supabase/supabase-js";
 import { writable, type Writable } from "svelte/store";
-import { createBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl = PUBLIC_SUPABASE_URL;
-const supabaseKey = PUBLIC_SUPABASE_ANON_KEY;
-
-export const supabase = createBrowserClient(supabaseUrl, supabaseKey);
-
-export const loadedAuth: Writable<boolean> = writable(false);
-export const currentUser: Writable<User | null> = writable(null);
 export const cart: Writable<string | null> = writable(null);
 
 export const isSuperUser = (user: User | null) => {

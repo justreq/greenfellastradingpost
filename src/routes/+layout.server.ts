@@ -1,11 +1,8 @@
-import { supabase } from "$lib/supabaseClient";
-
-export const load = async () => {
-	const users = await supabase.from("users").select();
-	const streams = await supabase.from("streams").select();
+export const load = async ({ locals: { safeGetSession }, cookies }) => {
+	const { session } = await safeGetSession();
 
 	return {
-		users: users.data ?? [],
-		streams: streams.data ?? [],
+		session,
+		cookies: cookies.getAll(),
 	};
 };

@@ -3,8 +3,7 @@
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import FancyCheckbox from "$lib/components/FancyCheckbox.svelte";
 	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
-	import { supabase } from "$lib/supabaseClient";
-	import { onMount } from "svelte";
+	let { supabase } = $derived(page.data);
 
 	const convertTimestampToReadable = (timestamp: string) => {
 		if (timestamp == null) return "❌";

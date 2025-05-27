@@ -8,8 +8,8 @@
 	import SortingOptions from "./SortingOptions.svelte";
 	import Filters from "./Filters.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
-	import { supabase } from "$lib/supabaseClient";
 	import { page } from "$app/state";
+	let { supabase } = $derived(page.data);
 
 	let { className = "" } = $props();
 	// svelte-ignore non_reactive_update
@@ -55,7 +55,7 @@
 					<ProfileNav />
 				</article>
 			{:else if $globalPopupState == "signup" || $globalPopupState == "login"}
-				<article class="flex flex-col gap-2 p-2"><AuthForm authType={$globalPopupState} /></article>
+				<article class="flex flex-col gap-2 p-2"><AuthForm authType={$globalPopupState.toString()} /></article>
 			{:else if $globalPopupState == "sorts"}
 				<SortingOptions />
 			{:else if $globalPopupState == "filters"}

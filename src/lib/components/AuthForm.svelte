@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { supabase } from "$lib/supabaseClient";
 	import type { Provider, User } from "@supabase/supabase-js";
 	import FancyButton from "./FancyButton.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	import { globalPopupState } from "$lib/globals";
+	import { page } from "$app/state";
+	let { supabase } = $derived(page.data);
 
-	export var authType = "";
+	let { authType = "signup" } = $props();
 
-	var email = "";
-	var displayName = "";
-	var password = "";
-	var confirmPassword = "";
-	var dontIncludeInEmailBlast = false;
-	var acceptedTerms = false;
+	let email = $state("");
+	let displayName = $state("");
+	let password = $state("");
+	let confirmPassword = $state("");
+	let dontIncludeInEmailBlast = $state(false);
+	let acceptedTerms = $state(false);
 
-	var errorText = "0";
+	let errorText = $state("0");
 
 	const tryCreateAccount = async () => {
 		if (password != confirmPassword) {
@@ -102,10 +103,10 @@
 	{/if}
 	<p class:!block={errorText != "0"} class="text-red-500 hidden">{errorText}</p>
 	<FancyButton disabled={authType == "signup" ? email.length == 0 || password.length == 0 || displayName.length == 0 || !acceptedTerms : email.length == 0 || password.length == 0} type="submit" text={authType == "signup" ? "Sign Up" : "Log In"} className="fancy-anchor fancy-anchor-on !transition-all md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
-	<hr class="h-1 border-none bg-tertiary rounded-full" />
+	<!-- <hr class="h-1 border-none bg-tertiary rounded-full" />
 	<p class="text-center">or sign in via</p>
 	<div class="flex gap-4 justify-center [&>button]:h-12 [&>button]:aspect-square [&>button]:bg-secondary [&>button]:rounded-full [&>button]:transition-transform [&>button]:duration-200 [&>button:hover]:scale-110 [&>button>img]:w-2/3 [&>button>img]:h-2/3 [&>button>img]:m-auto">
 		<button type="button" onclick={() => trySignIn("google")}><img src="/icons/google.svg" alt="Sign In With Google" /></button>
 		<button type="button" onclick={() => trySignIn("discord")}><img src="/icons/discord.svg" alt="Sign In With Discord" /></button>
-	</div>
+	</div> -->
 </form>

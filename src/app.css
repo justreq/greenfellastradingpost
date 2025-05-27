@@ -48,6 +48,7 @@
 		@apply block max-w-full;
 	}
 
+	textarea,
 	input[type="text"],
 	input[type="email"],
 	input[type="password"],
@@ -74,6 +75,10 @@
 	a:not(:has(*)) {
 		@apply fancy-anchor;
 	}
+
+	dialog::backdrop {
+		@apply bg-black/80;
+	}
 }
 
 @layer components {
@@ -90,11 +95,11 @@
 	}
 
 	.hover-effect {
-		@apply duration-200 transition-colors md:hover:border-accent2;
+		@apply duration-200 transition-colors [&:not(:disabled)]:md:hover:border-accent2;
 	}
 
 	.fancy-button {
-		@apply fancy-anchor border-text !transition-all md:hover:scale-105;
+		@apply fancy-anchor border-text !transition-all [&:not(:disabled)]:md:hover:scale-105;
 	}
 
 	.fancy-anchor {
@@ -102,11 +107,11 @@
 	}
 
 	.fancy-anchor:not(.fancy-anchor-on) {
-		@apply font-normal md:hover:text-accent2;
+		@apply font-normal [&:not(:disabled)]:md:hover:text-accent2;
 	}
 
 	.fancy-anchor.fancy-anchor-on {
-		@apply bg-text text-bg font-extrabold md:hover:bg-accent2;
+		@apply bg-text text-bg font-extrabold [&:not(:disabled)]:md:hover:bg-accent2;
 	}
 
 	.fade-out-x-none {
