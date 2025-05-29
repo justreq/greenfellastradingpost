@@ -29,7 +29,8 @@
 		moveParallaxBG(new Event(""));
 
 		if (localStorage.getItem("cart") != null) {
-			showCart = true;
+			if (JSON.parse(localStorage.getItem("cart") as string).temporary) localStorage.removeItem("cart");
+			else showCart = true;
 		}
 
 		const { data } = supabase.auth.onAuthStateChange(async (_: any, newSession: { expires_at: number | undefined }) => {
@@ -37,6 +38,7 @@
 				invalidate("supabase:auth");
 			}
 		});
+
 		return () => data.subscription.unsubscribe();
 	});
 </script>
@@ -61,7 +63,7 @@
 	<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
-{#if page.url.pathname == "/" && !user}
+{#if page.url.pathname == "/"}
 	<article class:hidden={user || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
 		<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
 		<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>
@@ -70,7 +72,7 @@
 	<Header></Header>
 {/if}
 <main class:pb-32={page.url.pathname != "/" || user} class="w-screen pt-12 lg:pt-24 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if dev || (user && superUsers.includes(user.id)) || (user && superUsers.includes(user.id) && page.route.id?.includes("private")) || page.route.id?.includes("legal") || page.route.id?.includes("psa")}
+	{#if dev || (user && superUsers.includes(user.id)) || (user && superUsers.includes(user.id) && page.route.id?.includes("private")) || page.route.id?.includes("legal") || page.route.id?.includes("psa") || page.url.pathname == "/"}
 		{@render children()}
 	{:else}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">

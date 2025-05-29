@@ -5,7 +5,7 @@
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	import { globalPopupState } from "$lib/globals";
 	import { page } from "$app/state";
-	let { supabase } = $derived(page.data);
+	let { supabase, user } = $derived(page.data);
 
 	let { authType = "signup" } = $props();
 
@@ -45,13 +45,19 @@
 		} else {
 			const { error } = await supabase.from("users").insert({ id: (data.user as User).id, email: (data.user as User).email, display_name: (data.user as User).user_metadata.displayName, includeInEmailBlast: (data.user as User).user_metadata.includeInEmailBlast });
 			if (error) throw error;
-			location.reload();
+
+			if (localStorage.getItem("cart") == null) return;
+
+			let cart = JSON.parse(localStorage.getItem("cart") as string);
+			cart.owner_id = (data.user as User).id;
+
+			$globalPopupState = "checkout";
 		}
 	};
 
 	const trySignIn = async (provider: Provider | "email") => {
 		if (provider == "email") {
-			let { error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+			let { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 			if (error) {
 				switch (error.code) {
 					case "invalid_credentials":
@@ -65,7 +71,13 @@
 				throw error;
 			}
 
-			location.reload();
+			if (localStorage.getItem("cart") == null) return;
+
+			let cart = JSON.parse(localStorage.getItem("cart") as string);
+			cart.owner_id = (data.user as User).id;
+
+			$globalPopupState = "checkout";
+
 			return;
 		}
 

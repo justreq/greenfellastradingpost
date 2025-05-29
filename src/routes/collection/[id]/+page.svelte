@@ -16,21 +16,22 @@
 		trailingZeroDisplay: "stripIfInteger",
 	});
 
-	const addToCart = () => {};
+	const addToCart = () => {
+		let cart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
+		if (user) cart.owner_id = user.id;
+		localStorage.setItem("cart", JSON.stringify(cart));
+	};
 
 	const buyNow = async () => {
-		const { error } = await supabase.from("orders").delete().eq("id", localStorage.getItem("cart"));
-		if (error) throw error;
+		let cart: { product_ids: string[]; owner_id: string | null; temporary: boolean } = { product_ids: [page.data.id], owner_id: null, temporary: true };
+		if (user) {
+			cart.owner_id = user.id;
+			$globalPopupState = "checkout";
+		} else $globalPopupState = "profile";
 
-		let order: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
-		if (user) order.owner_id = user.id;
+		// const { data } = await supabase.from("orders").upsert(order).select();
 
-		const { data } = await supabase.from("orders").upsert(order).select();
-
-		if (!user && data != null) {
-			$globalPopupState = "login";
-			localStorage.setItem("cart", data[0].id);
-		}
+		localStorage.setItem("cart", JSON.stringify(cart));
 	};
 </script>
 
