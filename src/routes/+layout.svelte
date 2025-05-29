@@ -77,8 +77,10 @@
 	{:else}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
 			<h2>Coming Soon...</h2>
-			<p class="text-lg lg:text-xl">Create an account with us to stay up to date with GTP's latest machinations...</p>
-			<button class="fancy-button w-fit mx-auto mt-4" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
+			{#if !user}
+				<p class="text-lg lg:text-xl">Create an account with us to stay up to date with GTP's latest machinations...</p>
+				<button class="fancy-button w-fit mx-auto mt-4" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
+			{/if}
 		</article>
 	{/if}
 </main>
