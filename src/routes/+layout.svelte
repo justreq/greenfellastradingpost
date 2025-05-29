@@ -25,7 +25,6 @@
 
 	onMount(() => {
 		moveParallaxBG(new Event(""));
-
 		localStorage.removeItem("tempCart");
 		if (localStorage.getItem("cart") != null) $hasItemsInCart = true;
 
@@ -59,7 +58,7 @@
 	<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
-{#if page.url.pathname == "/" && !user}
+{#if page.url.pathname == "/"}
 	<article class:hidden={user || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
 		<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
 		<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>

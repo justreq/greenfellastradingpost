@@ -33,17 +33,17 @@
 <section id="landing-section" class="bg-glass-sm">
 	<div class="flex flex-col xl:flex-row gap-16 justify-center items-center py-12 [&>article]:w-[90%] [&>article]:sm:w-[32rem] [&>article]:xl:w-80 [&>article]:flex [&>article]:flex-col [&>article]:gap-2 [&>article]:sm:gap-8 [&>article]:xl:gap-2 [&>article]:items-center [&_img]:aspect-square [&_img]:w-32 [&_div]:flex [&_div]:flex-col [&_div]:items-center [&_div]:gap-2 [&>*]:text-center [&_a]:border-0 [&_span]:border-b-[1.5px] [&_span]:uppercase [&_span]:transition-colors [&_span]:duration-200 [&_span:hover]:lg:text-accent2 [&_span:hover]:lg:border-accent2">
 		<article>
-			<h3>Buy our singles on streams</h3>
-			<p>Visit our weekday streams for high-quality raw cards in a magnetic case and custom sticker.</p>
-			<a href="/mag#stream">
-				<span>Next Mag stream</span>
+			<h3>One-stop shop for everything GTP</h3>
+			<p>Buy into our streams for singles, graded cards, breaks, and more!</p>
+			<a href="/services">
+				<span>All our services</span>
 				→
 			</a>
 		</article>
 		<article>
 			<h3>Invest in our breaks</h3>
 			<p>Secure a team spot and get all of their player cards from 2 cases. Watch a live broadcast of the case breaks on Whatnot</p>
-			<a href="/break#stream">
+			<a href="/services/break#stream">
 				<span>Next break stream</span>
 				→
 			</a>
@@ -51,7 +51,7 @@
 		<article>
 			<h3>Check out our repacks</h3>
 			<p>Get the chance to secure a high-value card in one of our Sunday Repack shows</p>
-			<a href="/repack#stream">
+			<a href="/services/repack#stream">
 				<span>Next Repack stream</span>
 				→
 			</a>
@@ -62,7 +62,7 @@
 			<div>
 				<h3>Bonus Grading Services</h3>
 				<p>Have any raw cards you own or purchase be cleaned and hand-delivered to PSA for expedited grading. Recieve your graded cards in 1 - 3 weeks!</p>
-				<a href="/psa">Learn More</a>
+				<a href="/services/psa">Learn More</a>
 			</div>
 			<img src="/images/logo-psa.png" alt="PSA logo" draggable="false" />
 		</article>

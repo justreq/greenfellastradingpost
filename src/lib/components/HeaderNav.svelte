@@ -22,13 +22,13 @@
 	Collection
 </a>
 <a
-	href="/store"
-	class:fancy-anchor-on={page.route.id?.includes("store")}
+	href="/services"
+	class:fancy-anchor-on={page.route.id?.includes("services")}
 	onclick={() => {
 		$globalPopupState = "none";
 	}}
 >
-	GTP Store
+	Services
 </a>
 <a
 	href="/contact"

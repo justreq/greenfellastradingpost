@@ -30,8 +30,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			allowed_countries: ["US"],
 		},
 		mode: "payment",
-		success_url: `${BASE}`,
-		cancel_url: `${BASE}`,
+		success_url: `${BASE}/success`,
+		cancel_url: `${BASE}/cancel`,
 	});
 
 	return new Response(JSON.stringify({ url: session.url }), { status: 200, headers: { "Content-Type": "application/json" } });

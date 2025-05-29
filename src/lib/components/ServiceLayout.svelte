@@ -109,6 +109,33 @@
 			});
 		});
 	});
+
+	const buySpot = async () => {
+		let cartContents;
+
+		if (localStorage.getItem("spotCart") != null) {
+			let cart = JSON.parse(localStorage.getItem("spotCart") as string);
+
+			let spotData = page.data.breakSpots.find((c: { id: any }) => c.id == cart.spot_id);
+
+			cartContents = [
+				{
+					name: spotData.name,
+					price: spotData.price,
+				},
+			];
+		}
+
+		const data = await fetch("/checkout", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ cart: cartContents }),
+		}).then((data) => data.json());
+
+		window.location.replace(data.url);
+	};
 </script>
 
 <div class="absolute left-0 top-[82px] -z-10 w-screen h-screen max-h-[56rem] overflow-hidden">
@@ -121,7 +148,7 @@
 		<a href={type == "psa" ? "#form" : "#stream"} class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">{getInfo("ctaText")}</a>
 	</article>
 </section>
-<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:lg:flex-row [&_article]:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
+<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:sm:flex-row [&_article]:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
 	<div class="bg-primary">
 		<article>
 			<h2>
@@ -166,12 +193,15 @@
 					<FancyButton type="submit" text="Submit" disabled={psaEmail == "" || selectedPSAServices.length == 0 || (selectedPSAServices.length > 1 && psaNotes == "")} className="max-w-64 fancy-anchor fancy-anchor-on !transition-all [&:not(:disabled)]:md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
 				</form>
 			{:else}
-				<a target="_blank" href={page.data.streams.find((e: { type: any }) => e.type == type)} class="cursor-pointer relative flex justify-center object-contain overflow-hidden !w-full max-h-[32rem] h-[32rem] [&:hover_img:last-child]:md:scale-110 lg:h-auto lg:max-h-none lg:max-w-[24rem] -mt-32 lg:mt-0 lg:rounded-2xl bg-primary sm:bg-transparent">
+				<a target="_blank" href={page.data.streams.find((e: { type: any }) => e.type == type).link} class="cursor-pointer relative flex justify-center object-contain overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] lg:rounded-2xl bg-primary sm:bg-transparent">
 					<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}.jpg" alt="Next stream thumbnail" draggable="false" class="max-h-full mx-auto" />
 					<div class="bg-black/60 w-full h-full absolute"></div>
 					<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
 				</a>
-				<h2>Next {type} Stream</h2>
+				<div>
+					<h2 class="sm:!text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl">Next {type} Stream</h2>
+					<h3 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{page.data.streams.find((e: { type: any }) => e.type == type).name}</h3>
+				</div>
 			{/if}
 		</article>
 	</div>
@@ -247,9 +277,16 @@
 										{#if key != "" && breakSpot[key] == null}
 											<span>
 												<button
-													onclick={() => {
-														isPopupVisible = true;
-														isBuyingSpot = true;
+													data-spot-id={breakSpot.id}
+													class="whitespace-nowrap"
+													onclick={(event) => {
+														localStorage.removeItem("spotCart");
+														let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
+														if (user) {
+															spotCart.owner_id = user.id;
+															localStorage.setItem("spotCart", JSON.stringify(spotCart));
+															buySpot();
+														} else $globalPopupState = "profile";
 													}}
 												>
 													Buy Spot

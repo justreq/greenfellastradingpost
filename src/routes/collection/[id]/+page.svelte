@@ -38,8 +38,6 @@
 			$globalPopupState = "checkout";
 		} else $globalPopupState = "profile";
 
-		// const { data } = await supabase.from("orders").upsert(order).select();
-
 		localStorage.setItem("tempCart", JSON.stringify(tempCart));
 	};
 </script>

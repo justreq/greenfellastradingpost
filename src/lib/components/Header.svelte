@@ -2,6 +2,7 @@
 	import { page } from "$app/state";
 	import { globalPopupState, hasItemsInCart } from "$lib/globals";
 	import HeaderNav from "./HeaderNav.svelte";
+	import ProfileNav from "./ProfileNav.svelte";
 	let { user } = $derived(page.data);
 </script>
 
@@ -36,9 +37,13 @@
 	<nav class="hidden lg:flex gap-8"><HeaderNav /></nav>
 	<article class="flex gap-4">
 		<article class="hidden lg:flex">
-			<button type="button" onclick={() => ($globalPopupState = "profile")} class="fancy-button text-center my-auto">{user.user_metadata.displayName || user.user_metadata.full_name}</button>
+			{#if user}
+				<button type="button" onclick={() => ($globalPopupState = "profile")} class="fancy-button text-center my-auto">{user.user_metadata.displayName || user.user_metadata.full_name}</button>
+			{:else}
+				<ProfileNav />
+			{/if}
 		</article>
-		<button type="button" disabled={!$hasItemsInCart} onclick={() => ($globalPopupState = "checkout")} class="h-1/3 lg:h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
+		<button type="button" disabled={!$hasItemsInCart} onclick={() => ($globalPopupState = user == null ? "profile" : "checkout")} class="h-1/3 lg:h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
 			<img src="/icons/cart{$hasItemsInCart ? '' : '-empty'}.svg" alt="Cart Button" draggable="false" class="h-full" />
 		</button>
 	</article>
