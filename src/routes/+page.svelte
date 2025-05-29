@@ -31,7 +31,7 @@
 	</article>
 </section>
 <section id="landing-section" class="bg-glass-sm">
-	<div class="flex flex-col xl:flex-row gap-16 justify-center items-center py-12 [&>article]:w-[90%] [&>article]:sm:w-[32rem] [&>article]:xl:w-80 [&>article]:flex [&>article]:flex-col [&>article]:sm:flex-row [&>article]:xl:flex-col [&>article]:gap-2 [&>article]:sm:gap-8 [&>article]:xl:gap-2 [&>article]:items-center [&_img]:aspect-square [&_img]:w-32 [&_div]:flex [&_div]:flex-col [&_div]:items-center [&_div]:gap-2 [&>*]:text-center [&_a]:border-0 [&_span]:border-b-[1.5px] [&_span]:uppercase [&_span]:transition-colors [&_span]:duration-200 [&_span:hover]:lg:text-accent2 [&_span:hover]:lg:border-accent2">
+	<div class="flex flex-col xl:flex-row gap-16 justify-center items-center py-12 [&>article]:w-[90%] [&>article]:sm:w-[32rem] [&>article]:xl:w-80 [&>article]:flex [&>article]:flex-col [&>article]:gap-2 [&>article]:sm:gap-8 [&>article]:xl:gap-2 [&>article]:items-center [&_img]:aspect-square [&_img]:w-32 [&_div]:flex [&_div]:flex-col [&_div]:items-center [&_div]:gap-2 [&>*]:text-center [&_a]:border-0 [&_span]:border-b-[1.5px] [&_span]:uppercase [&_span]:transition-colors [&_span]:duration-200 [&_span:hover]:lg:text-accent2 [&_span:hover]:lg:border-accent2">
 		<article>
 			<h3>Buy our singles on streams</h3>
 			<p>Visit our weekday streams for high-quality raw cards in a magnetic case and custom sticker.</p>

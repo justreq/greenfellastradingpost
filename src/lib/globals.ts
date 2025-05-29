@@ -4,3 +4,5 @@ export const superUsers = ["2b5c3202-96ca-4ce2-b9dc-b4c4661e6f7b", "52097e7f-c34
 export const globalPopupState: Writable<"none" | "headernav" | "profile" | "signup" | "login" | "sorts" | "filters" | "createbreakspot" | "checkout"> = writable("none");
 
 export const filtersList: Writable<{ [key: string]: { name: string; value: string }[] }> = writable({});
+
+export const hasItemsInCart: Writable<boolean> = writable(false);

@@ -5,7 +5,7 @@
 	import { page } from "$app/state";
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
-	import { globalPopupState, superUsers } from "$lib/globals";
+	import { globalPopupState, hasItemsInCart, superUsers } from "$lib/globals";
 	import { dev } from "$app/environment";
 	import { invalidate } from "$app/navigation";
 	let { children } = $props();
@@ -23,15 +23,11 @@
 		bg2.style.top = `-${50 + scrollAmount * 50}px`;
 	};
 
-	let showCart = $state(false);
-
 	onMount(() => {
 		moveParallaxBG(new Event(""));
 
-		if (localStorage.getItem("cart") != null) {
-			if (JSON.parse(localStorage.getItem("cart") as string).temporary) localStorage.removeItem("cart");
-			else showCart = true;
-		}
+		localStorage.removeItem("tempCart");
+		if (localStorage.getItem("cart") != null) $hasItemsInCart = true;
 
 		const { data } = supabase.auth.onAuthStateChange(async (_: any, newSession: { expires_at: number | undefined }) => {
 			if (newSession?.expires_at !== session?.expires_at) {
@@ -44,8 +40,8 @@
 </script>
 
 <svelte:head>
-	<!-- <script src="https://www.paypal.com/sdk/js?client-id=BAAiDpoa6hKu2qzEnwK605Ix6mZuiIECKR7vhNx_GljZz2UMCvzZzs7ubI0UyeqXepMkFyvJ81dxnc-iNo&components=hosted-buttons&enable-funding=venmo&currency=USD"> -->
-	<!-- </script> -->
+	<!-- <script src="https://www.paypal.com/sdk/js?client-id=BAAiDpoa6hKu2qzEnwK605Ix6mZuiIECKR7vhNx_GljZz2UMCvzZzs7ubI0UyeqXepMkFyvJ81dxnc-iNo&components=hosted-buttons&enable-funding=venmo&currency=USD">
+	</script> -->
 	<title>Greenfellas Trading Post</title>
 	<meta name="description" content="Get the highest quality soccer trading cards. Mags, slabs, repacks, breaks, and more available here!" />
 </svelte:head>
@@ -53,7 +49,7 @@
 <svelte:window
 	onscroll={moveParallaxBG}
 	onresize={(event) => {
-		if ((event.target as Window).innerWidth > 1024 && ($globalPopupState == "headernav" || $globalPopupState == "profile" || $globalPopupState == "sorts" || $globalPopupState == "filters")) $globalPopupState = "none";
+		if ((event.target as Window).innerWidth > 1024 && ($globalPopupState == "headernav" || $globalPopupState == "sorts" || $globalPopupState == "filters")) $globalPopupState = "none";
 	}}
 />
 
@@ -63,7 +59,7 @@
 	<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
-{#if page.url.pathname == "/"}
+{#if page.url.pathname == "/" && !user}
 	<article class:hidden={user || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
 		<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
 		<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>
@@ -84,9 +80,4 @@
 		</article>
 	{/if}
 </main>
-{#if showCart}
-	<button type="button" class="right-4 bottom-4 fixed aspect-square w-16 bg-glass-sm p-4 rounded-lg z-10">
-		<img src="/icons/cart.svg" alt="Cart" class="m-auto h-full" />
-	</button>
-{/if}
 <Footer></Footer>

@@ -6,12 +6,12 @@
 
 {#if user}
 	<div class="pt-8 px-2 flex flex-col gap-4">
-		<a href="/" class="fancy-button text-center">{user.user_metadata.displayName || user.user_metadata.full_name}</a>
 		<button
 			class="fancy-button border-none bg-text/40 font-bold"
 			type="button"
 			onclick={async () => {
 				await supabase.auth.signOut();
+				location.reload();
 			}}
 		>
 			Sign Out

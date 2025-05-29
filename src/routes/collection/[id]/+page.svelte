@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import FancyButton from "$lib/components/FancyButton.svelte";
-	import { globalPopupState } from "$lib/globals";
+	import { globalPopupState, hasItemsInCart } from "$lib/globals";
 	let { supabase, user } = $derived(page.data);
 
 	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((p: { id: any }) => p.id == page.data.id).item_id);
@@ -17,21 +17,30 @@
 	});
 
 	const addToCart = () => {
-		let cart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
-		if (user) cart.owner_id = user.id;
-		localStorage.setItem("cart", JSON.stringify(cart));
+		if (localStorage.getItem("cart") == null) {
+			let cart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
+			if (user) cart.owner_id = user.id;
+			localStorage.setItem("cart", JSON.stringify(cart));
+			$hasItemsInCart = true;
+		} else {
+			let cart = JSON.parse(localStorage.getItem("cart") as string);
+			if (cart.product_ids.includes(page.data.id)) return;
+
+			cart.product_ids.push(page.data.id);
+			localStorage.setItem("cart", JSON.stringify(cart));
+		}
 	};
 
 	const buyNow = async () => {
-		let cart: { product_ids: string[]; owner_id: string | null; temporary: boolean } = { product_ids: [page.data.id], owner_id: null, temporary: true };
+		let tempCart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
 		if (user) {
-			cart.owner_id = user.id;
+			tempCart.owner_id = user.id;
 			$globalPopupState = "checkout";
 		} else $globalPopupState = "profile";
 
 		// const { data } = await supabase.from("orders").upsert(order).select();
 
-		localStorage.setItem("cart", JSON.stringify(cart));
+		localStorage.setItem("tempCart", JSON.stringify(tempCart));
 	};
 </script>
 
@@ -62,7 +71,7 @@
 			</h2>
 			<h3 class="text-accent font-bold">{formatter.format(cardData.sell_price)}</h3>
 			<div class="flex flex-col sm:flex-row gap-4 [&>*]:w-full [&>*]:font-bold [&>*]:flex [&>*]:justify-center [&>*]:p-4 [&>*]:text-xl [&>*]:rounded-xl [&>*]:transition-all [&>*:hover]:md:scale-[101%]">
-				<FancyButton text="Add to Cart" iconPath="/icons/cart.svg" className="bg-tertiary/80" onclick={addToCart} />
+				<FancyButton text="Add To Cart" iconPath="/icons/cart.svg" className="bg-tertiary/80" onclick={addToCart} />
 				<FancyButton text="Buy Now" iconPath="/icons/buy-now.svg" className="bg-accent2/80 md:hover:!bg-accent2 uppercase" onclick={buyNow} />
 			</div>
 			<h3>Description</h3>

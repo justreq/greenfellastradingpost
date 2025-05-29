@@ -52,7 +52,7 @@
 		}
 	};
 
-	const itemsPerPage = 15;
+	const itemsPerPage = 30;
 
 	let searchParams: URLSearchParams = $state(new URLSearchParams());
 

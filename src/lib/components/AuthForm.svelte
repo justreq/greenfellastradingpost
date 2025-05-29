@@ -46,7 +46,10 @@
 			const { error } = await supabase.from("users").insert({ id: (data.user as User).id, email: (data.user as User).email, display_name: (data.user as User).user_metadata.displayName, includeInEmailBlast: (data.user as User).user_metadata.includeInEmailBlast });
 			if (error) throw error;
 
-			if (localStorage.getItem("cart") == null) return;
+			if (localStorage.getItem("cart") == null || !page.route.id?.includes("collection")) {
+				location.reload();
+				return;
+			}
 
 			let cart = JSON.parse(localStorage.getItem("cart") as string);
 			cart.owner_id = (data.user as User).id;
@@ -71,7 +74,10 @@
 				throw error;
 			}
 
-			if (localStorage.getItem("cart") == null) return;
+			if (localStorage.getItem("cart") == null || !page.route.id?.includes("collection")) {
+				location.reload();
+				return;
+			}
 
 			let cart = JSON.parse(localStorage.getItem("cart") as string);
 			cart.owner_id = (data.user as User).id;
