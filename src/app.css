@@ -94,6 +94,10 @@
 		@apply bg-primary/80 backdrop-blur-md border-2 border-secondary/80;
 	}
 
+	.bg-glass-secondary {
+		@apply bg-secondary/80 backdrop-blur-md border-2 border-tertiary/80;
+	}
+
 	.hover-effect {
 		@apply duration-200 transition-colors [&:not(:disabled)]:md:hover:border-accent2;
 	}

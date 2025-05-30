@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { type = "text", name = "", placeholder = "", required = false, iconPath = "", value = $bindable(""), list = "", step = "", accept = "", className = "" } = $props();
+	let { type = "text", name = "", placeholder = "", required = false, iconPath = "", value = $bindable(""), list = "", step = "", min = "", accept = "", className = "" } = $props();
 
 	let showRequired: boolean = $state(required);
 </script>
@@ -15,6 +15,7 @@
 		{placeholder}
 		{list}
 		{step}
+		{min}
 		{accept}
 		autocomplete="new-password"
 		bind:value={

@@ -20,6 +20,7 @@
 	let selectedPSAServices: number[] = $state([]);
 	let psaEmail = $state("");
 	let psaNotes = $state("");
+	let psaCardCount = $state("");
 
 	const togglePSAService = (index: number) => {
 		if (selectedPSAServices.includes(index)) {
@@ -148,7 +149,7 @@
 	</article>
 </section>
 <section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:sm:flex-row [&_article]:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
-	<div class="bg-primary">
+	<div class="bg-glass">
 		<article>
 			<h2>
 				{getInfo("overviewTitle")}
@@ -156,7 +157,7 @@
 			<h4>{getInfo("overview")}</h4>
 		</article>
 	</div>
-	<div class="bg-secondary !py-8 lg:!py-16 relative">
+	<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
 		<article id={type == "psa" ? "form" : "stream"}>
 			{#if type == "psa"}
 				<dialog id="psa-confirmation" class="m-auto bg-glass-sm p-4 rounded-lg max-w-[95vw]">Thank you for submitting! We will send a quote to your email very soon.</dialog>
@@ -176,7 +177,7 @@
 						<FancyButton text="Super Express" isTogglable toggleValue={selectedPSAServices.includes(6)} onclick={() => togglePSAService(6)} />
 						<FancyButton text="Walk-Through" isTogglable toggleValue={selectedPSAServices.includes(7)} onclick={() => togglePSAService(7)} />
 					</div>
-					<p class:hidden={!selectedPSAServices.includes(0)}>* Must be for at least 20 cards</p>
+					<p class:hidden={!selectedPSAServices.includes(0)}>* Must be for at least 20 cards (PSA requirement)</p>
 					<h5 class="inline text-xs sm:text-sm lg:text-base font-bold">
 						For more information about PSA's pricing options, visit
 						<span>
@@ -188,7 +189,10 @@
 					</h5>
 					<textarea name="grade-cards" id="grade-cards" bind:value={psaNotes} class:hidden={selectedPSAServices.length < 2} class="h-64" placeholder="Notes (required if you select multiple services, see above)"></textarea>
 					<label for="psa-email">Contact Email</label>
+					<!-- <div class="flex gap-2"> -->
 					<FancyTextInput bind:value={psaEmail} type="email" name="psa-email" placeholder="Email" required iconPath="/icons/email.svg" className="max-w-[24rem]" />
+					<!-- <FancyTextInput type="number" min="1" bind:value={psaCardCount} required /> -->
+					<!-- </div> -->
 					<FancyButton type="submit" text="Submit" disabled={psaEmail == "" || selectedPSAServices.length == 0 || (selectedPSAServices.length > 1 && psaNotes == "")} className="max-w-64 fancy-anchor fancy-anchor-on !transition-all [&:not(:disabled)]:md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
 				</form>
 			{:else}

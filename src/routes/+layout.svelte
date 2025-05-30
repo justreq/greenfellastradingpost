@@ -67,7 +67,7 @@
 	<Header></Header>
 {/if}
 <main class:pb-32={page.url.pathname != "/" || user} class="w-screen pt-12 lg:pt-24 min-h-[calc(100vh-9rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if (user && superUsers.includes(user.id)) || (user && superUsers.includes(user.id) && page.route.id?.includes("private")) || page.route.id?.includes("legal") || page.url.pathname.includes("psa") || page.url.pathname == "/"}
+	{#if (user && superUsers.includes(user.id)) || (user && superUsers.includes(user.id) && page.route.id?.includes("private")) || page.route.id?.includes("legal") || page.url.pathname.includes("psa") || page.url.pathname.includes("break") || page.url.pathname.includes("success") || page.url.pathname == "/"}
 		{@render children()}
 	{:else}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
