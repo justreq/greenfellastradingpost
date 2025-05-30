@@ -146,7 +146,7 @@
 		<a href={type == "psa" ? "#form" : "#stream"} class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">{getInfo("ctaText")}</a>
 	</article>
 </section>
-<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:sm:flex-row [&_article]:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
+<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:md:flex-row [&_article]:gap-8 [&_article]:sm:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
 	<div class="bg-glass">
 		<article>
 			<h2>
@@ -194,15 +194,15 @@
 					<FancyButton type="submit" text="Submit" disabled={psaEmail == "" || selectedPSAServices.length == 0 || (selectedPSAServices.length > 1 && psaNotes == "")} className="max-w-64 fancy-anchor fancy-anchor-on !transition-all [&:not(:disabled)]:md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
 				</form>
 			{:else}
-				<a target="_blank" href={page.data.streams.find((e: { type: any }) => e.type == type).link} class="cursor-pointer relative flex justify-center object-contain overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] lg:rounded-2xl bg-primary sm:bg-transparent">
-					<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}.jpg" alt="Next stream thumbnail" draggable="false" class="max-h-full mx-auto" />
+				<a target="_blank" href={page.data.streams.find((e: { type: any }) => e.type == type).link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
+					<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
 					<div class="bg-black/60 w-full h-full absolute"></div>
 					<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
 				</a>
-				<div>
-					<h2 class="sm:!text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl">Next {type} Stream</h2>
-					<h3 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{page.data.streams.find((e: { type: any }) => e.type == type).name}</h3>
-					<h3 class:hidden={type != "break"} class="absolute mt-8">↓ Purchase Spots Below ↓</h3>
+				<div class="-mt-8 md:mt-0">
+					<h2 class="md:!text-left text-3xl md:text-2xl lg:text-4xl">Next {type} Stream</h2>
+					<h3 class="text-center md:text-left text-balance text-4xl md:text-3xl lg:text-5xl">{page.data.streams.find((e: { type: any }) => e.type == type).name}</h3>
+					<h3 class:hidden={type != "break"} class="mt-8 text-center md:text-left text-2xl md:text-xl lg:text-3xl text-balance">↓ Purchase Spots Below ↓</h3>
 				</div>
 			{/if}
 		</article>
