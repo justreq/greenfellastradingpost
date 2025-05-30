@@ -43,7 +43,7 @@
 		<article>
 			<h3>Invest in our breaks</h3>
 			<p>Secure a team spot and get all of their player cards from 2 cases. Watch a live broadcast of the case breaks on Whatnot</p>
-			<a href="/services/break#stream">
+			<a href="/break#stream">
 				<span>Next break stream</span>
 				→
 			</a>
@@ -51,7 +51,7 @@
 		<article>
 			<h3>Check out our repacks</h3>
 			<p>Get the chance to secure a high-value card in one of our Sunday Repack shows</p>
-			<a href="/services/repack#stream">
+			<a href="/repack#stream">
 				<span>Next Repack stream</span>
 				→
 			</a>
@@ -62,7 +62,7 @@
 			<div>
 				<h3>Bonus Grading Services</h3>
 				<p>Have any raw cards you own or purchase be cleaned and hand-delivered to PSA for expedited grading. Recieve your graded cards in 1 - 3 weeks!</p>
-				<a href="/services/psa">Learn More</a>
+				<a href="/psa">Learn More</a>
 			</div>
 			<img src="/images/logo-psa.png" alt="PSA logo" draggable="false" />
 		</article>

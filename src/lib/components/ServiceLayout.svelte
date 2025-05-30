@@ -10,11 +10,10 @@
 
 	let { type } = $props();
 
+	console.log(page.data);
+
 	let selectedSpotCount = $state(0);
 	let allSpotsSelected = $state(false);
-
-	let isPopupVisible = $state(false);
-	let isBuyingSpot = $state(false);
 
 	const psaServices = ["Value Bulk", "Value", "Value Plus", "Value Max", "Regular", "Express", "Super Express", "Walk-Through"];
 
@@ -157,7 +156,7 @@
 			<h4>{getInfo("overview")}</h4>
 		</article>
 	</div>
-	<div class="bg-secondary !py-8 lg:!py-16">
+	<div class="bg-secondary !py-8 lg:!py-16 relative">
 		<article id={type == "psa" ? "form" : "stream"}>
 			{#if type == "psa"}
 				<dialog id="psa-confirmation" class="m-auto bg-glass-sm p-4 rounded-lg max-w-[95vw]">Thank you for submitting! We will send a quote to your email very soon.</dialog>
@@ -201,6 +200,7 @@
 				<div>
 					<h2 class="sm:!text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl">Next {type} Stream</h2>
 					<h3 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{page.data.streams.find((e: { type: any }) => e.type == type).name}</h3>
+					<h3 class:hidden={type != "break"} class="absolute mt-8">↓ Purchase Spots Below ↓</h3>
 				</div>
 			{/if}
 		</article>
