@@ -10,8 +10,6 @@
 
 	let { type } = $props();
 
-	console.log(page.data);
-
 	let selectedSpotCount = $state(0);
 	let allSpotsSelected = $state(false);
 
