@@ -69,7 +69,7 @@
 			subheading: "Skip PSA's processing times when you grade your cards through us!",
 			ctaText: "Submit Request",
 			overviewTitle: "How does it work?",
-			overview: "Below is a form you can submit for a PSA submission request. You will need to choose a PSA pricing model. You CAN choose multiple, but you have to specify which of your cards apply to which one.\n\nAfter submitting the form, you will be sent an email with a quote containing information on how to pay us and where to ship your cards.\n\nWe will hand-deliver your cards to PSA, skipping any processing times and ensuring quick turnover rates.\n\nWhen we recieve your graded cards, we will email you once again, this time asking for an address to ship the graded cards to.",
+			overview: "You can access our PSA submission form below. You'll need to provide us basic information about each card you want to submit, including the PSA pricing model you want to use.\n\nOnce you submit the form and we look it over, we will email you an invoice you can pay for directly from the email.\n\nThe invoice will also contain an address for you to ship your cards to. When we receive your cards back from PSA, we will ship them straight back to you.",
 		},
 	};
 
@@ -149,13 +149,53 @@
 <section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:md:flex-row [&_article]:gap-8 [&_article]:sm:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
 	<div class="bg-glass">
 		<article>
-			<h2>
-				{getInfo("overviewTitle")}
-			</h2>
+			<h2>{getInfo("overviewTitle")}</h2>
 			<h4>{getInfo("overview")}</h4>
 		</article>
 	</div>
-	<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
+	{#if type == "psa"}
+		<div class="bg-glass-secondary !px-1 sm:!px-2 flex flex-col gap-4 [&_div]:rounded-lg [&_div]:w-48 [&_div]:sm:w-64 [&_div]:bg-glass-secondary-sm [&_div]:p-2 [&_div]:sm:p-4 [&_h4]:!text-left [&_h4]:text-base [&_h4]:sm:text-lg [&_h4]:uppercase [&_h5]:text-accent [&_h5]:text-xl [&_h5]:sm:text-2xl [&_h5]:font-bold">
+			<article class="!gap-4">
+				<h2 class="text-5xl lg:text-7xl">Pricing</h2>
+				<div class="!w-[90%] max-w-[32rem]">These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span> you want cleaned.</div>
+			</article>
+			<article class="flex !flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem]">
+				<div>
+					<h4>Value Bulk</h4>
+					<h5>$24.99 / card</h5>
+				</div>
+				<div>
+					<h4>Value</h4>
+					<h5>$29.99 / card</h5>
+				</div>
+				<div>
+					<h4>Value Plus</h4>
+					<h5>$44.99 / card</h5>
+				</div>
+				<div>
+					<h4>Value Max</h4>
+					<h5>$64.99 / card</h5>
+				</div>
+				<div>
+					<h4>Regular</h4>
+					<h5>$84.99 / card</h5>
+				</div>
+				<div>
+					<h4>Express</h4>
+					<h5>$159.99 / card</h5>
+				</div>
+				<div>
+					<h4>Super Express</h4>
+					<h5>$314.99 / card</h5>
+				</div>
+				<div>
+					<h4>Walk-Through</h4>
+					<h5>$614.99 / card</h5>
+				</div>
+			</article>
+		</div>
+	{/if}
+	<div class="bg-glass !py-8 lg:!py-16 relative">
 		<article id={type == "psa" ? "form" : "stream"}>
 			{#if type == "psa"}
 				<dialog id="psa-confirmation" class="m-auto bg-glass-sm p-4 rounded-lg max-w-[95vw]">Thank you for submitting! We will send a quote to your email very soon.</dialog>
