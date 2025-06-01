@@ -113,7 +113,7 @@
 		</tr>
 	</thead>
 	<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text [&_button:not(:has(*))]:fancy-button [&_button:not(:has(*))]:bg-accent2/20 [&_button:not(:has(*))]:border-accent2/40">
-		{#each page.data.breakSpots.filter((e) => e.break_id == $breakIDToShowSpots).sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
+		{#each page.data.breakSpots.filter((e: { break_id: string | null; }) => e.break_id == $breakIDToShowSpots).sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
 			<tr data-id={breakSpot.id}>
 				{#each (isSuperUser(user) ? [""] : []).concat(Object.keys(breakSpot).slice(2, 5)) as key}
 					<td class:text-accent2={breakSpot[key] == null}>
