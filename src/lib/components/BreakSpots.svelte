@@ -113,30 +113,34 @@
 		</tr>
 	</thead>
 	<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text [&_button:not(:has(*))]:fancy-button [&_button:not(:has(*))]:bg-accent2/20 [&_button:not(:has(*))]:border-accent2/40">
-		{#each page.data.breakSpots.filter((e: { break_id: string | null; }) => e.break_id == $breakIDToShowSpots).sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
+		{#each page.data.breakSpots.filter((e: { break_id: string | null }) => e.break_id == $breakIDToShowSpots).sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
 			<tr data-id={breakSpot.id}>
 				{#each (isSuperUser(user) ? [""] : []).concat(Object.keys(breakSpot).slice(2, 5)) as key}
 					<td class:text-accent2={breakSpot[key] == null}>
 						{#if key == ""}
 							<FancyCheckbox className="gap-0" value={allSpotsSelected} onclick={trackSelectedSpots} />
 						{/if}
-						{#if key != "" && breakSpot[key] == null}
+						{#if (breakSpot.bought != "" && key == "owner_id") || (key != "" && breakSpot[key] == null)}
 							<span>
-								<button
-									data-spot-id={breakSpot.id}
-									class="whitespace-nowrap"
-									onclick={(event) => {
-										localStorage.removeItem("spotCart");
-										let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
-										if (user) {
-											spotCart.owner_id = user.id;
-											localStorage.setItem("spotCart", JSON.stringify(spotCart));
-											buySpot();
-										} else $globalPopupState = "profile";
-									}}
-								>
-									Buy Spot
-								</button>
+								{#if breakSpot.bought != ""}
+									{breakSpot.bought}
+								{:else}
+									<button
+										data-spot-id={breakSpot.id}
+										class="whitespace-nowrap"
+										onclick={(event) => {
+											localStorage.removeItem("spotCart");
+											let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
+											if (user) {
+												spotCart.owner_id = user.id;
+												localStorage.setItem("spotCart", JSON.stringify(spotCart));
+												buySpot();
+											} else $globalPopupState = "profile";
+										}}
+									>
+										Buy Spot
+									</button>
+								{/if}
 							</span>
 						{:else}
 							{key == "price" ? convertFloatToPrice(breakSpot[key]) : key == "owner_id" ? page.data.users.find((e: { id: any }) => e.id == breakSpot[key]).display_name : breakSpot[key]}
