@@ -12,7 +12,7 @@ export const load = (async ({ params, locals: { supabase } }) => {
 
 		return {
 			type: params.stream,
-			streams: streams.data ?? [],
+			streams: streams.data == null ? [] : streams.data.filter((e) => e.type == params.stream),
 			breakSpots: breakSpots.data ?? [],
 			users: users.data ?? [],
 		};

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { globalPopupState, hasItemsInCart } from "$lib/globals";
+	import { breakIDToShowSpots, globalPopupState, hasItemsInCart } from "$lib/globals";
 	import { sineInOut } from "svelte/easing";
 	import { fade, fly } from "svelte/transition";
 	import AuthForm from "./AuthForm.svelte";
@@ -9,6 +9,7 @@
 	import Filters from "./Filters.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
 	import { page } from "$app/state";
+	import BreakSpots from "./BreakSpots.svelte";
 	let { supabase } = $derived(page.data);
 
 	let { className = "" } = $props();
@@ -29,7 +30,8 @@
 			document.body.classList.add("!overflow-y-hidden");
 		} else {
 			localStorage.removeItem("tempCart");
-			globalPopupState.set("none");
+			$globalPopupState = "none";
+			$breakIDToShowSpots = null;
 			document.body.querySelector("footer")?.firstElementChild?.classList.remove("!invisible");
 			document.body.classList.remove("!overflow-y-hidden");
 		}
@@ -71,7 +73,7 @@
 {#if $globalPopupState != "none"}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div bind:this={popupElement} class="fixed sm:flex left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/80" class:hidden={!visible} transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}>
+	<div bind:this={popupElement} class="fixed sm:flex left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/40" class:hidden={!visible} transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}>
 		<div
 			class="h-[60vh] sm:absolute sm:w-full sm:h-full"
 			onclick={() => {
@@ -110,6 +112,8 @@
 					<FancyTextInput name="spot_price" type="number" placeholder="Spot Price" step="any" required />
 					<button type="submit" class="fancy-button fancy-anchor-on w-full mt-4">Create New Spot</button>
 				</form>
+			{:else if $globalPopupState == "breakspots"}
+				<BreakSpots />
 			{:else if $globalPopupState == "checkout"}
 				<button type="button" onclick={checkout}>Checkout</button>
 				{#if localStorage.getItem("tempCart") != null}

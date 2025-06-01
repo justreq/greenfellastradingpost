@@ -1,17 +1,12 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { globalPopupState } from "$lib/globals";
-	import { isSuperUser } from "$lib/supabaseClient";
+	import { breakIDToShowSpots, globalPopupState } from "$lib/globals";
 	import { onMount } from "svelte";
 	import FancyButton from "./FancyButton.svelte";
-	import FancyCheckbox from "./FancyCheckbox.svelte";
 	import FancyTextInput from "./FancyTextInput.svelte";
 	let { supabase, user } = $derived(page.data);
 
 	let { type } = $props();
-
-	let selectedSpotCount = $state(0);
-	let allSpotsSelected = $state(false);
 
 	const psaServices = ["Value Bulk", "Value", "Value Plus", "Value Max", "Regular", "Express", "Super Express", "Walk-Through"];
 
@@ -77,23 +72,6 @@
 		return info[type][key];
 	};
 
-	const convertFloatToPrice = (float: number) => {
-		const formatter = new Intl.NumberFormat("en-US", {
-			style: "currency",
-			currency: "USD",
-			trailingZeroDisplay: "stripIfInteger",
-		});
-
-		return formatter.format(float);
-	};
-
-	const trackSelectedSpots = (event: Event, amount: number | null) => {
-		if (amount) selectedSpotCount = (event.target as HTMLInputElement).checked ? amount : 0;
-		else selectedSpotCount += ((event.target as HTMLInputElement).checked ? 1 : -1) * (amount ?? 1);
-
-		(document.getElementById("button-delete-spots") as HTMLElement).innerText = `Delete ${selectedSpotCount} SPOT${selectedSpotCount == 1 ? "" : "s"}`;
-	};
-
 	onMount(() => {
 		if (user != null) psaEmail = user.email || "";
 
@@ -107,33 +85,6 @@
 			});
 		});
 	});
-
-	const buySpot = async () => {
-		let cartContents;
-
-		if (localStorage.getItem("spotCart") != null) {
-			let cart = JSON.parse(localStorage.getItem("spotCart") as string);
-
-			let spotData = page.data.breakSpots.find((c: { id: any }) => c.id == cart.spot_id);
-
-			cartContents = [
-				{
-					name: spotData.name,
-					price: spotData.price,
-				},
-			];
-		}
-
-		const data = await fetch("/checkout", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ cart: cartContents }),
-		}).then((data) => data.json());
-
-		window.location.replace(data.url);
-	};
 </script>
 
 <div class="absolute left-0 top-[82px] -z-10 w-screen h-screen max-h-[56rem] overflow-hidden">
@@ -157,7 +108,10 @@
 		<div class="bg-glass-secondary !px-1 sm:!px-2 flex flex-col gap-4 [&_div]:rounded-lg [&_div]:w-48 [&_div]:sm:w-64 [&_div]:bg-glass-secondary-sm [&_div]:p-2 [&_div]:sm:p-4 [&_h4]:!text-left [&_h4]:text-base [&_h4]:sm:text-lg [&_h4]:uppercase [&_h5]:text-accent [&_h5]:text-xl [&_h5]:sm:text-2xl [&_h5]:font-bold">
 			<article class="!gap-4">
 				<h2 class="text-5xl lg:text-7xl">Pricing</h2>
-				<div class="!w-[90%] max-w-[32rem]">These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span> you want cleaned.</div>
+				<div class="!w-[90%] max-w-[32rem]">
+					These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span>
+					you want cleaned.
+				</div>
 			</article>
 			<article class="flex !flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem]">
 				<div>
@@ -195,7 +149,7 @@
 			</article>
 		</div>
 	{/if}
-	<div class="bg-glass !py-8 lg:!py-16 relative">
+	<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
 		<article id={type == "psa" ? "form" : "stream"}>
 			{#if type == "psa"}
 				<dialog id="psa-confirmation" class="m-auto bg-glass-sm p-4 rounded-lg max-w-[95vw]">Thank you for submitting! We will send a quote to your email very soon.</dialog>
@@ -234,116 +188,33 @@
 					<FancyButton type="submit" text="Submit" disabled={psaEmail == "" || selectedPSAServices.length == 0 || (selectedPSAServices.length > 1 && psaNotes == "")} className="max-w-64 fancy-anchor fancy-anchor-on !transition-all [&:not(:disabled)]:md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
 				</form>
 			{:else}
-				<a target="_blank" href={page.data.streams.find((e: { type: any }) => e.type == type).link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
-					<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
-					<div class="bg-black/60 w-full h-full absolute"></div>
-					<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
-				</a>
-				<div class="-mt-8 md:mt-0">
-					<h2 class="md:!text-left text-3xl md:text-2xl lg:text-4xl">Next {type} Stream</h2>
-					<h3 class="text-center md:text-left text-balance text-4xl md:text-3xl lg:text-5xl">{page.data.streams.find((e: { type: any }) => e.type == type).name}</h3>
-					<h3 class:hidden={type != "break"} class="mt-8 text-center md:text-left text-2xl md:text-xl lg:text-3xl text-balance">↓ Purchase Spots Below ↓</h3>
+				<div class="flex flex-col gap-16">
+					{#each page.data.streams as stream, index}
+						<article>
+							<a target="_blank" href={stream.link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
+								<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}/{stream.id}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
+								<div class="bg-black/60 w-full h-full absolute"></div>
+								<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
+							</a>
+							<div class="-mt-4 md:mt-0">
+								<h2 class="md:!text-left text-3xl md:text-2xl lg:text-4xl">Upcoming {type} Stream</h2>
+								<h3 class="text-center md:text-left text-balance text-4xl md:text-3xl lg:text-5xl">{stream.name}</h3>
+								{#if type == "break"}
+									<FancyButton
+										onclick={() => {
+											$globalPopupState = "breakspots";
+											$breakIDToShowSpots = stream.id;
+										}}
+										text="Purchase Spots"
+										className="fancy-button rounded-full mt-4 text-xl fancy-anchor fancy-anchor-on mx-auto md:mx-0"
+									/>
+								{/if}
+							</div>
+						</article>
+						<hr class:hidden={index == page.data.streams.length - 1} class="bg-tertiary border-none h-1 rounded-full" />
+					{/each}
 				</div>
 			{/if}
 		</article>
 	</div>
-	<article class="justify-center !items-center lg:!items-start !gap-0 sm:!gap-8 lg:!gap-4 sm:justify-evenly xl:justify-center xl:!gap-32 w-full">
-		{#if type == "break"}
-			<div class="w-screen sm:w-auto overflow-x-scroll">
-				{#if isSuperUser(user)}
-					<div class="sm:p-0 p-2 flex justify-evenly flex-col sm:flex-row gap-2 mb-0 sm:mb-2 [&>*]:w-full [&>*]:uppercase [&>*]:block [&>*]:border-2">
-						<FancyButton className="!bg-green-500/40 !border-green-500/80 md:hover:!border-green-500 md:hover:!text-green-500" id="create-new-spot" text="Create New Spot" onclick={() => ($globalPopupState = "createbreakspot")} />
-						<FancyButton
-							text="Delete {selectedSpotCount} Spot{selectedSpotCount == 1 ? '' : 's'}"
-							onclick={async (event: Event) => {
-								switch ((event.target as HTMLElement).innerText) {
-									case `DELETE ${selectedSpotCount} SPOT${selectedSpotCount == 1 ? "" : "S"}`:
-										(event.target as HTMLElement).innerText = "Confirm?";
-										break;
-									case "CONFIRM?":
-										(event.target as HTMLElement).innerText = "Are you sure?";
-										break;
-									case "ARE YOU SURE?":
-										(event.target as HTMLElement).innerText = "All right then";
-										const { error } = await supabase
-											.from("break_spots")
-											.delete()
-											.in(
-												"id",
-												Array.from(document.getElementById("break-spots-table")?.querySelectorAll("tr") as NodeList)
-													.slice(1)
-													.filter((e) => ((e as HTMLElement).querySelector("input") as HTMLInputElement).checked)
-													.map((e) => (e as HTMLElement).getAttribute("data-id"))
-											);
-
-										if (error) throw error;
-										location.reload();
-
-										break;
-								}
-							}}
-							id="delete-spots"
-							disabled={selectedSpotCount == 0}
-							className="!bg-red-500/40 !border-red-500/80 [&:not(:disabled)]:md:hover:!border-red-500 [&:not(:disabled)]:md:hover:!text-red-500 disabled:opacity-50 transition-all"
-						/>
-					</div>
-				{/if}
-				<table id="break-spots-table" class="block mx-auto w-fit table-fixed overflow-scroll border-separate [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">
-					<thead class="bg-accent2/60">
-						<tr>
-							{#each (isSuperUser(user) ? [""] : []).concat(["Spot", "Price", "Owner"]) as column}
-								<td>
-									{#if column == ""}
-										<FancyCheckbox
-											id="select-all-spots"
-											className="gap-0"
-											bind:value={allSpotsSelected}
-											onclick={(cb: Event) => {
-												trackSelectedSpots(cb, Array.from(document.getElementById("break-spots-table")?.querySelectorAll("tr") as NodeList).length - 1);
-											}}
-										/>{:else}
-										{column}
-									{/if}
-								</td>
-							{/each}
-						</tr>
-					</thead>
-					<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text [&_button:not(:has(*))]:fancy-button [&_button:not(:has(*))]:bg-accent2/20 [&_button:not(:has(*))]:border-accent2/40">
-						{#each page.data.breakSpots.sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
-							<tr data-id={breakSpot.id}>
-								{#each (isSuperUser(user) ? [""] : []).concat(Object.keys(breakSpot).slice(2, 5)) as key}
-									<td class:text-accent2={breakSpot[key] == null}>
-										{#if key == ""}
-											<FancyCheckbox className="gap-0" value={allSpotsSelected} onclick={trackSelectedSpots} />
-										{/if}
-										{#if key != "" && breakSpot[key] == null}
-											<span>
-												<button
-													data-spot-id={breakSpot.id}
-													class="whitespace-nowrap"
-													onclick={(event) => {
-														localStorage.removeItem("spotCart");
-														let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
-														if (user) {
-															spotCart.owner_id = user.id;
-															localStorage.setItem("spotCart", JSON.stringify(spotCart));
-															buySpot();
-														} else $globalPopupState = "profile";
-													}}
-												>
-													Buy Spot
-												</button>
-											</span>
-										{:else}
-											{key == "price" ? convertFloatToPrice(breakSpot[key]) : key == "owner_id" ? page.data.users.find((e: { id: any }) => e.id == breakSpot[key]).display_name : breakSpot[key]}
-										{/if}
-									</td>
-								{/each}
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		{/if}
-	</article>
 </section>
