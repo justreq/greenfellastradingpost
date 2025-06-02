@@ -6,7 +6,7 @@
 	let { user } = $derived(page.data);
 </script>
 
-<header class="sticky top-0 h-24 border-0 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between z-20 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-24 [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
+<header class="sticky top-0 h-16 lg:h-24 border-0 border-b-2 w-screen px-8 xl:px-16 bg-glass flex justify-between z-20 [&_a]:my-auto [&>div]:lg:block [&>div]:bg-primary [&>div]:lg:bg-transparent [&>div]:absolute [&>div]:lg:static [&>div]:top-16 [&>div]:lg:top-24 [&>div]:w-full [&>div]:lg:w-auto [&>div]:left-0 [&>div>nav]:p-2 [&>div>nav]:flex [&>div>nav]:flex-col [&>div>nav]:lg:flex-row [&>div>nav]:lg:gap-8 [&>div>nav]:xl:gap-16 [&>div>nav]:lg:h-full [&>div>nav]:lg:justify-center [&>div>nav]:gap-2 [&>div>nav]:w-full [&>button]:h-1/2 [&>button]:lg:h-1/3 [&>button]:aspect-square [&>button>img]:h-full [&>button]:my-auto">
 	<button
 		type="button"
 		onclick={() => {
@@ -43,7 +43,7 @@
 				<ProfileNav />
 			{/if}
 		</article>
-		<button type="button" disabled={!$hasItemsInCart} onclick={() => ($globalPopupState = user == null ? "profile" : "checkout")} class="h-1/3 lg:h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
+		<button type="button" disabled={!$hasItemsInCart} onclick={() => ($globalPopupState = user == null ? "profile" : "checkout")} class="h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
 			<img src="/icons/cart{$hasItemsInCart ? '' : '-empty'}.svg" alt="Cart Button" draggable="false" class="h-full" />
 		</button>
 	</article>

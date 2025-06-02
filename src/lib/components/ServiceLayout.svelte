@@ -55,16 +55,16 @@
 		break: {
 			heading: "Experience amazing breaks",
 			subheading: "Find our next break and secure your spot before it's gone!",
-			ctaText: "Check spots",
+			ctaText: "Get Spots",
 			overviewTitle: "Breaks explained",
 			overview: "During a breaking stream, you get to watch as we open card hobby cases.\n\nEveryone who purchases a spot gets to keep all of the affiliated cards from that break, which are delivered after the stream ends.\n\nSpots are available for purchase before a break, but each spot can only go to one person.",
 		},
 		psa: {
 			heading: "Grade your cards faster than ever",
 			subheading: "Skip PSA's processing times when you grade your cards through us!",
-			ctaText: "Submit Request",
+			ctaText: "Submit Form",
 			overviewTitle: "How does it work?",
-			overview: "You can access our PSA submission form below. You'll need to provide us basic information about each card you want to submit, including the PSA pricing model you want to use.\n\nOnce you submit the form and we look it over, we will email you an invoice you can pay for directly from the email.\n\nThe invoice will also contain an address for you to ship your cards to. When we receive your cards back from PSA, we will ship them straight back to you.",
+			overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.",
 		},
 	};
 
@@ -87,14 +87,20 @@
 	});
 </script>
 
-<div class="absolute left-0 top-[82px] -z-10 w-screen h-screen max-h-[56rem] overflow-hidden">
+<div class="absolute left-0 top-[52px] lg:top-[82px] -z-10 w-screen h-screen max-h-[56rem] overflow-hidden">
 	<img src="/images/hero-image-{type}.png" alt="" draggable="false" class="blur-sm w-full h-full object-cover object-center" />
 </div>
 <section class="flex gap-4 mt-64 mb-32">
 	<article class="flex flex-col px-2 mx-auto gap-4 text-center [text-shadow:_0_2px_4px_black]">
 		<h2>{getInfo("heading")}</h2>
 		<h3 class="text-balance">{getInfo("subheading")}</h3>
-		<a href={type == "psa" ? "#form" : "#stream"} class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">{getInfo("ctaText")}</a>
+		<div class="mt-4 [&>*]:bg-glass-sm [&>*]:fancy-button [&>*]:w-fit [&>*]:mx-auto [&>*]:px-4 [&>*]:py-2 [&>*]:text-lg [&>*]:rounded-full">
+			{#if type == "psa"}
+				<button onclick={() => ($globalPopupState = "psaform")} type="button">{getInfo("ctaText")}</button>
+			{:else}
+				<a href="#streams">{getInfo("ctaText")}</a>
+			{/if}
+		</div>
 	</article>
 </section>
 <section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:md:flex-row [&_article]:gap-8 [&_article]:sm:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
@@ -106,14 +112,8 @@
 	</div>
 	{#if type == "psa"}
 		<div class="bg-glass-secondary !px-1 sm:!px-2 flex flex-col gap-4 [&_div]:rounded-lg [&_div]:w-48 [&_div]:sm:w-64 [&_div]:bg-glass-secondary-sm [&_div]:p-2 [&_div]:sm:p-4 [&_h4]:!text-left [&_h4]:text-base [&_h4]:sm:text-lg [&_h4]:uppercase [&_h5]:text-accent [&_h5]:text-xl [&_h5]:sm:text-2xl [&_h5]:font-bold">
-			<article class="!gap-4">
-				<h2 class="text-5xl lg:text-7xl">Pricing</h2>
-				<div class="!w-[90%] max-w-[32rem]">
-					These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span>
-					you want cleaned.
-				</div>
-			</article>
-			<article class="flex !flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem]">
+			<h2 class="text-5xl lg:text-7xl">Pricing</h2>
+			<article class="flex sm:!flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem] [&>*]:flex [&>*]:sm:flex-col [&>*]:justify-between [&>*]:sm:justify-normal [&>*]:!w-[95%] [&>*]:sm:!w-64">
 				<div>
 					<h4>Value Bulk</h4>
 					<h5>$24.99 / card</h5>
@@ -147,47 +147,21 @@
 					<h5>$614.99 / card</h5>
 				</div>
 			</article>
+			<div class="!w-[95%] max-w-[67rem] text-balance text-center sm:text-lg">
+				These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span>
+				you want cleaned. For more information about PSA's pricing models, visit
+				<span class="text-accent inline-block">
+					<a target="_blank" class="underline inline-block" href="https://www.psacard.com/services/tradingcardgrading#card-authentication-and-grading-prices">
+						<div class="hidden"></div>
+						psacard.com
+					</a>
+				</span>
+			</div>
 		</div>
 	{/if}
-	<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
-		<article id={type == "psa" ? "form" : "stream"}>
-			{#if type == "psa"}
-				<dialog id="psa-confirmation" class="m-auto bg-glass-sm p-4 rounded-lg max-w-[95vw]">Thank you for submitting! We will send a quote to your email very soon.</dialog>
-				<form class="max-w-[64rem] flex flex-col gap-2 px-2" method="post" onsubmit={submitPSARequest}>
-					<h2>PSA Submission Form</h2>
-					<p>
-						Choose one or more of the service options below. If you choose multiple options, <span class="font-extrabold text-red-500">you are required</span>
-						to specify which of your submitted cards apply to each one.
-					</p>
-					<div class="flex flex-wrap gap-1 sm:gap-2 [&>*]:bg-glass [&>*]:text-sm [&>*]:sm:text-base">
-						<FancyButton text="Value Bulk*" isTogglable toggleValue={selectedPSAServices.includes(0)} onclick={() => togglePSAService(0)} />
-						<FancyButton text="Value" isTogglable toggleValue={selectedPSAServices.includes(1)} onclick={() => togglePSAService(1)} />
-						<FancyButton text="Value Plus" isTogglable toggleValue={selectedPSAServices.includes(2)} onclick={() => togglePSAService(2)} />
-						<FancyButton text="Value Max" isTogglable toggleValue={selectedPSAServices.includes(3)} onclick={() => togglePSAService(3)} />
-						<FancyButton text="Regular" isTogglable toggleValue={selectedPSAServices.includes(4)} onclick={() => togglePSAService(4)} />
-						<FancyButton text="Express" isTogglable toggleValue={selectedPSAServices.includes(5)} onclick={() => togglePSAService(5)} />
-						<FancyButton text="Super Express" isTogglable toggleValue={selectedPSAServices.includes(6)} onclick={() => togglePSAService(6)} />
-						<FancyButton text="Walk-Through" isTogglable toggleValue={selectedPSAServices.includes(7)} onclick={() => togglePSAService(7)} />
-					</div>
-					<p class:hidden={!selectedPSAServices.includes(0)}>* Must be for at least 20 cards (PSA requirement)</p>
-					<h5 class="inline text-xs sm:text-sm lg:text-base font-bold">
-						For more information about PSA's pricing options, visit
-						<span>
-							<a class="text-accent underline" target="_blank" href="https://www.psacard.com/services/tradingcardgrading#card-authentication-and-grading-prices">
-								psacard.com/services/tradingcardgrading
-								<div></div>
-							</a>
-						</span>
-					</h5>
-					<textarea name="grade-cards" id="grade-cards" bind:value={psaNotes} class:hidden={selectedPSAServices.length < 2} class="h-64" placeholder="Notes (required if you select multiple services, see above)"></textarea>
-					<label for="psa-email">Contact Email</label>
-					<!-- <div class="flex gap-2"> -->
-					<FancyTextInput bind:value={psaEmail} type="email" name="psa-email" placeholder="Email" required iconPath="/icons/email.svg" className="max-w-[24rem]" />
-					<!-- <FancyTextInput type="number" min="1" bind:value={psaCardCount} required /> -->
-					<!-- </div> -->
-					<FancyButton type="submit" text="Submit" disabled={psaEmail == "" || selectedPSAServices.length == 0 || (selectedPSAServices.length > 1 && psaNotes == "")} className="max-w-64 fancy-anchor fancy-anchor-on !transition-all [&:not(:disabled)]:md:hover:scale-105 flex justify-center cursor-pointer disabled:bg-text/20" />
-				</form>
-			{:else}
+	{#if type != "psa"}
+		<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
+			<article id="streams">
 				<div class="flex flex-col gap-16">
 					{#each page.data.streams as stream, index}
 						<article>
@@ -214,7 +188,7 @@
 						<hr class:hidden={index == page.data.streams.length - 1} class="bg-tertiary border-none h-1 rounded-full" />
 					{/each}
 				</div>
-			{/if}
-		</article>
-	</div>
+			</article>
+		</div>
+	{/if}
 </section>

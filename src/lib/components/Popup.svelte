@@ -10,6 +10,7 @@
 	import FancyTextInput from "./FancyTextInput.svelte";
 	import { page } from "$app/state";
 	import BreakSpots from "./BreakSpots.svelte";
+	import PsaForm from "./PSAForm.svelte";
 	let { supabase } = $derived(page.data);
 
 	let { className = "" } = $props();
@@ -83,7 +84,7 @@
 		class:hidden={!visible}
 		transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}
 	>
-		<article class="bg-glass-sm sm:m-auto w-full max-w-[640px] min-h-[50vh] sm:min-h-0 rounded-t-lg sm:rounded-b-lg bottom-0 pb-24 sm:p-4 {className}" transition:fly={{ duration: 200, y: 500, easing: sineInOut }}>
+		<article class="mt-[60vh] sm:mt-auto bg-glass-sm sm:m-auto w-full max-w-[640px] min-h-[50vh] sm:min-h-0 rounded-t-lg sm:rounded-b-lg bottom-0 pb-24 sm:p-4 {className}" transition:fly={{ duration: 200, y: 500, easing: sineInOut }}>
 			{#if $globalPopupState == "headernav"}
 				<nav class="pt-8 sm:py-2 px-2 flex flex-col gap-4 [&>*]:bg-text/10">
 					<HeaderNav />
@@ -139,14 +140,8 @@
 						<p>{product}</p>
 					{/each}
 				{/if}
-				<!-- <div id="paypal-container-2Q7MW8YTLFWAW"></div>
-				<script>
-					paypal
-						.HostedButtons({
-							hostedButtonId: "2Q7MW8YTLFWAW",
-						})
-						.render("#paypal-container-2Q7MW8YTLFWAW");
-				</script> -->
+			{:else if $globalPopupState == "psaform"}
+				<PsaForm />
 			{/if}
 		</article>
 	</div>
