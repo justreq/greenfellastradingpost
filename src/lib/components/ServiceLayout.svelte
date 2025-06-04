@@ -149,7 +149,8 @@
 			</article>
 			<div class="!w-[95%] max-w-[67rem] text-balance text-center sm:text-lg">
 				These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span>
-				you want cleaned. For more information about PSA's pricing models, visit
+				<br />
+				For more information about PSA's pricing models, visit
 				<span class="text-accent inline-block">
 					<a target="_blank" class="underline inline-block" href="https://www.psacard.com/services/tradingcardgrading#card-authentication-and-grading-prices">
 						<div class="hidden"></div>

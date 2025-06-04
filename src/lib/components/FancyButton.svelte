@@ -25,7 +25,7 @@
 	});
 </script>
 
-<button {disabled} {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class:border-2={isTogglable} class:!border-text={isTogglable && toggleValue} class="h-min p-2 flex whitespace-nowrap gap-4 rounded-lg border-transparent transition-colors duration-200 md:hover:bg-tertiary {className}">
+<button {disabled} {type} id="button-{id}" {onclick} tabindex={setFocus(canFocus)} class:flex-row-reverse={reverse} class:border-2={isTogglable} class:!border-text={isTogglable && toggleValue} class="h-min p-2 flex whitespace-nowrap gap-4 rounded-lg border-transparent transition-colors duration-200 [&:not(:disabled)]:md:hover:bg-tertiary {className}">
 	{#if iconPath != ""}
 		<div class="h-6 aspect-square flex my-auto"><img src={iconPath} alt="" id="button-{id}-icon" class="h-full m-auto" /></div>
 	{/if}

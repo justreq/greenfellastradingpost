@@ -39,5 +39,18 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 		data: { user },
 	} = await supabase.auth.getUser();
 
+	var trigger = false;
+	if (user == null && !trigger) {
+		const {
+			data: { user },
+		} = await supabase.auth.signInAnonymously();
+		trigger = true;
+
+		const { error } = await supabase.auth.updateUser({ data: { displayName: "Guest" } });
+		if (error) throw error;
+
+		return { session, supabase, user };
+	}
+
 	return { session, supabase, user };
 };

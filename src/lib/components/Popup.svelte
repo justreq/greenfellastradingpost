@@ -80,7 +80,7 @@
 			if ((event.target as HTMLElement).id == "popup-backdrop") $globalPopupState = "none";
 		}}
 		bind:this={popupElement}
-		class="fixed sm:flex left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/40"
+		class="sm:py-16 fixed sm:flex left-0 top-0 w-screen h-screen z-30 overflow-scroll bg-black/40"
 		class:hidden={!visible}
 		transition:fade={{ delay: visible ? 150 : 0, duration: 100 }}
 	>

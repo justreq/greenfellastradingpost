@@ -1,4 +1,4 @@
-import { BASE } from "$env/static/private";
+import { PUBLIC_BASE } from "$env/static/public";
 import { stripe } from "../stripe";
 import type { RequestHandler } from "./$types";
 
@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					name: item.name,
 					images: [],
 				},
-				unit_amount: item.price * 100,
+				unit_amount: Math.round(item.price * 100 * 100) / 100,
 			},
 			quantity: 1,
 		};
@@ -31,12 +31,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		},
 		custom_text: {
 			submit: {
-				message: "You are not charged for shipping when buying a break spot, only after the break. Even if your spot doesn't get hits, you can purchase a shipping label with us for some base cards.",
+				message: data.message,
 			},
 		},
 		mode: "payment",
-		success_url: `${BASE}/success`,
-		cancel_url: `${BASE}`,
+		success_url: `${PUBLIC_BASE}/success`,
+		cancel_url: `${PUBLIC_BASE}/fail`,
 	});
 
 	return new Response(JSON.stringify({ url: session.url }), { status: 200, headers: { "Content-Type": "application/json" } });

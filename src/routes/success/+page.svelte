@@ -1,22 +1,30 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-	import { redirect } from "@sveltejs/kit";
+	import { PUBLIC_BASE } from "$env/static/public";
+	import type { User } from "@supabase/supabase-js";
 	import { onMount } from "svelte";
-
 	let { supabase, user } = $derived(page.data);
 
 	onMount(async () => {
-		if (user == null || (localStorage.getItem("spotCart") == null && localStorage.getItem("tempCart") == null && localStorage.getItem("cart") == null)) redirect(302, "/");
+		let route = localStorage.getItem("redirect-route") ?? "";
+		localStorage.removeItem("redirect-route");
 
-		const { error } = await supabase
-			.from("break_spots")
-			.update({ owner_id: user.id })
-			.eq("id", JSON.parse(localStorage.getItem("spotCart") as string).spot_id);
-		if (error) throw error;
-		localStorage.removeItem("spotCart");
-		goto("/break#stream");
+		if (localStorage.getItem("spotCart") != null) {
+			const { error } = await supabase
+				.from("break_spots")
+				.update({ owner_id: user.id })
+				.eq("id", JSON.parse(localStorage.getItem("spotCart") as string).spot_id);
+			if (error) throw error;
+			localStorage.removeItem("spotCart");
+
+			const { error: userError } = await supabase.from("users").insert({ id: (user as User).id, email: "", display_name: (user as User).user_metadata.displayName });
+			if (userError) throw userError;
+		}
+
+		if (route.includes("psa")) {
+			localStorage.removeItem("psa-form-data");
+		}
+
+		location.href = PUBLIC_BASE + route;
 	});
 </script>
-
-<h2>Great Success!</h2>

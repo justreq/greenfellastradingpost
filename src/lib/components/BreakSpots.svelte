@@ -2,6 +2,7 @@
 	import { page } from "$app/state";
 	import { breakIDToShowSpots, globalPopupState } from "$lib/globals";
 	import { isSuperUser } from "$lib/supabaseClient";
+	import type { User } from "@supabase/supabase-js";
 	import FancyButton from "./FancyButton.svelte";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	let { supabase, user } = $derived(page.data);
@@ -42,12 +43,14 @@
 			];
 		}
 
+		localStorage.setItem("redirect-route", "/break");
+
 		const data = await fetch("/checkout", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ cart: cartContents }),
+			body: JSON.stringify({ cart: cartContents, message: "You are not charged for shipping when buying a break spot, only after the break. Even if your spot doesn't get hits, you can purchase a shipping label with us for some base cards." }),
 		}).then((data) => data.json());
 
 		window.location.replace(data.url);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { type = "text", name = "", placeholder = "", required = false, iconPath = "", value = $bindable(""), list = "", step = "", min = "", accept = "", className = "" } = $props();
+	let { type = "text", name = "", placeholder = "", required = false, iconPath = "", value = $bindable(""), oninput = (event: Event) => {}, list = "", step = "", min = "", accept = "", className = "" } = $props();
 
 	let showRequired: boolean = $state(required);
 </script>
@@ -25,6 +25,7 @@
 			},
 			(v) => (value = v)
 		}
+		oninput={(event) => oninput(event)}
 		class:pl-10={iconPath != ""}
 		class:pr-10={required}
 		class="w-full text-xs sm:text-sm lg:text-base"
