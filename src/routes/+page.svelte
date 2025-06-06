@@ -26,23 +26,25 @@
 <section class="w-screen">
 	<img src={getTitleImage()} alt="Title" id="title" class="mt-56 xl:-mt-20 mb-4 xl:mb-56 w-3/4 sm:w-1/2 lg:w-4/5 lg:max-w-[48rem] mx-auto" draggable="false" />
 	<article class="px-2 sm:px-8 pb-4 w-fit mx-auto flex flex-col gap-4">
-		<h2 class="text-center text-4xl sm:text-5xl lg:text-6xl text-balance">Filling your collections with high-end soccer cards</h2>
-		<a href="/collection" class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">Browse GTP Collection</a>
+		<h2 class="text-center text-4xl sm:text-5xl lg:text-6xl text-balance">Filling your pockets with high-end soccer cards</h2>
+		<a href="/collection" class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">Browse our collection</a>
 	</article>
 </section>
 <section id="landing-section" class="bg-glass">
 	<div class="flex flex-col xl:flex-row gap-16 justify-center items-center py-12 [&>article]:w-[90%] [&>article]:sm:w-[32rem] [&>article]:xl:w-80 [&>article]:flex [&>article]:flex-col [&>article]:gap-2 [&>article]:sm:gap-8 [&>article]:xl:gap-2 [&>article]:items-center [&_img]:aspect-square [&_img]:w-32 [&_div]:flex [&_div]:flex-col [&_div]:items-center [&_div]:gap-2 [&>*]:text-center [&_a]:border-0 [&_span]:border-b-[1.5px] [&_span]:uppercase [&_span]:transition-colors [&_span]:duration-200 [&_span:hover]:lg:text-accent2 [&_span:hover]:lg:border-accent2">
 		<article>
 			<h3>One-stop shop for everything GTP</h3>
-			<p>Buy into our streams for singles, graded cards, breaks, and more!</p>
+			<p>Buy into our streams for raw and graded cards, case breaks, and more!</p>
 			<a href="/services">
-				<span>All our services</span>
+				<span>What we offer</span>
 				→
 			</a>
 		</article>
 		<article>
 			<h3>Invest in our breaks</h3>
-			<p>Secure a team spot and get all of their cards from a multi-case break. Watch a live broadcast of the case breaks on Whatnot</p>
+			<p>
+				Secure a team spot and get all of their cards from a case break. Watch a live broadcast of the case breaks on <span class="p-0 border-none"><a href="https://www.whatnot.com/" class="p-0 text-accent capitalize underline md:hover:!text-accent">Whatnot</a></span>
+			</p>
 			<a href="/break#stream">
 				<span>Next break stream</span>
 				→

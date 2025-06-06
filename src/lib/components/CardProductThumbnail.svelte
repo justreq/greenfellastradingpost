@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { getCardName } from "$lib/globals";
 	export let id;
 
 	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((p: { id: any }) => p.id == id).item_id);
@@ -17,10 +18,7 @@
 	</div>
 	<div class="flex flex-col">
 		<p class="mt-2 lg:mt-4 h-14 lg:text-lg line-clamp-2 text-ellipsis transition-colors duration-200">
-			{[cardData.number || "", cardData.grade || "", cardData.player || "", cardData.year || "", cardData.brand || "", cardData.set || ""]
-				.map((e) => e.trim())
-				.filter((e) => e != "")
-				.join(" ")}
+			{getCardName(cardData)}
 		</p>
 		<p class="w-full text-2xl sm:text-lg lg:text-2xl text-accent font-bold">{formatter.format(cardData.sell_price)}</p>
 	</div>

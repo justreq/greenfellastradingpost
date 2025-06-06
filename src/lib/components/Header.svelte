@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { globalPopupState, hasItemsInCart } from "$lib/globals";
+	import { globalPopupState, cartContents } from "$lib/globals";
 	import type { User } from "@supabase/supabase-js";
 	import HeaderNav from "./HeaderNav.svelte";
 	import ProfileNav from "./ProfileNav.svelte";
@@ -35,8 +35,8 @@
 				<ProfileNav />
 			{/if}
 		</article>
-		<button type="button" disabled={!$hasItemsInCart} onclick={() => ($globalPopupState = user == null ? "profile" : "checkout")} class="h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
-			<img src="/icons/cart{$hasItemsInCart ? '' : '-empty'}.svg" alt="Cart Button" draggable="false" class="h-full" />
+		<button id="cart-button" type="button" onclick={() => ($globalPopupState = "checkout")} class="h-1/2 aspect-square my-auto lg:bg-secondary lg:p-3 rounded-lg transition-all duration-200 md:hover:bg-tertiary/80 md:hover:scale-105">
+			<img src="/icons/cart{$cartContents.length == 0 ? '-empty' : ''}.svg" alt="Cart Button" draggable="false" class="h-full" />
 		</button>
 	</article>
 	<button

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { breakIDToShowSpots, globalPopupState, hasItemsInCart } from "$lib/globals";
+	import { breakIDToShowSpots, globalPopupState } from "$lib/globals";
 	import { sineInOut } from "svelte/easing";
 	import { fade, fly } from "svelte/transition";
 	import AuthForm from "./AuthForm.svelte";
@@ -11,6 +11,7 @@
 	import { page } from "$app/state";
 	import BreakSpots from "./BreakSpots.svelte";
 	import PsaForm from "./PSAForm.svelte";
+	import Checkout from "./Checkout.svelte";
 	let { supabase } = $derived(page.data);
 
 	let { className = "" } = $props();
@@ -30,45 +31,12 @@
 			document.body.querySelector("footer")?.firstElementChild?.classList.add("!invisible");
 			document.body.classList.add("!overflow-y-hidden");
 		} else {
-			localStorage.removeItem("tempCart");
 			$globalPopupState = "none";
 			$breakIDToShowSpots = null;
 			document.body.querySelector("footer")?.firstElementChild?.classList.remove("!invisible");
 			document.body.classList.remove("!overflow-y-hidden");
 		}
 	});
-
-	const checkout = async () => {
-		let cart = { product_ids: [] };
-		if (localStorage.getItem("tempCart") != null) {
-			cart = JSON.parse(localStorage.getItem("tempCart") as string);
-		} else if (localStorage.getItem("cart") != null) {
-			cart = JSON.parse(localStorage.getItem("cart") as string);
-		} else return;
-
-		let cartContents = cart.product_ids.map((e: any) => {
-			let productData = page.data.products.find((c: { id: any }) => c.id == e);
-			let cardData = page.data.cards.find((c: { id: any }) => c.id == productData.item_id);
-
-			return {
-				name: [cardData.number || "", cardData.grade || "", cardData.player || "", cardData.year || "", cardData.brand || "", cardData.set || ""]
-					.map((e) => e.trim())
-					.filter((e) => e != "")
-					.join(" "),
-				price: cardData.sell_price,
-			};
-		});
-
-		const data = await fetch("/checkout", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ cart: cartContents }),
-		}).then((data) => data.json());
-
-		window.location.replace(data.url);
-	};
 </script>
 
 {#if $globalPopupState != "none"}
@@ -119,27 +87,7 @@
 			{:else if $globalPopupState == "breakspots"}
 				<BreakSpots />
 			{:else if $globalPopupState == "checkout"}
-				<button type="button" onclick={checkout}>Checkout</button>
-				{#if localStorage.getItem("tempCart") != null}
-					{#each JSON.parse(localStorage.getItem("tempCart") as string).product_ids as product}
-						<p>{product}</p>
-					{/each}
-				{:else if localStorage.getItem("cart") != null}
-					<h3>Checkout Cart</h3>
-					<button
-						type="button"
-						onclick={() => {
-							localStorage.removeItem("cart");
-							$hasItemsInCart = false;
-							$globalPopupState = "none";
-						}}
-					>
-						Clear Cart
-					</button>
-					{#each JSON.parse(localStorage.getItem("cart") as string).product_ids as product}
-						<p>{product}</p>
-					{/each}
-				{/if}
+				<Checkout />
 			{:else if $globalPopupState == "psaform"}
 				<PsaForm />
 			{/if}

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import FancyButton from "$lib/components/FancyButton.svelte";
-	import { globalPopupState, hasItemsInCart } from "$lib/globals";
+	import { cartContents, checkout, getCardName, globalPopupState } from "$lib/globals";
+	import { onMount } from "svelte";
 	let { supabase, user } = $derived(page.data);
 
-	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((p: { id: any }) => p.id == page.data.id).item_id);
 	let productData = page.data.products.find((c: { id: any }) => c.id == page.data.id);
+	let cardData = page.data.cards.find((c: { id: any }) => c.id == productData.item_id);
 
 	let currentImage = $state(0);
 	let productIndex = page.data.products.map((e: any) => e.id).indexOf(page.data.id);
@@ -19,27 +20,42 @@
 	const addToCart = () => {
 		if (localStorage.getItem("cart") == null) {
 			let cart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
-			if (user) cart.owner_id = user.id;
+
 			localStorage.setItem("cart", JSON.stringify(cart));
-			$hasItemsInCart = true;
+			$cartContents = cart.product_ids;
 		} else {
 			let cart = JSON.parse(localStorage.getItem("cart") as string);
 			if (cart.product_ids.includes(page.data.id)) return;
 
 			cart.product_ids.push(page.data.id);
 			localStorage.setItem("cart", JSON.stringify(cart));
+			$cartContents = cart.product_ids;
 		}
+
+		document.getElementById("cart-button")?.animate(
+			[
+				{
+					transform: "scale(1)",
+					opacity: 1,
+				},
+				{
+					transform: "scale(1.2)",
+					opacity: 0.75,
+					backgroundColor: "#57C5A0",
+				},
+				{
+					transform: "scale(1)",
+					opacity: 1,
+				},
+			],
+			{ duration: 500, easing: "ease-out" }
+		);
 	};
 
-	const buyNow = async () => {
-		let tempCart: { product_ids: string[]; owner_id: string | null } = { product_ids: [page.data.id], owner_id: null };
-		if (user) {
-			tempCart.owner_id = user.id;
-			$globalPopupState = "checkout";
-		} else $globalPopupState = "profile";
-
-		localStorage.setItem("tempCart", JSON.stringify(tempCart));
-	};
+	onMount(() => {
+		localStorage.setItem("redirect-route", `/collection/${page.data.id}`);
+		if (localStorage.getItem("cart") != null) $cartContents = JSON.parse(localStorage.getItem("cart") as string).product_ids;
+	});
 </script>
 
 <section class="mx-auto max-w-[90rem] w-[95%]">
@@ -62,15 +78,12 @@
 		</div>
 		<div class="flex-grow p-4 sm:p-8 flex flex-col gap-8">
 			<h2>
-				{[cardData.number || "", cardData.grade || "", cardData.player || "", cardData.year || "", cardData.brand || "", cardData.set || ""]
-					.map((e) => e.trim())
-					.filter((e) => e != "")
-					.join(" ")}
+				{getCardName(cardData)}
 			</h2>
 			<h3 class="text-accent font-bold">{formatter.format(cardData.sell_price)}</h3>
 			<div class="flex flex-col sm:flex-row gap-4 [&>*]:w-full [&>*]:font-bold [&>*]:flex [&>*]:justify-center [&>*]:p-4 [&>*]:text-xl [&>*]:rounded-xl [&>*]:transition-all [&>*:hover]:md:scale-[101%]">
-				<FancyButton text="Add To Cart" iconPath="/icons/cart.svg" className="bg-tertiary/80" onclick={addToCart} />
-				<FancyButton text="Buy Now" iconPath="/icons/buy-now.svg" className="bg-accent2/80 md:hover:!bg-accent2 uppercase" onclick={buyNow} />
+				<FancyButton text={$cartContents.includes(page.data.id) ? "In Cart" : "Add To Cart"} iconPath="/icons/cart.svg" className="bg-tertiary/80" onclick={addToCart} />
+				<FancyButton text="Buy Now" iconPath="/icons/buy-now.svg" className="bg-accent2/80 md:hover:!bg-accent2 uppercase" onclick={() => checkout(page.data.id)} />
 			</div>
 			<h3>Description</h3>
 			<p class="text-lg">All card information is displayed in the title or front/back card images. All cards are handled with care and packaged securely. Please contact us if you have any questions.</p>

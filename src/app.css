@@ -121,7 +121,9 @@
 	.fancy-anchor.fancy-anchor-on {
 		@apply bg-text text-bg font-extrabold [&:not(:disabled)]:md:hover:bg-accent2;
 	}
+}
 
+@layer utilities {
 	.fade-out-x-none {
 		mask-image: linear-gradient(to right, white);
 	}

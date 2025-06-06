@@ -5,7 +5,7 @@
 	import { page } from "$app/state";
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
-	import { globalPopupState, hasItemsInCart, superUsers } from "$lib/globals";
+	import { cartContents, globalPopupState, superUsers } from "$lib/globals";
 	import { dev } from "$app/environment";
 	import { goto, invalidate } from "$app/navigation";
 	let { children } = $props();
@@ -25,8 +25,8 @@
 
 	onMount(() => {
 		moveParallaxBG(new Event(""));
-		localStorage.removeItem("tempCart");
-		if (localStorage.getItem("cart") != null) $hasItemsInCart = true;
+
+		if (localStorage.getItem("cart") != null) $cartContents = JSON.parse(localStorage.getItem("cart") as string).product_ids;
 
 		const { data } = supabase.auth.onAuthStateChange(async (_: any, newSession: { expires_at: number | undefined }) => {
 			if (newSession?.expires_at !== session?.expires_at) {
@@ -65,15 +65,11 @@
 	<Header></Header>
 {/if}
 <main class:pb-32={page.url.pathname != "/" || user} class="w-screen pt-16 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if (user && superUsers.includes(user.id)) || (user && superUsers.includes(user.id) && page.route.id?.includes("private")) || page.route.id?.includes("legal") || page.url.pathname.includes("break") || page.url.pathname.includes("psa") || page.url.pathname.includes("success") || page.url.pathname.includes("fail") || page.url.pathname == "/"}
+	{#if page.url.pathname == "/" || (user && superUsers.includes(user.id)) || page.url.pathname.includes("legal") || page.url.pathname.includes("break") || page.url.pathname.includes("psa") || page.url.pathname.includes("success") || page.url.pathname.includes("fail") || page.url.pathname.includes("collection")}
 		{@render children()}
 	{:else}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
 			<h2>Under Construction</h2>
-			{#if !user}
-				<p class="text-lg lg:text-xl">Create an account with us to stay up to date with GTP's latest machinations...</p>
-				<button class="fancy-button w-fit mx-auto mt-4" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
-			{/if}
 		</article>
 	{/if}
 </main>
