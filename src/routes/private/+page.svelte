@@ -78,9 +78,9 @@
 			const frontExtension = (document.getElementById("front") as HTMLInputElement).value.split(".")[1];
 			const backExtension = (document.getElementById("back") as HTMLInputElement).value.split(".")[1];
 			const product = await supabase
-				.from("products")
+				.from("card")
 				.update({ file_extensions: [frontExtension, backExtension] })
-				.eq("item_id", data[0].id)
+				.eq("id", data[0].id)
 				.select();
 
 			const productID = product.data == null ? "unknown" : product.data[0].id;

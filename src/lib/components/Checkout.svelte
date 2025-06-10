@@ -16,7 +16,7 @@
 		<FancyButton onclick={() => checkout()} text="Proceed to checkout" className="bg-accent2/80 uppercase p-3 w-full justify-center md:hover:!bg-accent2" iconPath="/icons/buy-now.svg" />
 		{#each checkoutList as product}
 			<div class="flex justify-between gap-4 py-4 place-items-center bg-glass-sm rounded-lg p-2">
-				<p>{getCardName(page.data.cards.find((c: { id: any }) => c.id == page.data.products.find((c: { id: any }) => c.id == product).item_id))}</p>
+				<p>{getCardName(page.data.cards.find((c: { id: any }) => c.id == product))}</p>
 				<FancyButton
 					iconPath="/icons/delete.svg"
 					className="fancy-button border-none bg-red-500/80 disabled:opacity-50 [&:not(:disabled)]:md:hover:!bg-red-500"

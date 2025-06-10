@@ -135,7 +135,7 @@
 		setSortIcon();
 		setFilterIcon();
 
-		productList = data.products.filter(filterProductList).sort(sortProductList);
+		productList = data.cards.filter((e) => filterProductList(e) && e.retail == true).sort(sortProductList);
 		if (sortReversed) productList.reverse();
 
 		optionsLoaded = true;
@@ -172,7 +172,7 @@
 			<FancyButton
 				iconPath="/icons/right.svg"
 				onclick={() => {
-					if (currentPage < Math.ceil(data.products.length / itemsPerPage)) submitCollectionForm(Math.max(1, currentPage + 1));
+					if (currentPage < Math.ceil(productList.length / itemsPerPage)) submitCollectionForm(Math.max(1, currentPage + 1));
 				}}
 				className="w-min justify-self-center"
 			/>

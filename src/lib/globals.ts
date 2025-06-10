@@ -20,8 +20,7 @@ export const checkout = async (singleID: string | null = null) => {
 	} else return;
 
 	let cartContents = cart.product_ids.map((e: any) => {
-		let productData = page.data.products.find((c: { id: any }) => c.id == e);
-		let cardData = page.data.cards.find((c: { id: any }) => c.id == productData.item_id);
+	let cardData = page.data.cards.find((c: { id: any }) => c.id == e);
 
 		return {
 			name: getCardName(cardData),
