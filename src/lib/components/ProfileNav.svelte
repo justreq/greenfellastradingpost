@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { globalPopupState } from "$lib/globals";
-	import type { User } from "@supabase/supabase-js";
 	let { supabase, user } = $derived(page.data);
 </script>
 
-{#if user && !(user as User).is_anonymous}
+{#if user && !user.is_anonymous}
 	<div class="pt-8 px-2 flex flex-col gap-4">
 		<button
 			class="fancy-button border-none bg-text/40 font-bold"

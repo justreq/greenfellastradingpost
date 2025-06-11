@@ -2,7 +2,6 @@
 	import { page } from "$app/state";
 	import { breakIDToShowSpots, globalPopupState } from "$lib/globals";
 	import { isSuperUser } from "$lib/supabaseClient";
-	import type { User } from "@supabase/supabase-js";
 	import FancyButton from "./FancyButton.svelte";
 	import FancyCheckbox from "./FancyCheckbox.svelte";
 	let { supabase, user } = $derived(page.data);
@@ -134,8 +133,6 @@
 										onclick={(event) => {
 											localStorage.removeItem("spotCart");
 											let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
-
-											spotCart.owner_id = user.id;
 											localStorage.setItem("spotCart", JSON.stringify(spotCart));
 											buySpot();
 										}}

@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import FancyButton from "$lib/components/FancyButton.svelte";
-	import { cartContents, checkout, getCardName, globalPopupState } from "$lib/globals";
+	import { cartContents, checkout, getCardName } from "$lib/globals";
 	import { onMount } from "svelte";
-	let { supabase, user } = $derived(page.data);
 
 	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.id);
 
 	let currentImage = $state(0);
-	let productIndex = page.data.cards
-		.map((e: any) => e.id)
-		.indexOf(page.data.id);
+	let productIndex = page.data.cards.map((e: any) => e.id).indexOf(page.data.id);
 
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",

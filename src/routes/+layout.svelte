@@ -39,8 +39,8 @@
 </script>
 
 <svelte:head>
-	<title>Greenfellas Trading Post</title>
-	<meta name="description" content="Get the highest quality soccer trading cards. Mags, slabs, repacks, breaks, and more available here!" />
+	<title>High Quality Soccer Collectibles - Greenfellas Trading Post</title>
+	<meta name="description" content="Get the highest quality soccer trading cards. Raw, graded, repacks, breaks, and more available here!" />
 </svelte:head>
 
 <svelte:window
@@ -64,8 +64,8 @@
 {:else}
 	<Header></Header>
 {/if}
-<main class:pb-32={page.url.pathname != "/" || user} class="w-screen pt-16 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if page.url.pathname == "/" || (user && superUsers.includes(user.id)) || page.url.pathname.includes("legal") || page.url.pathname.includes("break") || page.url.pathname.includes("psa") || page.url.pathname.includes("success") || page.url.pathname.includes("fail")}
+<main class:pb-32={page.url.pathname != "/"} class="w-screen pt-16 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
+	{#if dev || page.url.pathname == "/" || (user && superUsers.includes(user.id)) || page.url.pathname.includes("legal") || page.url.pathname.includes("break") || page.url.pathname.includes("psa") || page.url.pathname.includes("success") || page.url.pathname.includes("fail")}
 		{@render children()}
 	{:else}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">

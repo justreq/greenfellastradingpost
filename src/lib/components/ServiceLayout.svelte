@@ -53,7 +53,7 @@
 			overview: "",
 		},
 		break: {
-			heading: "Experience amazing breaks",
+			heading: "Experience quality breaks",
 			subheading: "Find our next break and secure your spot before it's gone!",
 			ctaText: "Get Spots",
 			overviewTitle: "Breaks explained",
@@ -73,7 +73,7 @@
 	};
 
 	onMount(() => {
-		if (user != null) psaEmail = user.email || "";
+		if (user != null) psaEmail = user.email;
 
 		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 			(anchor as HTMLElement).addEventListener("click", (event) => {

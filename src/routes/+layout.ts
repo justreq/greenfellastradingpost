@@ -1,6 +1,7 @@
 import { createBrowserClient, createServerClient, isBrowser } from "@supabase/ssr";
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public";
 import type { LayoutLoad } from "./$types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 	/**
@@ -38,19 +39,6 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-
-	var trigger = false;
-	if (user == null && !trigger) {
-		const {
-			data: { user },
-		} = await supabase.auth.signInAnonymously();
-		trigger = true;
-
-		const { error } = await supabase.auth.updateUser({ data: { displayName: "Guest" } });
-		if (error) throw error;
-
-		return { session, supabase, user };
-	}
 
 	return { session, supabase, user };
 };

@@ -27,13 +27,6 @@
 			return;
 		} else errorText = "0";
 
-		const { error: updateError } = await supabase.auth.updateUser({
-			email: email,
-			password: password,
-		});
-
-		if (updateError) errorText = "There is already an account with that email";
-
 		let { data, error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { displayName: displayName, includeInEmailBlast: !dontIncludeInEmailBlast } } });
 		if (error) {
 			switch (error.code) {

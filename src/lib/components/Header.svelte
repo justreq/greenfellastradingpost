@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { globalPopupState, cartContents } from "$lib/globals";
-	import type { User } from "@supabase/supabase-js";
 	import HeaderNav from "./HeaderNav.svelte";
 	import ProfileNav from "./ProfileNav.svelte";
 	let { user } = $derived(page.data);
@@ -29,7 +28,7 @@
 	<nav class="hidden lg:flex gap-8"><HeaderNav /></nav>
 	<article class="flex gap-4">
 		<article class="hidden lg:flex">
-			{#if user && !(user as User).is_anonymous}
+			{#if user && !user.is_anonymous}
 				<button type="button" onclick={() => ($globalPopupState = "profile")} class="fancy-button text-center my-auto">{user.user_metadata.displayName || user.user_metadata.full_name}</button>
 			{:else}
 				<ProfileNav />
