@@ -46,7 +46,7 @@
 			const { error } = await supabase.from("users").insert({ id: (data.user as User).id, email: (data.user as User).email, display_name: (data.user as User).user_metadata.displayName, includeInEmailBlast: (data.user as User).user_metadata.includeInEmailBlast });
 			if (error) throw error;
 
-			if (localStorage.getItem("cart") == null || !page.route.id?.includes("collection")) {
+			if (localStorage.getItem("cart") == null || !page.route.id?.includes("marketplace")) {
 				location.reload();
 				return;
 			}
@@ -74,7 +74,7 @@
 				throw error;
 			}
 
-			if (localStorage.getItem("cart") == null || !page.route.id?.includes("collection")) {
+			if (localStorage.getItem("cart") == null || !page.route.id?.includes("marketplace")) {
 				location.reload();
 				return;
 			}

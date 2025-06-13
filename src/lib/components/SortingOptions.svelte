@@ -7,7 +7,7 @@
 
 	const setSort = () => {
 		(document.getElementById("sortby") as HTMLInputElement).value = ["default", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
-		(document.getElementById("collection-form") as HTMLFormElement).submit();
+		(document.getElementById("marketplace-form") as HTMLFormElement).submit();
 	};
 
 	onMount(() => {

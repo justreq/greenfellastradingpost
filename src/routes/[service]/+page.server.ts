@@ -2,11 +2,11 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ params, locals: { supabase } }) => {
-	if (params.service && !["mag", "slab", "break", "repack", "psa"].includes(params.service)) throw redirect(302, "/");
+	if (params.service && !["singles", "breaks", "repacks", "psa"].includes(params.service)) throw redirect(302, "/");
 
 	const streams = await supabase.from("streams").select();
 
-	if (params.service == "break") {
+	if (params.service == "breaks") {
 		const breakSpots = await supabase.from("break_spots").select();
 		const users = await supabase.from("users").select();
 

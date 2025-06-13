@@ -5,9 +5,9 @@
 	import { page } from "$app/state";
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
-	import { cartContents, globalPopupState, superUsers } from "$lib/globals";
+	import { cartContents, globalPopupState } from "$lib/globals";
 	import { dev } from "$app/environment";
-	import { goto, invalidate } from "$app/navigation";
+	import { invalidate } from "$app/navigation";
 	let { children } = $props();
 	let { session, supabase, user } = $derived(page.data);
 
@@ -56,7 +56,7 @@
 	<img id="bg-1" src="/images/bg-1.png" alt="" class="w-full h-full object-cover" />
 	<img id="bg-2" src="/images/bg-2.png" alt="" class="mt-64 h-full object-cover" />
 </div>
-{#if page.url.pathname == "/"}
+{#if page.url.pathname == "/" && (!user || user.is_anonymous)}
 	<article class:hidden={user || page.url.pathname != "/"} class="fixed flex gap-2 right-4 top-4 z-20 [&>*]:fancy-button [&>*]:bg-glass-sm">
 		<button type="button" onclick={() => ($globalPopupState = "signup")}>Sign Up</button>
 		<button type="button" onclick={() => ($globalPopupState = "login")}>Log In</button>
@@ -64,13 +64,13 @@
 {:else}
 	<Header></Header>
 {/if}
-<main class:pb-32={page.url.pathname != "/"} class="w-screen pt-16 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if dev || page.url.pathname == "/" || (user && superUsers.includes(user.id)) || page.url.pathname.includes("legal") || page.url.pathname.includes("break") || page.url.pathname.includes("psa") || page.url.pathname.includes("success") || page.url.pathname.includes("fail")}
-		{@render children()}
-	{:else}
+<main class="w-screen pt-16 pb-32 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
+	{#if !dev && (page.url.pathname.includes("singles") || page.url.pathname.includes("repacks") || page.url.pathname.includes("marketplace") || page.url.pathname.includes("contact"))}
 		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
 			<h2>Under Construction</h2>
 		</article>
+	{:else}
+		{@render children()}
 	{/if}
 </main>
 <Footer></Footer>

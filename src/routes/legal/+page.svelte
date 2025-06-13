@@ -26,7 +26,7 @@
 	<h3>Privacy Policy</h3>
 	<ol>
 		<li>
-			<span>Data Collection:</span>
+			<span>Data Marketplace:</span>
 			We collect personal information such as email, shipping and payment details to process orders and improve user experience.
 		</li>
 		<li>

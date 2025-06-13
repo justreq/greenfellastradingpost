@@ -63,7 +63,7 @@
 			case 0:
 				return a.reputation - b.reputation;
 			case 1:
-				return data.cards.find((e) => e.id == a.item_id).player.localeCompare(data.cards.find((e) => e.id == b.item_id).player);
+				return data.cards.find((e: { id: any }) => e.id == a.item_id).player.localeCompare(data.cards.find((e: { id: any }) => e.id == b.item_id).player);
 			case 2:
 				return a.price - b.price;
 			case 3:
@@ -76,7 +76,7 @@
 	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0)]}.svg`);
 
 	const filterProductList = (e: any) => {
-		const itemData = data.cards.find((card) => card.id == e.item_id);
+		const itemData = data.cards.find((card: { id: any }) => card.id == e.item_id);
 		let isValid = false;
 
 		if (priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0) return true;
@@ -108,7 +108,7 @@
 		(document.getElementById("page") as HTMLInputElement).disabled = page == 1;
 	};
 
-	const submitCollectionForm = (page = currentPage) => {
+	const submitMarketplaceForm = (page = currentPage) => {
 		(document.getElementById("sortby") as HTMLInputElement).value = ["default", "name", "price", "newest"][sortingMethod] + (sortReversed ? "-reversed" : "");
 		Object.keys($filtersList).forEach((e) => {
 			(document.getElementById(e) as HTMLInputElement).value = getFilters(e).join("_");
@@ -118,7 +118,7 @@
 		setSortIcon();
 		setFilterIcon();
 		setPage(page);
-		(document.getElementById("collection-form") as HTMLFormElement).submit();
+		(document.getElementById("marketplace-form") as HTMLFormElement).submit();
 	};
 
 	let productList: any[] = $state([]);
@@ -135,7 +135,7 @@
 		setSortIcon();
 		setFilterIcon();
 
-		productList = data.cards.filter((e) => filterProductList(e) && e.retail == true).sort(sortProductList);
+		productList = data.cards.filter((e: { retail: boolean }) => filterProductList(e) && e.retail == true).sort(sortProductList);
 		if (sortReversed) productList.reverse();
 
 		optionsLoaded = true;
@@ -144,7 +144,7 @@
 
 <section class="w-full mx-auto [&>*]:w-screen [&>*]:2xl:w-[90rem] [&>*]:2xl:mx-auto">
 	<header class="px-4 2xl:px-0">
-		<form id="collection-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
+		<form id="marketplace-form" class="lg:relative grid grid-cols-[3rem_1fr_1fr_1fr_1fr_3rem] lg:flex lg:justify-end gap-4 lg:px-0 [&>button]:bg-glass [&>button]:uppercase [&>div]:rounded-lg [&>button]:rounded-lg">
 			<input type="text" name="sortby" id="sortby" value={sortingMethods[sortingMethod] + (sortReversed ? "-reversed" : "")} class="hidden" />
 			<FancyButton iconPath="/icons/sort.svg" id="sorting-options" text="Sort By" onclick={() => ($globalPopupState = "sorts")} className="col-span-3 lg:hidden" />
 			{#each Object.keys($filtersList) as filterType}
@@ -161,7 +161,7 @@
 			<FancyButton
 				iconPath="/icons/left.svg"
 				onclick={() => {
-					if (currentPage > 1) submitCollectionForm(Math.max(1, currentPage - 1));
+					if (currentPage > 1) submitMarketplaceForm(Math.max(1, currentPage - 1));
 				}}
 				className="w-min justify-self-center"
 			/>
@@ -172,7 +172,7 @@
 			<FancyButton
 				iconPath="/icons/right.svg"
 				onclick={() => {
-					if (currentPage < Math.ceil(productList.length / itemsPerPage)) submitCollectionForm(Math.max(1, currentPage + 1));
+					if (currentPage < Math.ceil(productList.length / itemsPerPage)) submitMarketplaceForm(Math.max(1, currentPage + 1));
 				}}
 				className="w-min justify-self-center"
 			/>

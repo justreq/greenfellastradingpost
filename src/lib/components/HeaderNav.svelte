@@ -13,22 +13,22 @@
 	Home
 </a>
 <a
-	href="/collection"
-	class:fancy-anchor-on={page.route.id?.includes("collection")}
+	href="/marketplace"
+	class:fancy-anchor-on={page.route.id?.includes("marketplace")}
 	onclick={() => {
 		$globalPopupState = "none";
 	}}
 >
-	Collection
+	Marketplace
 </a>
 <a
-	href="/services"
-	class:fancy-anchor-on={page.route.id?.includes("services")}
+	href="/psa"
+	class:fancy-anchor-on={page.url.pathname.includes("psa")}
 	onclick={() => {
 		$globalPopupState = "none";
 	}}
 >
-	Services
+	Grading
 </a>
 <a
 	href="/contact"

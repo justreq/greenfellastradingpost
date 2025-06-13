@@ -1,94 +1,18 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { breakIDToShowSpots, globalPopupState } from "$lib/globals";
-	import { onMount } from "svelte";
+	import { serviceInfo, breakIDToShowSpots, globalPopupState } from "$lib/globals";
 	import FancyButton from "./FancyButton.svelte";
-	import FancyTextInput from "./FancyTextInput.svelte";
-	let { supabase, user } = $derived(page.data);
 
 	let { type } = $props();
 
-	const psaServices = ["Value Bulk", "Value", "Value Plus", "Value Max", "Regular", "Express", "Super Express", "Walk-Through"];
-
-	let selectedPSAServices: number[] = $state([]);
-	let psaEmail = $state("");
-	let psaNotes = $state("");
-	let psaCardCount = $state("");
-
-	const togglePSAService = (index: number) => {
-		if (selectedPSAServices.includes(index)) {
-			selectedPSAServices.splice(selectedPSAServices.indexOf(index), 1);
-		} else selectedPSAServices.push(index);
-	};
-
-	const submitPSARequest = async (event: Event) => {
-		event.preventDefault();
-
-		const { error } = await supabase.from("psa_submissions").insert({ from_email: psaEmail, services: selectedPSAServices.map((e) => psaServices[e]), notes: psaNotes });
-		if (error) throw error;
-
-		(document.getElementById("psa-confirmation") as HTMLDialogElement).showModal();
-	};
-
-	const info: { [key: string]: { [key: string]: string } } = {
-		mag: {
-			heading: "",
-			subheading: "",
-			ctaText: "Next stream",
-			overviewTitle: "Mag streams explained",
-			overview: "",
-		},
-		slab: {
-			heading: "",
-			subheading: "",
-			ctaText: "Next stream",
-			overviewTitle: "Slab streams explained",
-			overview: "",
-		},
-		repack: {
-			heading: "",
-			subheading: "",
-			ctaText: "Next stream",
-			overviewTitle: "Repacks explained",
-			overview: "",
-		},
-		break: {
-			heading: "Experience quality breaks",
-			subheading: "Find our next break and secure your spot before it's gone!",
-			ctaText: "Get Spots",
-			overviewTitle: "Breaks explained",
-			overview: "During a breaking stream, you get to watch as we open card hobby cases.\n\nEveryone who purchases a spot gets to keep all of the affiliated cards from that break, which are delivered after the stream ends.\n\nSpots are available for purchase before a break, but each spot can only go to one person.",
-		},
-		psa: {
-			heading: "Grade your cards faster than ever",
-			subheading: "Skip PSA's processing times when you grade your cards through us!",
-			ctaText: "Submit Form",
-			overviewTitle: "How does it work?",
-			overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.",
-		},
-	};
-
 	const getInfo = (key: string) => {
-		return info[type][key];
+		return serviceInfo[type][key];
 	};
-
-	onMount(() => {
-		if (user != null) psaEmail = user.email;
-
-		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-			(anchor as HTMLElement).addEventListener("click", (event) => {
-				event.preventDefault();
-
-				(document.querySelector(anchor.getAttribute("href") ?? "") as Element).scrollIntoView({
-					behavior: "smooth",
-				});
-			});
-		});
-	});
 </script>
 
 <div class="absolute left-0 top-[52px] lg:top-[82px] -z-10 w-screen h-screen max-h-[56rem] overflow-hidden">
-	<img src="/images/hero-image-{type}.png" alt="" draggable="false" class="blur-sm w-full h-full object-cover object-center" />
+	<img src="/images/hero-image-{type}.jpg" alt="" draggable="false" class="blur-md w-full h-full object-cover object-center" />
+	<div class="w-full h-full bg-black/40 absolute left-0 top-0"></div>
 </div>
 <section class="flex gap-4 mt-64 mb-32">
 	<article class="flex flex-col px-2 mx-auto gap-4 text-center [text-shadow:_0_2px_4px_black]">
@@ -159,35 +83,38 @@
 				</span>
 			</div>
 		</div>
-	{/if}
-	{#if type != "psa"}
+	{:else}
 		<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
 			<article id="streams">
 				<div class="flex flex-col gap-16">
-					{#each page.data.streams as stream, index}
-						<article>
-							<a target="_blank" href={stream.link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
-								<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}/{stream.id}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
-								<div class="bg-black/60 w-full h-full absolute"></div>
-								<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
-							</a>
-							<div class="-mt-4 md:mt-0">
-								<h2 class="md:!text-left text-3xl md:text-2xl lg:text-4xl">Upcoming {type} Stream</h2>
-								<h3 class="text-center md:text-left text-balance text-4xl md:text-3xl lg:text-5xl">{stream.name}</h3>
-								{#if type == "break"}
-									<FancyButton
-										onclick={() => {
-											$globalPopupState = "breakspots";
-											$breakIDToShowSpots = stream.id;
-										}}
-										text="Purchase Spots"
-										className="fancy-button rounded-full mt-4 text-xl fancy-anchor fancy-anchor-on mx-auto md:mx-0"
-									/>
-								{/if}
-							</div>
-						</article>
-						<hr class:hidden={index == page.data.streams.length - 1} class="bg-tertiary border-none h-1 rounded-full" />
-					{/each}
+					{#if page.data.streams.length == 0}
+						<h2>No upcoming streams as of right now</h2>
+					{:else}
+						{#each page.data.streams as stream, index}
+							<article>
+								<a target="_blank" href={stream.link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
+									<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type.slice(0, -1)}/{stream.id}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
+									<div class="bg-black/60 w-full h-full absolute"></div>
+									<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
+								</a>
+								<div class="-mt-4 md:mt-0">
+									<h2 class="md:!text-left text-3xl md:text-2xl lg:text-4xl">Upcoming {type.slice(0, -1)} Stream</h2>
+									<h3 class="text-center md:text-left text-balance text-4xl md:text-3xl lg:text-5xl">{stream.name}</h3>
+									{#if type == "breaks"}
+										<FancyButton
+											onclick={() => {
+												$globalPopupState = "breakspots";
+												$breakIDToShowSpots = stream.id;
+											}}
+											text="Purchase Spots"
+											className="fancy-button rounded-full mt-4 text-xl fancy-anchor fancy-anchor-on mx-auto md:mx-0"
+										/>
+									{/if}
+								</div>
+							</article>
+							<hr class:hidden={index == page.data.streams.length - 1} class="bg-tertiary border-none h-1 rounded-full" />
+						{/each}
+					{/if}
 				</div>
 			</article>
 		</div>

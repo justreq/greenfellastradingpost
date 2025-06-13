@@ -37,7 +37,7 @@
 			(document.getElementById(e) as HTMLInputElement).disabled = getFilters(e).length == 0;
 		});
 
-		(document.getElementById("collection-form") as HTMLFormElement).submit();
+		(document.getElementById("marketplace-form") as HTMLFormElement).submit();
 	};
 
 	const clearFilters = () => {
@@ -46,7 +46,7 @@
 			(document.getElementById(type) as HTMLInputElement).disabled = true;
 		});
 
-		(document.getElementById("collection-form") as HTMLFormElement).submit();
+		(document.getElementById("marketplace-form") as HTMLFormElement).submit();
 	};
 
 	onMount(() => {

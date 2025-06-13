@@ -36,6 +36,10 @@
 		@apply text-lg lg:text-xl font-bold;
 	}
 
+	html {
+		@apply scroll-smooth;
+	}
+
 	body {
 		@apply min-h-screen bg-bg overflow-x-hidden;
 	}

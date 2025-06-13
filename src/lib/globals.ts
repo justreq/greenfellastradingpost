@@ -8,6 +8,37 @@ export const globalPopupState: Writable<popupState> = writable("none");
 
 export const filtersList: Writable<{ [key: string]: { name: string; value: string }[] }> = writable({});
 
+export const serviceInfo: { [key: string]: { [key: string]: string } } = {
+	singles: {
+		heading: "",
+		subheading: "",
+		ctaText: "Next stream",
+		overviewTitle: "What are singles streams?",
+		overview: "",
+	},
+	repacks: {
+		heading: "High-value repacks",
+		subheading: "Get your hands on a high-value card (raw, magged, or graded)",
+		ctaText: "Next stream",
+		overviewTitle: "Repacks explained",
+		overview: "",
+	},
+	breaks: {
+		heading: "Experience quality breaks",
+		subheading: "Find our next break and secure your spot before it's gone!",
+		ctaText: "Get Spots",
+		overviewTitle: "Breaks explained",
+		overview: "During a breaking stream, you get to watch as we open card hobby cases.\n\nEveryone who purchases a spot gets to keep all of the affiliated cards from that break, which are delivered after the stream ends.\n\nSpots are available for purchase before a break, but each spot can only go to one person.",
+	},
+	psa: {
+		heading: "Grade your cards faster than ever",
+		subheading: "Skip PSA's processing times when you grade your cards through us!",
+		ctaText: "Submit Form",
+		overviewTitle: "How does it work?",
+		overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.",
+	},
+};
+
 export const cartContents: Writable<string[]> = writable([]);
 export const breakIDToShowSpots: Writable<string | null> = writable(null);
 
@@ -20,7 +51,7 @@ export const checkout = async (singleID: string | null = null) => {
 	} else return;
 
 	let cartContents = cart.product_ids.map((e: any) => {
-	let cardData = page.data.cards.find((c: { id: any }) => c.id == e);
+		let cardData = page.data.cards.find((c: { id: any }) => c.id == e);
 
 		return {
 			name: getCardName(cardData),

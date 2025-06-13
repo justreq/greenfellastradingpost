@@ -51,15 +51,15 @@
 	};
 
 	onMount(() => {
-		localStorage.setItem("redirect-route", `/collection/${page.data.id}`);
+		localStorage.setItem("redirect-route", `/marketplace/${page.data.id}`);
 		if (localStorage.getItem("cart") != null) $cartContents = JSON.parse(localStorage.getItem("cart") as string).product_ids;
 	});
 </script>
 
 <section class="mx-auto max-w-[90rem] w-[95%]">
 	<header class="flex justify-between mb-4 [&>*]:fancy-button">
-		<a data-sveltekit-reload href="/collection/{page.data.cards[(productIndex == 0 ? page.data.cards.length : productIndex) - 1].id}">← Previous</a>
-		<a data-sveltekit-reload href="/collection/{page.data.cards[(productIndex == page.data.cards.length - 1 ? -1 : productIndex) + 1].id}">Next →</a>
+		<a data-sveltekit-reload href="/marketplace/{page.data.cards[(productIndex == 0 ? page.data.cards.length : productIndex) - 1].id}">← Previous</a>
+		<a data-sveltekit-reload href="/marketplace/{page.data.cards[(productIndex == page.data.cards.length - 1 ? -1 : productIndex) + 1].id}">Next →</a>
 	</header>
 	<article class="flex flex-col-reverse lg:flex-row gap-8 xl:gap-16 [&>*]:bg-glass-sm [&>*]:rounded-lg">
 		<div class="flex flex-col sm:flex-row lg:flex-col-reverse xl:flex-row gap-4 xl:gap-16 p-2 sm:p-4">

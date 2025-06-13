@@ -40,8 +40,8 @@
 		<p class="bg-glass-sm p-2 rounded-lg">
 			There's nothing in your cart... yet. Fill your cart with high-end soccer cards from our ever-expanding
 			<span>
-				<a href="/collection" onclick={() => ($globalPopupState = "none")}>
-					<span class="underline uppercase underline-offset-4">collection</span>
+				<a href="/marketplace" onclick={() => ($globalPopupState = "none")}>
+					<span class="underline uppercase underline-offset-4">marketplace</span>
 					→
 				</a>
 			</span>
