@@ -16,6 +16,10 @@
 		if (document.getElementById("title")) (document.getElementById("title") as HTMLImageElement).src = getTitleImage();
 	};
 
+	const getHubPatternURL = (service: string) => {
+		return `url('/icons/pattern-${service}.svg')`;
+	};
+
 	onMount(() => {
 		updateTitle();
 	});
@@ -76,7 +80,7 @@
 	{#each ["marketplace", "psa", "singles", "repacks", "breaks"] as service, index}
 		<a href={index == 0 ? "/marketplace" : `/${service}`} class="overflow-hidden relative rounded-2xl shadow-[0_0_12px_4px_black] border-black border-4 {index < 2 ? 'max-h-64 sm:max-h-none col-span-full sm:col-span-3' : 'max-h-64 lg:max-h-none col-span-full lg:col-span-2'} duration-200 transition-all md:hover:scale-[101%] md:hover:border-accent2/40">
 			<img src="/images/hero-image-{service}.jpg" alt="" draggable="false" class="blur-[2px] w-full h-full object-cover object-center" />
-			<div class="w-full h-full bg-black/60 absolute left-0 top-0 flex bg-[url('/icons/pattern-{service}.svg')] bg-[size:4rem]">
+			<div style="background-image: {getHubPatternURL(service)};" class="w-full h-full bg-black/60 absolute left-0 top-0 flex bg-[size:4rem]">
 				<h2 class="m-auto uppercase [text-shadow:_0_2px_4px_black]">{service}{service == "psa" ? " grading" : ""}</h2>
 			</div>
 		</a>
