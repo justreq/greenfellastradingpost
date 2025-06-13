@@ -28,7 +28,7 @@
 		<img src={getTitleImage()} alt="Title" id="title" class="mt-56 xl:-mt-20 mb-4 xl:mb-56 w-3/4 sm:w-1/2 lg:w-4/5 lg:max-w-[48rem] mx-auto" draggable="false" />
 		<article class="px-2 sm:px-8 pb-4 w-fit mx-auto flex flex-col gap-4">
 			<h2 class="text-center text-4xl sm:text-5xl lg:text-6xl text-balance">Filling your pockets with high-end soccer cards</h2>
-			<a href="/marketplace" class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">Browse our marketplace</a>
+			<a href="/marketplace" class="bg-glass-sm fancy-button w-fit mx-auto px-4 py-2 text-lg rounded-full">Browse marketplace</a>
 		</article>
 	</section>
 	<section id="landing-section" class="bg-glass">
@@ -60,9 +60,9 @@
 				</a>
 			</article>
 		</div>
-		<div class="px-4 flex flex-col items-center [&>article]:py-32 [&>article:not(:first-child)]:bg-glass [&>article]:border-none [&>article]:flex [&>article]:flex-col-reverse [&>article]:xl:flex-row [&>article]:items-center [&>article]:gap-16 [&>article>div]:items-center [&>article>div]:justify-center [&_div]:max-w-[32rem] [&_div]:flex [&_div]:flex-col [&_div]:gap-4 [&_a]:w-min [&_a]:rounded-full [&_a]:px-4 [&_a]:bg-accent/60 [&_a]:border-transparent [&_a]:transition-transform [&_a:hover]:lg:scale-110 [&_a]:!text-text [&_img]:max-h-72 [&_img]:w-3/4 [&_img]:sm:w-1/2 [&_img]:xl:w-auto [&_img]:xl:h-56 [&_img]:2xl:h-full">
+		<div class="px-4 flex flex-col items-center [&>article]:py-32 [&>article:not(:first-child)]:bg-glass [&>article]:border-none [&>article]:flex [&>article]:flex-col-reverse [&>article]:xl:flex-row [&>article]:items-center [&>article]:gap-16 [&>article>div]:justify-center [&_div]:max-w-[32rem] [&_div]:flex [&_div]:flex-col [&_div]:gap-4 [&_a]:w-min [&_a]:rounded-full [&_a]:px-4 [&_a]:bg-accent/60 [&_a]:border-transparent [&_a]:transition-transform [&_a:hover]:lg:scale-110 [&_a]:!text-text [&_img]:max-h-72 [&_img]:w-3/4 [&_img]:sm:w-1/2 [&_img]:xl:w-auto [&_img]:xl:h-56 [&_img]:2xl:h-full">
 			<article>
-				<div>
+				<div class="[&>*]:mx-auto [&>*]:xl:mx-0 [&>*]:text-center [&>*]:xl:text-left">
 					<h3>Bonus Grading Services</h3>
 					<p>Have any raw cards you own or purchase be cleaned and hand-delivered to PSA for expedited grading. Recieve your graded cards faster than ever!</p>
 					<a href="/psa">Learn More</a>
@@ -74,7 +74,7 @@
 {/if}
 <section id="hub" class="grid grid-cols-6 px-2 mx-auto mt-4 gap-4 xl:gap-8 w-screen 2xl:w-[90rem] 2xl:mx-auto">
 	{#each ["marketplace", "psa", "singles", "repacks", "breaks"] as service, index}
-		<a href={index == 0 ? "/marketplace" : `/${service}`} class="overflow-hidden relative rounded-2xl shadow-[0_0_12px_4px_black] border-black border-4 {index < 2 ? 'col-span-3' : 'max-h-64 lg:max-h-none col-span-full lg:col-span-2'} duration-200 transition-all md:hover:scale-[101%] md:hover:border-accent2/40">
+		<a href={index == 0 ? "/marketplace" : `/${service}`} class="overflow-hidden relative rounded-2xl shadow-[0_0_12px_4px_black] border-black border-4 {index < 2 ? 'max-h-64 sm:max-h-none col-span-full sm:col-span-3' : 'max-h-64 lg:max-h-none col-span-full lg:col-span-2'} duration-200 transition-all md:hover:scale-[101%] md:hover:border-accent2/40">
 			<img src="/images/hero-image-{service}.jpg" alt="" draggable="false" class="blur-sm w-full h-full object-cover object-center" />
 			<div class="w-full h-full bg-black/40 absolute left-0 top-0 flex">
 				<h2 class="m-auto uppercase [text-shadow:_0_2px_4px_black]">{service}{service == "psa" ? " grading" : ""}</h2>
