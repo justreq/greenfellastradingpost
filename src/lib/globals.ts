@@ -79,6 +79,7 @@ export const email = async (from: string, title: string, body: string) => {
 		},
 		body: JSON.stringify({ from, title, body }),
 	});
+	window.location.href = PUBLIC_BASE;
 };
 
 export const getCardName = (data: any) => {
