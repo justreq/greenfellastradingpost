@@ -63,7 +63,7 @@
 			case 0:
 				return a.reputation - b.reputation;
 			case 1:
-				return data.cards.find((e: { id: any }) => e.id == a.item_id).player.localeCompare(data.cards.find((e: { id: any }) => e.id == b.item_id).player);
+				return data.cards.find((e: { id: any }) => e.id == a.id).player.localeCompare(data.cards.find((e: { id: any }) => e.id == b.id).player);
 			case 2:
 				return a.price - b.price;
 			case 3:
@@ -76,7 +76,7 @@
 	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0)]}.svg`);
 
 	const filterProductList = (e: any) => {
-		const itemData = data.cards.find((card: { id: any }) => card.id == e.item_id);
+		const itemData = data.cards.find((card: { id: any }) => card.id == e.id);
 		let isValid = false;
 
 		if (priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0) return true;
