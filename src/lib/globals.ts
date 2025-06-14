@@ -1,4 +1,5 @@
 import { page } from "$app/state";
+import { PUBLIC_BASE } from "$env/static/public";
 import { writable, type Writable } from "svelte/store";
 
 export type popupState = "none" | "headernav" | "profile" | "signup" | "login" | "sorts" | "filters" | "createbreakspot" | "breakspots" | "checkout" | "psaform";
@@ -10,18 +11,18 @@ export const filtersList: Writable<{ [key: string]: { name: string; value: strin
 
 export const serviceInfo: { [key: string]: { [key: string]: string } } = {
 	singles: {
-		heading: "",
-		subheading: "",
+		heading: "Single cards starting at $1",
+		subheading: "Score your dream cards in our singles auctions.",
 		ctaText: "Next stream",
 		overviewTitle: "What are singles streams?",
-		overview: "",
+		overview: "Catch us live during a Magdonald's or Slabby Sunday stream, during which we auction all kinds of soccer cards, all starting at $1.\n\nMagdonald's streams feature a curated collection of cards in magnetic cases with a custom GTP sticker.\n\nSlabby Sunday streams feature a curated collection of graded cards.",
 	},
 	repacks: {
-		heading: "High-value repacks",
+		heading: "High-value repacks starting at $1",
 		subheading: "Get your hands on a high-value card (raw, magged, or graded)",
 		ctaText: "Next stream",
 		overviewTitle: "Repacks explained",
-		overview: "",
+		overview: "Repack streams feature a collection of carefully put-together repacks, all starting at $1. Each repack contains a high-value card of any type.\n\nWhen you win a repack, you get to watch us open a repack box of your choice live. You keep everything we pull from your chosen repack box, except the box itself.",
 	},
 	breaks: {
 		heading: "Experience quality breaks",
@@ -68,6 +69,16 @@ export const checkout = async (singleID: string | null = null) => {
 	}).then((data) => data.json());
 
 	window.location.replace(data.url);
+};
+
+export const email = async (from: string, title: string, body: string) => {
+	const data = await fetch("/email", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ from, title, body }),
+	});
 };
 
 export const getCardName = (data: any) => {

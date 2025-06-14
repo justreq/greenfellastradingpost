@@ -65,12 +65,9 @@
 	<Header></Header>
 {/if}
 <main class="w-screen pt-16 pb-32 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	{#if !dev && (page.url.pathname.includes("singles") || page.url.pathname.includes("repacks") || page.url.pathname.includes("contact"))}
-		<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
+	<!-- <article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
 			<h2>Under Construction</h2>
-		</article>
-	{:else}
-		{@render children()}
-	{/if}
+		</article> -->
+	{@render children()}
 </main>
 <Footer></Footer>
