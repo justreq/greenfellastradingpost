@@ -52,7 +52,7 @@
 		}
 	};
 
-	const itemsPerPage = 30;
+	const itemsPerPage = 50;
 
 	let searchParams: URLSearchParams = $state(new URLSearchParams());
 
@@ -178,7 +178,7 @@
 			/>
 		</form>
 	</header>
-	<article class="flex flex-col sm:flex-row sm:flex-wrap px-2 lg:pl-80 justify-evenly mx-auto mt-4 gap-8">
+	<article class="flex flex-row flex-wrap justify-center px-2 sm:px-8 lg:pl-80 mx-auto mt-4 gap-8">
 		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
 			<CardProductThumbnail id={product.id} />
 		{/each}

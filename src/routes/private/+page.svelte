@@ -5,21 +5,6 @@
 	import FancyTextInput from "$lib/components/FancyTextInput.svelte";
 	let { supabase } = $derived(page.data);
 
-	const convertTimestampToReadable = (timestamp: string) => {
-		if (timestamp == null) return "❌";
-
-		const date = new Date(timestamp);
-
-		const options: Intl.DateTimeFormatOptions = {
-			year: "numeric",
-			month: "long",
-			day: "numeric",
-		};
-
-		const formatter = new Intl.DateTimeFormat("en-US", options);
-		return formatter.format(date);
-	};
-
 	const convertFloatToPrice = (float: number) => {
 		const formatter = new Intl.NumberFormat("en-US", {
 			style: "currency",
@@ -30,15 +15,11 @@
 		return formatter.format(float);
 	};
 
-	let date = new Date();
-
 	let isNewCardFormVisible = $state(false);
 	let brand = $state("");
 	let year = $state("");
 	let set = $state("");
 	let player = $state("");
-	let comp = $state("");
-	let buyPrice = $state("");
 	let sellPrice = $state("");
 	let frontImage = $state("");
 	let backImage = $state("");
@@ -61,9 +42,6 @@
 			set: formData.set,
 			player: formData.player,
 			year: formData.year,
-			comp_price: formData.comp,
-			buy_price: formData.buy,
-			bought: new Date(formData.bought as string).toISOString().replace("T", " ").replace("Z", "+00"),
 			sell_price: formData.sell,
 			number: formData.number || "",
 			grade: formData.grade || "",
@@ -78,7 +56,7 @@
 			const frontExtension = (document.getElementById("front") as HTMLInputElement).value.split(".")[1];
 			const backExtension = (document.getElementById("back") as HTMLInputElement).value.split(".")[1];
 			const product = await supabase
-				.from("card")
+				.from("cards")
 				.update({ file_extensions: [frontExtension, backExtension] })
 				.eq("id", data[0].id)
 				.select();
@@ -88,8 +66,8 @@
 			[
 				{ name: `0.${frontExtension}`, file: ((document.getElementById("front") as HTMLInputElement).files as FileList)[0] },
 				{ name: `1.${backExtension}`, file: ((document.getElementById("back") as HTMLInputElement).files as FileList)[0] },
-			].forEach(async (fileData) => {
-				const { error } = await supabase.storage.from("product_images").upload(`${productID}/${fileData.name}`, fileData.file, {
+			].forEach(async (fileData, index) => {
+				const { error } = await supabase.storage.from("product_images").upload(`${productID}/${index}.jpg`, fileData.file, {
 					contentType: fileData.file.type,
 					upsert: true,
 				});
@@ -117,7 +95,7 @@
 	<table class="block table-fixed overflow-scroll border-separate [&_td]:whitespace-nowrap [&_td]:overflow-scroll [&_td]:rounded-sm [&_td]:p-2">
 		<thead class="bg-accent2/60">
 			<tr>
-				{#each page.data.cards.length == 0 ? [] : Object.keys(page.data.cards[0]).slice(3) as column}
+				{#each page.data.cards.length == 0 ? [] : Object.keys(page.data.cards[0]).slice(3, -2) as column}
 					<td>
 						{column[0].toUpperCase() + column.slice(1).replaceAll("_", " ")}
 					</td>
@@ -127,8 +105,8 @@
 		{#each page.data.cards as card}
 			<tbody class="even:bg-tertiary/80 odd:bg-secondary/80 [&_td]:!select-text">
 				<tr>
-					{#each Object.keys(card).slice(3) as key}
-						<td>{["created", "bought", "sold"].includes(key) ? convertTimestampToReadable(card[key]) : key.includes("price") ? convertFloatToPrice(card[key]) : ["auto", "patch"].includes(key) ? (card[key] ? "✅" : "❌") : card[key]}</td>
+					{#each Object.keys(card).slice(3, -2) as key}
+						<td>{key.includes("price") ? convertFloatToPrice(card[key]) : ["auto", "patch", "sold"].includes(key) ? (card[key] ? "✅" : "❌") : card[key]}</td>
 					{/each}
 				</tr>
 			</tbody>
@@ -189,10 +167,6 @@
 			<hr />
 			<div>
 				<label for="bought">Buy Information</label>
-				<FancyTextInput type="number" name="buy" placeholder="Buy Price" required bind:value={buyPrice} step="any" className="col-span-3" />
-				<FancyTextInput type="date" name="bought" required value={`${date.getFullYear()}-${(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + date.getDate()}`} className="col-span-3" />
-				<label for="sold">Product Information</label>
-				<FancyTextInput type="number" name="comp" placeholder="Comp" required bind:value={comp} step="any" className="col-span-3" />
 				<FancyTextInput type="number" name="sell" placeholder="Sell Price" required bind:value={sellPrice} step="any" className="col-span-3" />
 				<FancyCheckbox id="retail" className="col-span-6">Retail (should this card appear on the website?)</FancyCheckbox>
 				<hr />
@@ -201,7 +175,7 @@
 				<FancyTextInput type="file" name="front" required bind:value={frontImage} accept="image/*" className="col-span-3" />
 				<FancyTextInput type="file" name="back" required bind:value={backImage} accept="image/*" className="col-span-3" />
 				<p>Both images should be oriented properly and cropped along the border of the mag / slab / card</p>
-				<FancyButton text="Add Card" onclick={submitNewCardForm} disabled={[brand, year, set, player, comp, buyPrice, sellPrice, frontImage, backImage].some((e) => e == null || e == "")} className="bg-accent/60 justify-center mt-4 col-span-6" />
+				<FancyButton text="Add Card" onclick={submitNewCardForm} disabled={[brand, year, set, player, sellPrice, frontImage, backImage].some((e) => e == null || e == "")} className="bg-accent/60 justify-center mt-4 col-span-6" />
 				<hr class="sm:hidden" />
 			</div>
 		</form>

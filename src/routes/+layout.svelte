@@ -6,7 +6,6 @@
 	import { onMount } from "svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import { cartContents, globalPopupState } from "$lib/globals";
-	import { dev } from "$app/environment";
 	import { invalidate } from "$app/navigation";
 	let { children } = $props();
 	let { session, supabase, user } = $derived(page.data);

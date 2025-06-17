@@ -3,6 +3,7 @@
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import { cartContents, checkout, getCardName } from "$lib/globals";
 	import { onMount } from "svelte";
+	import VanillaTilt from "vanilla-tilt";
 
 	let cardData = page.data.cards.find((c: { id: any }) => c.id == page.data.id);
 
@@ -50,7 +51,14 @@
 		);
 	};
 
+	let element: HTMLElement;
+
 	onMount(() => {
+		VanillaTilt.init(element, {
+			reverse: true,
+			perspective: 5000,
+		});
+
 		localStorage.setItem("redirect-route", `/marketplace/${page.data.id}`);
 		if (localStorage.getItem("cart") != null) $cartContents = JSON.parse(localStorage.getItem("cart") as string).product_ids;
 	});
@@ -71,7 +79,7 @@
 				{/each}
 			</aside>
 			<div class="w-[90%] sm:w-max sm:h-[32rem] xl:h-[36rem] m-auto object-contain">
-				<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{currentImage}.{cardData.file_extensions[currentImage]}" alt="Product" draggable="false" class="rounded-lg w-full sm:w-auto sm:h-full" />
+				<img bind:this={element} src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{currentImage}.{cardData.file_extensions[currentImage]}" alt="Product" draggable="false" class="rounded-lg w-full sm:w-auto sm:h-full shadow-[0_0_1rem_4px_black]" />
 			</div>
 		</div>
 		<div class="flex-grow p-4 sm:p-8 flex flex-col gap-8">

@@ -4,7 +4,7 @@ import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({ locals: { supabase, user } }) => {
 	if (!isSuperUser(user)) throw redirect(302, "/");
-	const cards = await supabase.from("cards").select();
+	const cards = await supabase.from("cards").select().eq("retail", true);
 
 	return {
 		cards: cards.data ?? [],
