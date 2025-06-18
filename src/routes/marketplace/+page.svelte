@@ -15,11 +15,11 @@
 			{ name: "Has Patch", value: "patch" },
 		],
 		prices: [
-			{ name: "Free - $10", value: "lowest" },
-			{ name: "$11 - $25", value: "affordable" },
-			{ name: "$26 - $75", value: "midrange" },
-			{ name: "$75 - $150", value: "premium" },
-			{ name: "$151+", value: "luxury" },
+			{ name: "Free - $100", value: "lowest" },
+			{ name: "$101 - $250", value: "affordable" },
+			{ name: "$251 - $500", value: "midrange" },
+			{ name: "$501 - $1000", value: "premium" },
+			{ name: "$1000+", value: "luxury" },
 		],
 		sets: data.cards.map((e: any) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
 		players: data.cards.map((e: any) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
@@ -81,11 +81,11 @@
 
 		if (priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0) return true;
 
-		if (priceFilters.includes("lowest") && e.price <= 10.0) isValid = true;
-		if (priceFilters.includes("affordable") && e.price > 10.0 && e.price <= 25.0) isValid = true;
-		if (priceFilters.includes("midrange") && e.price > 25.0 && e.price <= 75.0) isValid = true;
-		if (priceFilters.includes("premium") && e.price > 75.0 && e.price <= 150.0) isValid = true;
-		if (priceFilters.includes("luxury") && e.price > 150.0) isValid = true;
+		if (priceFilters.includes("lowest") && e.price <= 100.0) isValid = true;
+		if (priceFilters.includes("affordable") && e.price > 100.0 && e.price <= 250.0) isValid = true;
+		if (priceFilters.includes("midrange") && e.price > 250.0 && e.price <= 500.0) isValid = true;
+		if (priceFilters.includes("premium") && e.price > 500.0 && e.price <= 1000.0) isValid = true;
+		if (priceFilters.includes("luxury") && e.price > 1000.0) isValid = true;
 
 		if (setFilters.length > 0 && setFilters.includes(`${itemData.brand.toLowerCase().split(" ").join("-")}-${itemData.set.toLowerCase().split(" ").join("-")}`)) isValid = true;
 		if (playerFilters.length > 0 && playerFilters.includes(itemData.player.toLowerCase().split(" ").join("-"))) isValid = true;
