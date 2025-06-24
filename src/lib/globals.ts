@@ -83,6 +83,8 @@ export const email = async (from: string, title: string, body: string) => {
 };
 
 export const getCardName = (data: any) => {
+	if (data.custom_name != "") return data.custom_name;
+
 	return [data.number || "", data.grade || "", data.player || "", data.year || "", data.brand || "", data.set || ""]
 		.map((e) => e.trim())
 		.filter((e) => e != "")

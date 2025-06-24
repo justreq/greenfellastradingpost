@@ -54,11 +54,6 @@
 	let element: HTMLElement;
 
 	onMount(() => {
-		VanillaTilt.init(element, {
-			reverse: true,
-			perspective: 5000,
-		});
-
 		localStorage.setItem("redirect-route", `/marketplace/${page.data.id}`);
 		if (localStorage.getItem("cart") != null) $cartContents = JSON.parse(localStorage.getItem("cart") as string).product_ids;
 	});
