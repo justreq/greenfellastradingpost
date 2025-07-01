@@ -14,7 +14,7 @@
 	<img src="/images/hero-image-{type}.jpg" alt="" draggable="false" class="blur-md w-full h-full object-cover object-center" />
 	<div class="w-full h-full bg-black/40 absolute left-0 top-0"></div>
 </div>
-<section class="flex gap-4 mt-64 mb-32">
+<section class="flex gap-4 my-8 lg:my-16">
 	<article class="flex flex-col px-2 mx-auto gap-4 text-center [text-shadow:_0_2px_4px_black]">
 		<h2>{getInfo("heading")}</h2>
 		<h3 class="text-balance">{getInfo("subheading")}</h3>
@@ -27,8 +27,18 @@
 		</div>
 	</article>
 </section>
-<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:md:flex-row [&_article]:gap-8 [&_article]:sm:gap-16 [&_article]:lg:gap-32 [&_article]:items-center">
+<section class="flex flex-col items-center [&>*]:px-4 [&>*]:py-16 [&>*]:lg:py-32 [&>*]:w-full [&>*]:place-items-center [&_h2]:text-center [&_h2]:lg:text-left [&_h2]:lg:max-w-fit [&_h4]:text-center [&_h4]:lg:text-left [&_h4]:max-w-[32rem] [&_h3]:whitespace-pre-line [&_h4]:whitespace-pre-line [&_article]:flex [&_article]:flex-col [&_article]:md:flex-row [&_article]:gap-8 [&_article]:sm:gap-16 [&_article]:lg:gap-32 [&_article]:place-items-center">
 	<div class="bg-primary">
+		<article class="-mt-8 lg:-mt-24 mb-12 sm:!flex-row !gap-8">
+			{#each getInfo("badges") as badges}
+				<div class="bg-tertiary/60 border-tertiary border-2 rounded-xl py-6 flex flex-row sm:flex-col w-full sm:w-auto">
+					<img src="/icons/{badges.icon}.svg" alt="" class="w-20 mx-4 sm:mx-8 sm:mb-4" />
+					<p class="uppercase sm:text-center whitespace-pre-wrap my-auto sm:my-0 mx-4 sm:mx-0">
+						{badges.text}
+					</p>
+				</div>
+			{/each}
+		</article>
 		<article>
 			<h2>{getInfo("overviewTitle")}</h2>
 			<h4>{getInfo("overview")}</h4>
@@ -37,7 +47,7 @@
 	{#if type == "psa"}
 		<div class="bg-glass-secondary !px-1 sm:!px-2 flex flex-col gap-4 [&_div]:rounded-lg [&_div]:w-48 [&_div]:sm:w-64 [&_div]:bg-glass-secondary-sm [&_div]:p-2 [&_div]:sm:p-4 [&_h4]:!text-left [&_h4]:text-base [&_h4]:sm:text-lg [&_h4]:uppercase [&_h5]:text-accent [&_h5]:text-xl [&_h5]:sm:text-2xl [&_h5]:font-bold">
 			<h2 class="text-5xl lg:text-7xl">Pricing</h2>
-			<article class="flex sm:!flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem] [&>*]:flex [&>*]:sm:flex-col [&>*]:justify-between [&>*]:sm:justify-normal [&>*]:!w-[95%] [&>*]:sm:!w-64">
+			<article class="flex sm:!flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem] [&>*]:flex [&>*]:sm:flex-col [&>*]:justify-between [&>*]:sm:justify-normal [&>*]:!w-full [&>*]:sm:!w-64">
 				<div>
 					<h4>Value Bulk</h4>
 					<h5>$24.99 / card</h5>
@@ -72,15 +82,15 @@
 				</div>
 			</article>
 			<div class="!w-[95%] max-w-[67rem] text-balance text-center sm:text-lg">
-				These prices cover our curing, direct walk-in, and the PSA submission cost. Cleaning incurs an additional <span class="text-accent">$2.99 per card</span>
-				<br />
-				For more information about PSA's pricing models, visit
+				Cleaning is optional, <span class="text-accent">$2.99 per card cleaned</span>
+				<!-- <br />
+				To see PSA's pricing models, visit
 				<span class="text-accent inline-block">
 					<a target="_blank" class="underline inline-block" href="https://www.psacard.com/services/tradingcardgrading#card-authentication-and-grading-prices">
 						<div class="hidden"></div>
 						psacard.com
 					</a>
-				</span>
+				</span> -->
 			</div>
 		</div>
 	{:else}

@@ -9,11 +9,12 @@ export const globalPopupState: Writable<popupState> = writable("none");
 
 export const filtersList: Writable<{ [key: string]: { name: string; value: string }[] }> = writable({});
 
-export const serviceInfo: { [key: string]: { [key: string]: string } } = {
+export const serviceInfo: { [key: string]: { [key: string]: string | any[] } } = {
 	singles: {
 		heading: "Single cards starting at $1",
 		subheading: "Score your dream cards in our singles auctions.",
 		ctaText: "Next stream",
+		badges: [],
 		overviewTitle: "What are singles streams?",
 		overview: "Catch us live during a Magdonald's or Slabby Sunday stream, during which we auction all kinds of soccer cards, all starting at $1.\n\nMagdonald's streams feature a curated collection of cards in magnetic cases with a custom GTP sticker.\n\nSlabby Sunday streams feature a curated collection of graded cards.",
 	},
@@ -21,6 +22,7 @@ export const serviceInfo: { [key: string]: { [key: string]: string } } = {
 		heading: "High-value repacks starting at $1",
 		subheading: "Get your hands on a high-value card (raw, magged, or graded)",
 		ctaText: "Next stream",
+		badges: [],
 		overviewTitle: "Repacks explained",
 		overview: "Repack streams feature a collection of carefully put-together repacks, all starting at $1. Each repack contains a high-value card of any type.\n\nWhen you win a repack, you get to watch us open a repack box of your choice live. You keep everything we pull from your chosen repack box, except the box itself.",
 	},
@@ -28,15 +30,21 @@ export const serviceInfo: { [key: string]: { [key: string]: string } } = {
 		heading: "Experience quality breaks",
 		subheading: "Find our next break and secure your spot before it's gone!",
 		ctaText: "Get Spots",
+		badges: [],
 		overviewTitle: "Breaks explained",
 		overview: "During a breaking stream, you get to watch as we open card hobby cases.\n\nEveryone who purchases a spot gets to keep all of the affiliated cards from that break, which are delivered after the stream ends.\n\nSpots are available for purchase before a break, but each spot can only go to one person.",
 	},
 	psa: {
 		heading: "Grade your cards faster than ever",
-		subheading: "Skip PSA's processing times when you grade your cards through us!",
+		subheading: "Skip PSA's waiting times when you grade your cards with us!",
 		ctaText: "Submit Form",
+		badges: [
+			{ text: "Optional\ncleaning", icon: "shiny-card" },
+			{ text: "Fast\ndelivery", icon: "box-deliver" },
+			{ text: "Straight\nto grading", icon: "box-transfer" },
+		],
 		overviewTitle: "How does it work?",
-		overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.",
+		overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.\n\nPricing can be found below.",
 	},
 };
 
