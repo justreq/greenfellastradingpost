@@ -46,7 +46,7 @@
 	</div>
 	{#if type == "psa"}
 		<div class="bg-glass-secondary !px-1 sm:!px-2 flex flex-col gap-4 [&_div]:rounded-lg [&_div]:w-48 [&_div]:sm:w-64 [&_div]:bg-glass-secondary-sm [&_div]:p-2 [&_div]:sm:p-4 [&_h4]:!text-left [&_h4]:text-base [&_h4]:sm:text-lg [&_h4]:uppercase [&_h5]:text-accent [&_h5]:text-xl [&_h5]:sm:text-2xl [&_h5]:font-bold">
-			<h2 class="text-5xl lg:text-7xl">Pricing</h2>
+			<h2 class="text-5xl lg:text-7xl">Pricing*</h2>
 			<article class="flex sm:!flex-row flex-wrap !gap-2 sm:!gap-4 justify-center w-full max-w-[72rem] [&>*]:flex [&>*]:sm:flex-col [&>*]:justify-between [&>*]:sm:justify-normal [&>*]:!w-full [&>*]:sm:!w-64">
 				<div>
 					<h4>Value Bulk</h4>
@@ -83,14 +83,14 @@
 			</article>
 			<div class="!w-[95%] max-w-[67rem] text-balance text-center sm:text-lg">
 				Cleaning is optional, <span class="text-accent">$2.99 per card cleaned</span>
-				<!-- <br />
-				To see PSA's pricing models, visit
+				<br />
+				*For more information on each pricing model, visit
 				<span class="text-accent inline-block">
 					<a target="_blank" class="underline inline-block" href="https://www.psacard.com/services/tradingcardgrading#card-authentication-and-grading-prices">
 						<div class="hidden"></div>
 						psacard.com
 					</a>
-				</span> -->
+				</span>
 			</div>
 		</div>
 	{:else}
@@ -103,7 +103,7 @@
 						{#each page.data.streams as stream, index}
 							<article>
 								<a target="_blank" href={stream.link} class="cursor-pointer relative flex justify-center overflow-hidden [&:hover_img:last-child]:md:scale-110 h-auto max-w-[24rem] rounded-lg bg-primary sm:bg-transparent">
-									<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type.slice(0, -1)}/{stream.id}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
+									<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/previews/{type}/{stream.id}.jpg" alt="Next stream thumbnail" draggable="false" class="h-full mx-auto aspect-square md:aspect-auto object-cover" />
 									<div class="bg-black/60 w-full h-full absolute"></div>
 									<img src="/icons/external-link.svg" alt="Link to next stream" class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-12 transition-transform duration-200" />
 								</a>

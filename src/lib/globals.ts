@@ -54,8 +54,10 @@ export const breakIDToShowSpots: Writable<string | null> = writable(null);
 export const checkout = async (singleID: string | null = null) => {
 	let cart: { product_ids: string[] } = { product_ids: [] };
 
-	if (singleID != null) cart.product_ids = [singleID];
-	else if (localStorage.getItem("cart") != null) {
+	if (singleID != null) {
+		cart.product_ids = [singleID];
+		localStorage.setItem("singleItemCart", JSON.stringify({ id: singleID, owner_id: null }));
+	} else if (localStorage.getItem("cart") != null) {
 		cart = JSON.parse(localStorage.getItem("cart") as string);
 	} else return;
 
@@ -79,15 +81,15 @@ export const checkout = async (singleID: string | null = null) => {
 	window.location.replace(data.url);
 };
 
-export const email = async (from: string, title: string, body: string) => {
-	const data = await fetch("/email", {
+export const email = async (to: string, title: string, body: string) => {
+	await fetch("/email", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ from, title, body }),
+		body: JSON.stringify({ to, title, body }),
 	});
-	window.location.href = PUBLIC_BASE;
+	window.location.href = PUBLIC_BASE + (localStorage.getItem("redirect-route") ?? "");
 };
 
 export const getCardName = (data: any) => {

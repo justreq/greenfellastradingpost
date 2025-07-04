@@ -20,6 +20,6 @@ export const load = (async ({ params, locals: { supabase } }) => {
 
 	return {
 		type: params.service,
-		streams: streams.data ?? [],
+		streams: streams.data == null ? [] : streams.data.filter((e) => e.type == params.service),
 	};
 }) satisfies PageServerLoad;

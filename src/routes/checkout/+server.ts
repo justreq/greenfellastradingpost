@@ -35,7 +35,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			},
 		},
 		mode: "payment",
-		success_url: `${PUBLIC_BASE}/success`,
+		success_url: `${PUBLIC_BASE}/success?${data.message == null ? "" : "psa=true&"}session_id={CHECKOUT_SESSION_ID}`,
 		cancel_url: `${PUBLIC_BASE}/fail`,
 	});
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 	import { globalPopupState } from "$lib/globals";
 	import { onMount } from "svelte";
 	let { user } = $derived(page.data);
@@ -77,13 +78,10 @@
 	</section>
 {/if}
 <section id="hub" class="grid grid-cols-6 px-2 mx-auto mt-4 gap-4 xl:gap-8 w-screen 2xl:w-[90rem] 2xl:mx-auto">
-	{#each ["marketplace", "psa", "singles", "repacks", "breaks"] as service, index}
-		<a class:h-96={index < 2} href={index == 0 ? "/marketplace" : `/${service}`} class="overflow-hidden relative rounded-2xl shadow-[0_0_12px_4px_black] border-black border-4 {index < 2 ? 'max-h-64 sm:max-h-none col-span-full sm:col-span-6' : 'max-h-64 lg:max-h-none col-span-full lg:col-span-2'} duration-200 transition-all md:hover:scale-[101%] md:hover:border-accent2/40">
-			{#if index > 0}
-				<img src="/images/hero-image-{service}.jpg" alt="" draggable="false" class="blur-[2px] w-full h-full object-cover object-center" />
-			{/if}
-
-			<div style="background-image: {getHubPatternURL(service)};" class="w-full h-full bg-black/60 absolute left-0 top-0 flex bg-[size:4rem]">
+	{#each ["singles", "repacks", "breaks"].concat(user == null ? [] : ["psa"]) as service}
+		<a class:h-96={service == "psa"} href="/{service}" class="overflow-hidden relative rounded-2xl shadow-[0_0_12px_4px_black] border-black border-4 {service == 'psa' ? 'max-h-64 sm:max-h-none col-span-full sm:col-span-6' : 'max-h-64 lg:max-h-none col-span-full lg:col-span-2'} duration-200 transition-all md:hover:scale-[101%] md:hover:border-accent2/40">
+			<img src="/images/hero-image-{service}.jpg" alt="" draggable="false" class="blur-[2px] w-full h-full object-cover object-center" />
+			<div style="background-image: {getHubPatternURL(service)};" class="w-full h-full bg-black/60 absolute left-0 top-0 flex bg-[size:4rem] {service == 'psa' ? 'gap-x-12 px-8 flex-wrap' : ''}">
 				<h2 class="m-auto uppercase [text-shadow:_0_2px_4px_black]">{service}{service == "psa" ? " grading - skip waiting times when you grade with us!" : ""}</h2>
 			</div>
 		</a>

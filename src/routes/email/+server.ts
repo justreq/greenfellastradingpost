@@ -24,9 +24,9 @@ export const POST: RequestHandler = async ({ request }) => {
 		mode: "cors",
 		body: JSON.stringify({
 			from: "donotreply@updates.greenfellastradingpost.com",
-			to: "greenfellastradingpost@gmail.com",
-			title: `Contact Message - ${data.from}`,
-			body: `<h1>${data.title}</h1>\n\n${data.body}`,
+			to: data.to,
+			title: data.title,
+			body: data.body,
 		}),
 		headers: {
 			"Access-Control-Allow-Origin": PUBLIC_BASE,

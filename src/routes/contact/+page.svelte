@@ -22,7 +22,8 @@
 		class="flex flex-col gap-2 xl:gap-4 [&>*]:w-full"
 		onsubmit={async (event: Event) => {
 			event.preventDefault();
-            email(contactEmail, contactTitle, contactBody)
+			email("greenfellastradingpost@gmail.com", `Contact Message - ${contactEmail}`, `<h1>${contactTitle}</h1>\n\n${contactBody}`);
+			email(contactEmail, `Your message has been recieved!`, `<h1>Thank you for contacting us!</h1>\n\nWe will get back to you as soon as we can through the email you provided. If you don't hear from us in a couple days, check your spam folder just in case. If you don't see anything, feel free to contact us again or directly through our email, greenfellastradingpost@gmail.com.`);
 		}}
 	>
 		<FancyTextInput placeholder="Email" type="email" bind:value={contactEmail} required />

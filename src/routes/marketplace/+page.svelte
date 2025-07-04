@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import CardProductThumbnail from "$lib/components/CardProductThumbnail.svelte";
 	import FancyButton from "$lib/components/FancyButton.svelte";
 	import Filters from "$lib/components/Filters.svelte";
 	import SortingOptions from "$lib/components/SortingOptions.svelte";
 	import { filtersList, globalPopupState } from "$lib/globals.js";
 	import { onMount } from "svelte";
-	let { data } = $props();
 
 	$filtersList = {
 		special: [
@@ -21,8 +21,8 @@
 			{ name: "$501 - $1000", value: "premium" },
 			{ name: "$1000+", value: "luxury" },
 		],
-		sets: data.cards.map((e: any) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
-		players: data.cards.map((e: any) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
+		sets: page.data.cards.map((e: any) => ({ name: `${e.brand} ${e.set}`, value: `${e.brand.toLowerCase().split(" ").join("-")}-${e.set.toLowerCase().split(" ").join("-")}` })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
+		players: page.data.cards.map((e: any) => ({ name: e.player, value: e.player.toLowerCase().split(" ").join("-") })).filter((e: any, index: any, array: any) => array.map((e: { value: any }) => e.value).indexOf(e.value) == index),
 	};
 
 	let sortingMethods = ["default", "name", "price", "newest"];
@@ -63,7 +63,7 @@
 			case 0:
 				return a.reputation - b.reputation;
 			case 1:
-				return data.cards.find((e: { id: any }) => e.id == a.id).player.localeCompare(data.cards.find((e: { id: any }) => e.id == b.id).player);
+				return page.data.cards.find((e: { id: any }) => e.id == a.id).player.localeCompare(page.data.cards.find((e: { id: any }) => e.id == b.id).player);
 			case 2:
 				return a.price - b.price;
 			case 3:
@@ -76,7 +76,7 @@
 	const setFilterIcon = () => ((document.getElementById("button-filters-icon") as HTMLImageElement).src = `/icons/filter${["-remove", ""][Number(priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0)]}.svg`);
 
 	const filterProductList = (e: any) => {
-		const itemData = data.cards.find((card: { id: any }) => card.id == e.id);
+		const itemData = page.data.cards.find((card: { id: any }) => card.id == e.id);
 		let isValid = false;
 
 		if (priceFilters.length == 0 && setFilters.length == 0 && playerFilters.length == 0 && specialFilters.length == 0) return true;
@@ -124,6 +124,7 @@
 	let productList: any[] = $state([]);
 
 	onMount(() => {
+		localStorage.setItem("redirect-route", `/marketplace`);
 		searchParams = new URLSearchParams(window.location.search);
 		sortReversed = searchParams.get("sortby") != null ? ((searchParams.get("sortby") as string).split("-").length < 2 ? false : (searchParams.get("sortby") as string).includes("reversed") ? true : false) : false;
 		sortingMethod = searchParams.get("sortby") != null ? (sortingMethods.includes((searchParams.get("sortby") as string).split("-")[0]) ? sortingMethods.indexOf((searchParams.get("sortby") as string).split("-")[0]) : 0) : 0;
@@ -135,7 +136,7 @@
 		setSortIcon();
 		setFilterIcon();
 
-		productList = data.cards.filter((e: { retail: boolean }) => filterProductList(e) && e.retail == true).sort(sortProductList);
+		productList = page.data.cards.filter((e: { retail: boolean }) => filterProductList(e) && e.retail == true).sort(sortProductList);
 		if (sortReversed) productList.reverse();
 
 		optionsLoaded = true;
