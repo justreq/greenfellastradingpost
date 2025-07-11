@@ -28,7 +28,7 @@
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ cart: cartContents, message: "Thanks for doing business with us! When you are ready, please ship your cards to this address:\n\n2412 East 65th St, Brooklyn NY 11234" }),
+			body: JSON.stringify({ type: "psa", cart: cartContents, message: "Thanks for doing business with us! When you are ready, please ship your cards to this address:\n\n2412 East 65th St, Brooklyn NY 11234" }),
 		}).then((data) => data.json());
 
 		window.location.replace(data.url);
