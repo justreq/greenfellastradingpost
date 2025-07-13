@@ -182,6 +182,8 @@
 	<article class="flex flex-row flex-wrap justify-center px-2 sm:px-8 lg:pl-80 mx-auto mt-4 gap-8">
 		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
 			<CardProductThumbnail id={product.id} />
+		{:else}
+			<h3 class="px-4 md:px-16 text-center text-xl md:text-3xl">We are currently curating a collection. Create an account to get notified when we drop more cards.</h3>
 		{/each}
 	</article>
 </section>
