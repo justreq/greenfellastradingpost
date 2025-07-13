@@ -44,30 +44,32 @@
 
 <div class="flex flex-col gap-2 p-2">
 	{#each page.data.breakSpots.filter((e: { break_id: string | null }) => e.break_id == $breakIDToShowSpots).sort((a: { name: any }, b: { name: any }) => a.name.localeCompare(b.name)) as breakSpot}
-		<div class="bg-glass-secondary-sm p-2 rounded-xl">
+		<article class="bg-glass-secondary-sm p-2 rounded-xl" data-spot-id={breakSpot.id}>
 			<div class="flex justify-between items-center">
 				<p class="text-accent text-xl font-bold">{convertFloatToPrice(breakSpot.price)}</p>
 				{#if breakSpot.bought != "" || breakSpot.owner_id != null}
+					<div class="absolute top-0 left-0 w-full h-full bg-black/40 rounded-xl"></div>
 					<p>{breakSpot.owner_id == null ? breakSpot.bought : page.data.users.find((e: { id: any }) => e.id == breakSpot.owner_id).display_name}</p>
 				{:else}
-					<button
-						data-spot-id={breakSpot.id}
-						class="whitespace-nowrap bg-accent2/40 border-2 border-accent2/80 px-2 py-1 rounded-md"
-						onclick={(event) => {
-							localStorage.removeItem("spotCart");
-							let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).getAttribute("data-spot-id") as string, owner_id: null };
-							localStorage.setItem("spotCart", JSON.stringify(spotCart));
-							buySpot();
-						}}
-					>
-						Buy Spot
-					</button>
+					<div class="flex gap-2">
+						<button
+							class="whitespace-nowrap bg-accent2/40 border-2 border-accent2/80 px-2 py-1 rounded-md"
+							onclick={(event) => {
+								localStorage.removeItem("spotCart");
+								let spotCart: { spot_id: string; owner_id: string | null } = { spot_id: (event.target as HTMLElement).parentElement?.parentElement?.parentElement?.getAttribute("data-spot-id") as string, owner_id: null };
+								localStorage.setItem("spotCart", JSON.stringify(spotCart));
+								buySpot();
+							}}
+						>
+							Buy Spot
+						</button>
+					</div>
 				{/if}
 			</div>
 			<p class="font-bold mt-2 bg-tertiary/40 rounded-md px-2 py-0.5">{breakSpot.name}</p>
 			{#if breakSpot.contents != ""}
 				<p class="text-sm mt-2 bg-tertiary/40 rounded-md px-2 py-0.5">{breakSpot.contents}</p>
 			{/if}
-		</div>
+		</article>
 	{/each}
 </div>

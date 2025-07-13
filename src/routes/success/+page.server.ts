@@ -24,7 +24,7 @@ export const load = (async ({ url, fetch }) => {
 		"greenfellastradingpost@gmail.com",
 		`${isPsa ? "PSA " : isSpot ? "Break Spot " : ""}Order Recieved - ${customerDetails.email}`,
 		`<h1>Order Contents:</h1>
-		${checkoutContents.data.map((i) => i.description).join("<br>")}<br><br>Shipping / Billing Address: ${customerDetails.address?.line1} ${customerDetails.address?.line2 ?? ""}`
+		${checkoutContents.data.map((i) => i.description).join("<br>")}<br><br>Shipping / Billing Address: ${customerDetails.address?.line1 ?? "Check Stripe"} ${customerDetails.address?.line2 ?? ""}`
 	);
 
 	if (isPsa) {
