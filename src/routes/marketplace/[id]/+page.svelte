@@ -64,14 +64,14 @@
 	</header>
 	<article class="flex flex-col-reverse lg:flex-row gap-8 xl:gap-16 [&>*]:bg-glass-sm [&>*]:rounded-lg">
 		<div class="flex flex-col sm:flex-row lg:flex-col-reverse xl:flex-row gap-4 xl:gap-16 p-2 sm:p-4">
-			<aside class="flex mx-auto sm:mx-0 gap-4 sm:flex-col lg:flex-row xl:flex-col [&>button]:w-16 [&>button]:xl:w-24 [&>button]:bg-glass-sm [&>button]:p-2 [&>button]:rounded-lg [&>button]:transition-colors [&>button]:duration-200 [&_img]:rounded-md">
+			<aside class="flex mx-auto sm:mx-0 gap-4 w-[16rem] sm:w-min sm:h-[32rem] lg:w-[21rem] lg:h-min xl:w-min xl:h-[36rem] overflow-scroll sm:flex-col lg:flex-row xl:flex-col [&>button]:min-w-16 [&>button]:xl:w-24 [&>button]:bg-glass-sm [&>button]:p-2 [&>button]:rounded-lg [&>button]:transition-colors [&>button]:duration-200 [&_img]:rounded-md">
 				{#each [...Array(cardData.file_extensions.length).keys()] as image}
 					<button type="button" class:!border-text={currentImage == image} onclick={() => (currentImage = image)}>
 						<img src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{image}.{cardData.file_extensions[image]}" alt="Product" draggable="false" />
 					</button>
 				{/each}
 			</aside>
-			<div class="w-[90%] sm:w-max sm:h-[32rem] xl:h-[36rem] m-auto object-contain">
+			<div class="w-[90%] sm:w-max sm:h-[32rem] xl:h-[36rem] mx-auto object-contain">
 				<img bind:this={element} src="https://stcebbhxlmcaweulagty.supabase.co/storage/v1/object/public/product_images/{page.data.id}/{currentImage}.{cardData.file_extensions[currentImage]}" alt="Product" draggable="false" class="rounded-lg w-full sm:w-auto sm:h-full shadow-[0_0_1rem_4px_black]" />
 			</div>
 		</div>

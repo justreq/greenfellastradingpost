@@ -65,7 +65,7 @@
 			case 1:
 				return page.data.cards.find((e: { id: any }) => e.id == a.id).player.localeCompare(page.data.cards.find((e: { id: any }) => e.id == b.id).player);
 			case 2:
-				return a.price - b.price;
+				return a.sell_price - b.sell_price;
 			case 3:
 				return new Date(b.created).getTime() - new Date(a.created).getTime();
 			default:
@@ -180,8 +180,11 @@
 		</form>
 	</header>
 	<article class="flex flex-row flex-wrap justify-center px-2 sm:px-8 lg:pl-80 mx-auto mt-4 gap-8">
-		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product}
+		{#each productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage) as product, index}
 			<CardProductThumbnail id={product.id} />
+			{#if index == productList.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage).length - 1}
+			<h3 class="px-4 md:px-16 text-center text-xl md:text-3xl">Our collection updates constantly. Make an account to stay up to date with future drops.</h3>
+			{/if}
 		{:else}
 			<h3 class="px-4 md:px-16 text-center text-xl md:text-3xl">We are currently curating a collection. Create an account to get notified when we drop more cards.</h3>
 		{/each}
