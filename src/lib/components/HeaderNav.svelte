@@ -22,13 +22,13 @@
 	Marketplace
 </a>
 <a
-	href="/psa"
-	class:fancy-anchor-on={page.url.pathname.includes("psa")}
+	href="/consignments"
+	class:fancy-anchor-on={page.url.pathname.includes("consignments")}
 	onclick={() => {
 		$globalPopupState = "none";
 	}}
 >
-	Grading
+	Consign
 </a>
 <a
 	href="/contact"

@@ -7,6 +7,8 @@
 	import Popup from "$lib/components/Popup.svelte";
 	import { cartContents, globalPopupState } from "$lib/globals";
 	import { invalidate } from "$app/navigation";
+	import { isSuperUser } from "$lib/supabaseClient";
+	import { dev } from "$app/environment";
 	let { children } = $props();
 	let { session, supabase, user } = $derived(page.data);
 
@@ -64,9 +66,16 @@
 	<Header></Header>
 {/if}
 <main class="w-screen pt-16 pb-32 lg:pt-24 min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-10rem)] flex flex-col gap-8 sm:gap-16 xl:gap-32">
-	<!-- <article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
-			<h2>Under Construction</h2>
-		</article> -->
-	{@render children()}
+	{#if page.url.pathname.includes("consignments")}
+		{#if isSuperUser(user) || dev}
+			{@render children()}
+		{:else}
+			<article class="flex flex-col justify-center [&>*]:text-center px-8 md:px-16 lg:px-0">
+				<h2>Under Construction</h2>
+			</article>
+		{/if}
+	{:else}
+		{@render children()}
+	{/if}
 </main>
 <Footer></Footer>

@@ -75,6 +75,16 @@
 				<img src="/images/logo-psa.png" alt="PSA logo" draggable="false" />
 			</article>
 		</div>
+		<div class="px-4 flex flex-col items-center [&>article]:py-32 [&>article:not(:first-child)]:bg-glass [&>article]:border-none [&>article]:flex [&>article]:flex-col-reverse [&>article]:xl:flex-row [&>article]:items-center [&>article]:gap-16 [&>article>div]:justify-center [&_div]:max-w-[32rem] [&_div]:flex [&_div]:flex-col [&_div]:gap-4 [&_a]:w-min [&_a]:rounded-full [&_a]:px-4 [&_a]:bg-accent/60 [&_a]:border-transparent [&_a]:transition-transform [&_a:hover]:lg:scale-110 [&_a]:!text-text [&_img]:max-h-72 [&_img]:w-3/4 [&_img]:sm:w-1/2 [&_img]:xl:w-auto [&_img]:xl:h-56 [&_img]:2xl:h-full">
+			<article>
+				<img src="/images/logo-gtp-consignments.png" alt="PSA logo" draggable="false" />
+				<div class="[&>*]:mx-auto [&>*]:xl:mx-0 [&>*]:text-center [&>*]:xl:text-left">
+					<h3>Consignment Offerings</h3>
+					<p>Sell your cards on our platform when you consign with us! We offer a flexible commission percentage, and all aspects of the consignment are negotiable.</p>
+					<a href="/consignments">Learn More</a>
+				</div>
+			</article>
+		</div>
 	</section>
 {/if}
 <section id="hub" class="grid grid-cols-6 px-2 mx-auto mt-4 gap-4 xl:gap-8 w-screen 2xl:w-[90rem] 2xl:mx-auto">

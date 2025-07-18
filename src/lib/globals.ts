@@ -46,6 +46,13 @@ export const serviceInfo: { [key: string]: { [key: string]: string | any[] } } =
 		overviewTitle: "How does it work?",
 		overview: "You can access the PSA submission form above. You'll need to provide basic information about each card you want to submit.\n\nOnce you submit the form, you'll be shown an address to ship your cards to. When we receive your cards, we will hand-deliver them to PSA, ensuring they skip processing and go straight to grading.\n\nWhen we receive your cards back from PSA, we will ship them to the address you provided when submitting the form.\n\nPricing can be found below.",
 	},
+	consignments: {
+		heading: "Consign your cards with GTP",
+		subheading: "Use our platform to sell your cards.",
+		ctaText: "Submit Form",
+		overviewTitle: "How to consign",
+		overview: "You can access our consignment submission form above. It takes a few seconds to fill out, after which you will be prompted to sign our consignment waiver."
+	}
 };
 
 export const cartContents: Writable<string[]> = writable([]);

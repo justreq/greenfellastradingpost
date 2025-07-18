@@ -93,7 +93,7 @@
 				</span>
 			</div>
 		</div>
-	{:else}
+	{:else if type == "consignments"}{:else}
 		<div class="bg-glass-secondary !py-8 lg:!py-16 relative">
 			<article id="streams">
 				<div class="flex flex-col gap-16">
